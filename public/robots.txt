@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hoatuoithanhngoc.com/sitemap.xml

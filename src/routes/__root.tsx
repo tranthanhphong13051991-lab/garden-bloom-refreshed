@@ -1,24 +1,41 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
-
 import appCss from "../styles.css?url";
+import { SITE } from "@/data/site";
+
+const localBusiness = {
+  "@context": "https://schema.org",
+  "@type": "Florist",
+  name: SITE.name,
+  alternateName: SITE.brand,
+  url: SITE.domain,
+  telephone: `+84${SITE.phones[0].slice(1)}`,
+  email: SITE.email,
+  image: `${SITE.domain}/image/logo-thanh-ngoc-flower.webp`,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "8 Phan Văn Hân, Phường 19",
+    addressLocality: "Bình Thạnh",
+    addressRegion: "TP. Hồ Chí Minh",
+    addressCountry: "VN",
+  },
+  geo: { "@type": "GeoCoordinates", latitude: SITE.geo.lat, longitude: SITE.geo.lng },
+  openingHoursSpecification: [
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], opens: "07:00", closes: "21:00" },
+  ],
+  priceRange: "₫₫",
+  sameAs: [SITE.facebook, SITE.zalo],
+};
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center bg-cream px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
+        <div className="font-serif text-7xl font-semibold text-primary">404</div>
+        <h1 className="mt-3 font-serif text-2xl text-foreground">Không tìm thấy trang</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Trang bạn đang tìm không tồn tại hoặc đã được dời đi.</p>
+        <Link to="/" className="mt-6 inline-flex items-center rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90">
+          Về trang chủ
+        </Link>
       </div>
     </div>
   );
@@ -29,20 +46,31 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Hoa Tươi Thanh Ngọc — Tiệm Hoa Bình Thạnh, TP.HCM | Giao Nhanh 2h" },
+      { name: "description", content: SITE.description },
+      { name: "keywords", content: "hoa tươi bình thạnh, hoa tươi tphcm, đặt hoa online, hoa khai trương, lan hồ điệp, bó hoa sinh nhật, giỏ hoa, hoa chia buồn, hoa tươi thanh ngọc" },
+      { name: "author", content: SITE.brand },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
+      { name: "theme-color", content: "#0F4C3A" },
+      { property: "og:site_name", content: SITE.name },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:locale", content: "vi_VN" },
+      { property: "og:title", content: "Hoa Tươi Thanh Ngọc — Tiệm Hoa Bình Thạnh" },
+      { property: "og:description", content: SITE.description },
+      { property: "og:url", content: SITE.domain },
+      { property: "og:image", content: `${SITE.domain}/image/logo-thanh-ngoc-flower.webp` },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Hoa Tươi Thanh Ngọc" },
+      { name: "twitter:description", content: SITE.description },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "stylesheet", href: appCss },
+      { rel: "canonical", href: SITE.domain },
+      { rel: "preconnect", href: "https://hoatuoithanhngoc.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+    ],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify(localBusiness) },
     ],
   }),
   shellComponent: RootShell,
@@ -52,7 +80,7 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="vi">
       <head>
         <HeadContent />
       </head>
