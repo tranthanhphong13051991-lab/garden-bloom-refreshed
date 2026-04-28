@@ -9,18 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SanPhamRouteImport } from './routes/san-pham'
 import { Route as LienHeRouteImport } from './routes/lien-he'
 import { Route as GioiThieuRouteImport } from './routes/gioi-thieu'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SanPhamSlugRouteImport } from './routes/san-pham.$slug'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SanPhamRoute = SanPhamRouteImport.update({
   id: '/san-pham',
   path: '/san-pham',
@@ -52,7 +46,6 @@ export interface FileRoutesByFullPath {
   '/gioi-thieu': typeof GioiThieuRoute
   '/lien-he': typeof LienHeRoute
   '/san-pham': typeof SanPhamRouteWithChildren
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/san-pham/$slug': typeof SanPhamSlugRoute
 }
 export interface FileRoutesByTo {
@@ -60,7 +53,6 @@ export interface FileRoutesByTo {
   '/gioi-thieu': typeof GioiThieuRoute
   '/lien-he': typeof LienHeRoute
   '/san-pham': typeof SanPhamRouteWithChildren
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/san-pham/$slug': typeof SanPhamSlugRoute
 }
 export interface FileRoutesById {
@@ -69,33 +61,19 @@ export interface FileRoutesById {
   '/gioi-thieu': typeof GioiThieuRoute
   '/lien-he': typeof LienHeRoute
   '/san-pham': typeof SanPhamRouteWithChildren
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/san-pham/$slug': typeof SanPhamSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/gioi-thieu'
-    | '/lien-he'
-    | '/san-pham'
-    | '/sitemap.xml'
-    | '/san-pham/$slug'
+  fullPaths: '/' | '/gioi-thieu' | '/lien-he' | '/san-pham' | '/san-pham/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/gioi-thieu'
-    | '/lien-he'
-    | '/san-pham'
-    | '/sitemap.xml'
-    | '/san-pham/$slug'
+  to: '/' | '/gioi-thieu' | '/lien-he' | '/san-pham' | '/san-pham/$slug'
   id:
     | '__root__'
     | '/'
     | '/gioi-thieu'
     | '/lien-he'
     | '/san-pham'
-    | '/sitemap.xml'
     | '/san-pham/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -104,18 +82,10 @@ export interface RootRouteChildren {
   GioiThieuRoute: typeof GioiThieuRoute
   LienHeRoute: typeof LienHeRoute
   SanPhamRoute: typeof SanPhamRouteWithChildren
-  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/san-pham': {
       id: '/san-pham'
       path: '/san-pham'
@@ -170,8 +140,16 @@ const rootRouteChildren: RootRouteChildren = {
   GioiThieuRoute: GioiThieuRoute,
   LienHeRoute: LienHeRoute,
   SanPhamRoute: SanPhamRouteWithChildren,
-  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
