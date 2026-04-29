@@ -32,8 +32,10 @@ export const Route = createFileRoute("/san-pham/$slug")({
       url,
       aggregateRating: {
         "@type": "AggregateRating",
-        ratingValue: "4.9",
-        reviewCount: "127",
+        ratingValue: product.rating.value.toFixed(1),
+        reviewCount: String(product.rating.count),
+        bestRating: "5",
+        worstRating: "1",
       },
       offers: {
         "@type": "Offer",
@@ -56,6 +58,15 @@ export const Route = createFileRoute("/san-pham/$slug")({
         { "@type": "ListItem", position: cat ? 4 : 3, name: product.name, item: url },
       ],
     };
+    const faqLd = product.faqs && product.faqs.length > 0 ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: product.faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    } : null;
     return {
       meta: [
         { title },
@@ -81,6 +92,7 @@ export const Route = createFileRoute("/san-pham/$slug")({
       scripts: [
         { type: "application/ld+json", children: JSON.stringify(productLd) },
         { type: "application/ld+json", children: JSON.stringify(breadcrumbLd) },
+        ...(faqLd ? [{ type: "application/ld+json", children: JSON.stringify(faqLd) }] : []),
       ],
     };
   },
@@ -137,7 +149,7 @@ function ProductDetail() {
             <div className="flex flex-wrap items-center gap-2">
               {cat && <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary">{cat.label}</span>}
               {product.badge && <span className="rounded-full bg-gold/20 px-3 py-1 text-xs font-medium text-primary">{product.badge}</span>}
-              <span className="rounded-full bg-cream px-3 py-1 text-xs font-medium text-muted-foreground">★ 4.9 · 127 đánh giá</span>
+              <span className="rounded-full bg-cream px-3 py-1 text-xs font-medium text-muted-foreground">★ {product.rating.value.toFixed(1)} · {product.rating.count} đánh giá</span>
             </div>
             <h1 className="mt-3 font-serif text-4xl font-semibold leading-tight text-foreground md:text-5xl">{product.name}</h1>
             <div className="mt-5 flex items-baseline gap-3">
@@ -177,6 +189,25 @@ function ProductDetail() {
           </div>
         </div>
       </section>
+
+      {product.faqs.length > 0 && (
+        <section className="py-16">
+          <div className="mx-auto max-w-3xl px-4 md:px-8">
+            <h2 className="font-serif text-3xl font-semibold md:text-4xl">Câu Hỏi Thường Gặp</h2>
+            <div className="mt-8 divide-y divide-border rounded-2xl border border-border bg-background shadow-soft">
+              {product.faqs.map((f, i) => (
+                <details key={i} className="group p-5 open:bg-cream/40">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-foreground">
+                    <span>{f.q}</span>
+                    <span className="text-xl leading-none text-primary transition group-open:rotate-45">+</span>
+                  </summary>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {related.length > 0 && (
         <section className="bg-cream py-16">
