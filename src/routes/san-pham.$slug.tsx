@@ -149,7 +149,7 @@ function ProductDetail() {
             <div className="flex flex-wrap items-center gap-2">
               {cat && <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary">{cat.label}</span>}
               {product.badge && <span className="rounded-full bg-gold/20 px-3 py-1 text-xs font-medium text-primary">{product.badge}</span>}
-              <span className="rounded-full bg-cream px-3 py-1 text-xs font-medium text-muted-foreground">★ 4.9 · 127 đánh giá</span>
+              <span className="rounded-full bg-cream px-3 py-1 text-xs font-medium text-muted-foreground">★ {product.rating.value.toFixed(1)} · {product.rating.count} đánh giá</span>
             </div>
             <h1 className="mt-3 font-serif text-4xl font-semibold leading-tight text-foreground md:text-5xl">{product.name}</h1>
             <div className="mt-5 flex items-baseline gap-3">
