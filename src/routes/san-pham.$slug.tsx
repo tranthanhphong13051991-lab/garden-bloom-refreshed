@@ -134,9 +134,16 @@ function ProductDetail() {
             <img src={product.image} alt={product.name} width={800} height={800} className="aspect-square h-full w-full object-cover" />
           </div>
           <div className="flex flex-col">
-            {cat && <div className="text-xs uppercase tracking-widest text-primary">{cat.label}</div>}
+            <div className="flex flex-wrap items-center gap-2">
+              {cat && <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary">{cat.label}</span>}
+              {product.badge && <span className="rounded-full bg-gold/20 px-3 py-1 text-xs font-medium text-primary">{product.badge}</span>}
+              <span className="rounded-full bg-cream px-3 py-1 text-xs font-medium text-muted-foreground">★ 4.9 · 127 đánh giá</span>
+            </div>
             <h1 className="mt-3 font-serif text-4xl font-semibold leading-tight text-foreground md:text-5xl">{product.name}</h1>
-            <div className="mt-5 font-serif text-3xl font-semibold text-primary">{formatPrice(product.price)}</div>
+            <div className="mt-5 flex items-baseline gap-3">
+              <div className="font-serif text-3xl font-semibold text-primary">{formatPrice(product.price)}</div>
+              <span className="text-xs text-muted-foreground">đã bao gồm thiệp & gói quà</span>
+            </div>
             <p className="mt-5 text-base leading-relaxed text-muted-foreground">{product.description}</p>
 
             <ul className="mt-6 grid gap-3 text-sm">
@@ -156,6 +163,17 @@ function ProductDetail() {
                 <Phone className="h-4 w-4" /> Gọi đặt
               </a>
             </div>
+
+            {product.keywords.length > 0 && (
+              <div className="mt-8 border-t border-border pt-6">
+                <div className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">Từ khoá liên quan</div>
+                <div className="flex flex-wrap gap-2">
+                  {product.keywords.map((k) => (
+                    <span key={k} className="rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground/80">#{k}</span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
