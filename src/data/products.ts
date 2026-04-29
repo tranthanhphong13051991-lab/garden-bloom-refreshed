@@ -75,7 +75,8 @@ export const CATEGORIES: { id: Category; label: string; description: string }[] 
   { id: "lan-ho-diep", label: "Lan Hồ Điệp", description: "Lan hồ điệp quý phái, biếu tặng cao cấp" },
 ];
 
-const raw: Array<Omit<Product, "image" | "thumb"> & { _img: string }> = [
+type RawProduct = Omit<Product, "image" | "thumb" | "rating" | "faqs"> & { _img: string; rating?: Product["rating"]; faqs?: FAQ[] };
+const raw: RawProduct[] = [
   // BÓ HOA
   { slug: "bo-hoa-hong-kem-tinh-te", name: "Bó Hoa Hồng Kem Tinh Tế", category: "bo-hoa", badge: "Bán Chạy", _img: "hoa-hong-kem-tinh-te", short: "Hoa hồng kem thuần khiết, gói kraft thủ công, dành tặng những khoảnh khắc đặc biệt.", description: "Bó hoa hồng kem tinh tế — sự kết hợp giữa hồng kem ngọt ngào và lớp giấy kraft mộc mạc. Mẫu bán chạy bậc nhất tại tiệm, phù hợp tặng người yêu, mẹ, bạn thân vào sinh nhật, kỷ niệm hay những ngày đặc biệt.", price: 650000, keywords: ["hoa hồng kem", "bó hoa tặng người yêu", "bó hoa sinh nhật"] },
   { slug: "bo-hoa-mua-xuan-ruc-ro", name: "Bó Hoa Mùa Xuân Rực Rỡ", category: "bo-hoa", badge: "Premium", _img: "bo-hong-do-trang-hong-mix", short: "Tổng hòa các loài hoa mùa xuân — rực rỡ, tươi vui, trọn vẹn yêu thương.", description: "Bó hoa mùa xuân rực rỡ kết hợp hồng đỏ, hồng phấn và trắng — mang sắc xuân tươi mới và năng lượng tích cực vào mọi không gian.", price: 850000, keywords: ["bó hoa mix", "bó hoa premium", "hoa mùa xuân"] },
@@ -123,6 +124,8 @@ export const PRODUCTS: Product[] = raw.map((p) => ({
   description: p.description,
   price: p.price,
   keywords: p.keywords,
+  rating: p.rating ?? ratingFor(p.slug),
+  faqs: p.faqs ?? FAQ_BY_CATEGORY[p.category],
   image: img(p._img, 800),
   thumb: img(p._img, 400),
 }));
