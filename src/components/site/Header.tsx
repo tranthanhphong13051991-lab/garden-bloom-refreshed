@@ -7,6 +7,7 @@ import { SITE } from "@/data/site";
 const nav = [
   { to: "/", label: "Trang Chủ" },
   { to: "/san-pham", label: "Sản Phẩm" },
+  { to: "/blog", label: "Blog" },
   { to: "/gioi-thieu", label: "Giới Thiệu" },
   { to: "/lien-he", label: "Liên Hệ" },
 ] as const;

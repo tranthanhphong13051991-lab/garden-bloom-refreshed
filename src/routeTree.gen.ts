@@ -13,7 +13,10 @@ import { Route as SanPhamRouteImport } from './routes/san-pham'
 import { Route as LienHeRouteImport } from './routes/lien-he'
 import { Route as GioiThieuRouteImport } from './routes/gioi-thieu'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as TheTagRouteImport } from './routes/the.$tag'
 import { Route as SanPhamSlugRouteImport } from './routes/san-pham.$slug'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
 const SanPhamRoute = SanPhamRouteImport.update({
   id: '/san-pham',
@@ -35,10 +38,25 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TheTagRoute = TheTagRouteImport.update({
+  id: '/the/$tag',
+  path: '/the/$tag',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SanPhamSlugRoute = SanPhamSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => SanPhamRoute,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -46,14 +64,20 @@ export interface FileRoutesByFullPath {
   '/gioi-thieu': typeof GioiThieuRoute
   '/lien-he': typeof LienHeRoute
   '/san-pham': typeof SanPhamRouteWithChildren
+  '/blog/$slug': typeof BlogSlugRoute
   '/san-pham/$slug': typeof SanPhamSlugRoute
+  '/the/$tag': typeof TheTagRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/gioi-thieu': typeof GioiThieuRoute
   '/lien-he': typeof LienHeRoute
   '/san-pham': typeof SanPhamRouteWithChildren
+  '/blog/$slug': typeof BlogSlugRoute
   '/san-pham/$slug': typeof SanPhamSlugRoute
+  '/the/$tag': typeof TheTagRoute
+  '/blog': typeof BlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,20 +85,42 @@ export interface FileRoutesById {
   '/gioi-thieu': typeof GioiThieuRoute
   '/lien-he': typeof LienHeRoute
   '/san-pham': typeof SanPhamRouteWithChildren
+  '/blog/$slug': typeof BlogSlugRoute
   '/san-pham/$slug': typeof SanPhamSlugRoute
+  '/the/$tag': typeof TheTagRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/gioi-thieu' | '/lien-he' | '/san-pham' | '/san-pham/$slug'
+  fullPaths:
+    | '/'
+    | '/gioi-thieu'
+    | '/lien-he'
+    | '/san-pham'
+    | '/blog/$slug'
+    | '/san-pham/$slug'
+    | '/the/$tag'
+    | '/blog/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/gioi-thieu' | '/lien-he' | '/san-pham' | '/san-pham/$slug'
+  to:
+    | '/'
+    | '/gioi-thieu'
+    | '/lien-he'
+    | '/san-pham'
+    | '/blog/$slug'
+    | '/san-pham/$slug'
+    | '/the/$tag'
+    | '/blog'
   id:
     | '__root__'
     | '/'
     | '/gioi-thieu'
     | '/lien-he'
     | '/san-pham'
+    | '/blog/$slug'
     | '/san-pham/$slug'
+    | '/the/$tag'
+    | '/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -82,6 +128,9 @@ export interface RootRouteChildren {
   GioiThieuRoute: typeof GioiThieuRoute
   LienHeRoute: typeof LienHeRoute
   SanPhamRoute: typeof SanPhamRouteWithChildren
+  BlogSlugRoute: typeof BlogSlugRoute
+  TheTagRoute: typeof TheTagRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -114,12 +163,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/the/$tag': {
+      id: '/the/$tag'
+      path: '/the/$tag'
+      fullPath: '/the/$tag'
+      preLoaderRoute: typeof TheTagRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/san-pham/$slug': {
       id: '/san-pham/$slug'
       path: '/$slug'
       fullPath: '/san-pham/$slug'
       preLoaderRoute: typeof SanPhamSlugRouteImport
       parentRoute: typeof SanPhamRoute
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -140,6 +210,9 @@ const rootRouteChildren: RootRouteChildren = {
   GioiThieuRoute: GioiThieuRoute,
   LienHeRoute: LienHeRoute,
   SanPhamRoute: SanPhamRouteWithChildren,
+  BlogSlugRoute: BlogSlugRoute,
+  TheTagRoute: TheTagRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

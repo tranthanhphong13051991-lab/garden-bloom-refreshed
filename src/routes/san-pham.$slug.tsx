@@ -5,6 +5,7 @@ import { ProductCard } from "@/components/site/ProductCard";
 import { findProduct, formatPrice, PRODUCTS, CATEGORIES } from "@/data/products";
 import { useCart } from "@/store/cart";
 import { SITE } from "@/data/site";
+import { tagSlug } from "@/data/tags";
 
 export const Route = createFileRoute("/san-pham/$slug")({
   loader: ({ params }) => {
@@ -181,7 +182,14 @@ function ProductDetail() {
                 <div className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">Từ khoá liên quan</div>
                 <div className="flex flex-wrap gap-2">
                   {product.keywords.map((k) => (
-                    <span key={k} className="rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground/80">#{k}</span>
+                    <Link
+                      key={k}
+                      to="/the/$tag"
+                      params={{ tag: tagSlug(k) }}
+                      className="rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground/80 transition hover:border-primary hover:text-primary"
+                    >
+                      #{k}
+                    </Link>
                   ))}
                 </div>
               </div>
