@@ -32,8 +32,10 @@ export const Route = createFileRoute("/san-pham/$slug")({
       url,
       aggregateRating: {
         "@type": "AggregateRating",
-        ratingValue: "4.9",
-        reviewCount: "127",
+        ratingValue: product.rating.value.toFixed(1),
+        reviewCount: String(product.rating.count),
+        bestRating: "5",
+        worstRating: "1",
       },
       offers: {
         "@type": "Offer",
@@ -56,6 +58,15 @@ export const Route = createFileRoute("/san-pham/$slug")({
         { "@type": "ListItem", position: cat ? 4 : 3, name: product.name, item: url },
       ],
     };
+    const faqLd = product.faqs && product.faqs.length > 0 ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: product.faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    } : null;
     return {
       meta: [
         { title },
@@ -81,6 +92,7 @@ export const Route = createFileRoute("/san-pham/$slug")({
       scripts: [
         { type: "application/ld+json", children: JSON.stringify(productLd) },
         { type: "application/ld+json", children: JSON.stringify(breadcrumbLd) },
+        ...(faqLd ? [{ type: "application/ld+json", children: JSON.stringify(faqLd) }] : []),
       ],
     };
   },
