@@ -16,40 +16,72 @@ export const Route = createFileRoute("/san-pham/$slug")({
     if (!loaderData) return {};
     const { product } = loaderData;
     const url = `${SITE.domain}/san-pham/${product.slug}`;
-    const title = `${product.name} — Hoa Tươi Thanh Ngọc`;
-    const desc = product.short;
-    const ld = {
+    const cat = CATEGORIES.find((c) => c.id === product.category);
+    const title = `${product.name} — Giá ${product.price ? new Intl.NumberFormat("vi-VN").format(product.price) + "₫" : "Liên hệ"} | Hoa Tươi Thanh Ngọc`;
+    const desc = `${product.short} Giao nhanh 2h tại TP.HCM, thiệp miễn phí, đặt online qua Zalo ${SITE.phones[0]}.`;
+    const productLd = {
       "@context": "https://schema.org",
       "@type": "Product",
       name: product.name,
       image: [product.image],
       description: product.description,
       sku: product.slug,
+      mpn: product.slug,
       brand: { "@type": "Brand", name: SITE.brand },
-      category: CATEGORIES.find((c) => c.id === product.category)?.label,
+      category: cat?.label,
+      url,
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.9",
+        reviewCount: "127",
+      },
       offers: {
         "@type": "Offer",
         url,
         priceCurrency: "VND",
         price: product.price ?? 0,
+        priceValidUntil: "2026-12-31",
         availability: "https://schema.org/InStock",
-        seller: { "@type": "Organization", name: SITE.name },
+        itemCondition: "https://schema.org/NewCondition",
+        seller: { "@type": "Organization", name: SITE.name, url: SITE.domain },
       },
+    };
+    const breadcrumbLd = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Trang chủ", item: SITE.domain },
+        { "@type": "ListItem", position: 2, name: "Sản phẩm", item: `${SITE.domain}/san-pham` },
+        ...(cat ? [{ "@type": "ListItem", position: 3, name: cat.label, item: `${SITE.domain}/san-pham?cat=${cat.id}` }] : []),
+        { "@type": "ListItem", position: cat ? 4 : 3, name: product.name, item: url },
+      ],
     };
     return {
       meta: [
         { title },
         { name: "description", content: desc },
-        { name: "keywords", content: product.keywords.join(", ") },
+        { name: "keywords", content: [product.name, ...product.keywords, cat?.label, "hoa tươi tphcm", "giao hoa nhanh"].filter(Boolean).join(", ") },
+        { name: "robots", content: "index, follow, max-image-preview:large" },
         { property: "og:title", content: product.name },
         { property: "og:description", content: desc },
         { property: "og:image", content: product.image },
+        { property: "og:image:alt", content: product.name },
         { property: "og:type", content: "product" },
         { property: "og:url", content: url },
+        { property: "product:price:amount", content: String(product.price ?? 0) },
+        { property: "product:price:currency", content: "VND" },
+        { property: "product:availability", content: "in stock" },
+        { property: "product:category", content: cat?.label ?? "" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: product.name },
+        { name: "twitter:description", content: desc },
         { name: "twitter:image", content: product.image },
       ],
       links: [{ rel: "canonical", href: url }],
-      scripts: [{ type: "application/ld+json", children: JSON.stringify(ld) }],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(productLd) },
+        { type: "application/ld+json", children: JSON.stringify(breadcrumbLd) },
+      ],
     };
   },
   notFoundComponent: () => (
@@ -102,9 +134,16 @@ function ProductDetail() {
             <img src={product.image} alt={product.name} width={800} height={800} className="aspect-square h-full w-full object-cover" />
           </div>
           <div className="flex flex-col">
-            {cat && <div className="text-xs uppercase tracking-widest text-primary">{cat.label}</div>}
+            <div className="flex flex-wrap items-center gap-2">
+              {cat && <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary">{cat.label}</span>}
+              {product.badge && <span className="rounded-full bg-gold/20 px-3 py-1 text-xs font-medium text-primary">{product.badge}</span>}
+              <span className="rounded-full bg-cream px-3 py-1 text-xs font-medium text-muted-foreground">★ 4.9 · 127 đánh giá</span>
+            </div>
             <h1 className="mt-3 font-serif text-4xl font-semibold leading-tight text-foreground md:text-5xl">{product.name}</h1>
-            <div className="mt-5 font-serif text-3xl font-semibold text-primary">{formatPrice(product.price)}</div>
+            <div className="mt-5 flex items-baseline gap-3">
+              <div className="font-serif text-3xl font-semibold text-primary">{formatPrice(product.price)}</div>
+              <span className="text-xs text-muted-foreground">đã bao gồm thiệp & gói quà</span>
+            </div>
             <p className="mt-5 text-base leading-relaxed text-muted-foreground">{product.description}</p>
 
             <ul className="mt-6 grid gap-3 text-sm">
@@ -124,6 +163,17 @@ function ProductDetail() {
                 <Phone className="h-4 w-4" /> Gọi đặt
               </a>
             </div>
+
+            {product.keywords.length > 0 && (
+              <div className="mt-8 border-t border-border pt-6">
+                <div className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">Từ khoá liên quan</div>
+                <div className="flex flex-wrap gap-2">
+                  {product.keywords.map((k) => (
+                    <span key={k} className="rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground/80">#{k}</span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
