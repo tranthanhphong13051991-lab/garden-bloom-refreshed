@@ -190,6 +190,25 @@ function ProductDetail() {
         </div>
       </section>
 
+      {product.faqs.length > 0 && (
+        <section className="py-16">
+          <div className="mx-auto max-w-3xl px-4 md:px-8">
+            <h2 className="font-serif text-3xl font-semibold md:text-4xl">Câu Hỏi Thường Gặp</h2>
+            <div className="mt-8 divide-y divide-border rounded-2xl border border-border bg-background shadow-soft">
+              {product.faqs.map((f, i) => (
+                <details key={i} className="group p-5 open:bg-cream/40">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-foreground">
+                    <span>{f.q}</span>
+                    <span className="text-xl leading-none text-primary transition group-open:rotate-45">+</span>
+                  </summary>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {related.length > 0 && (
         <section className="bg-cream py-16">
           <div className="mx-auto max-w-7xl px-4 md:px-8">
