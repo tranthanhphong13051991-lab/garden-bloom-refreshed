@@ -1,7 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tanstack-start-app",
+  "name": "hoatuoithanhngoc",
   "compatibility_date": "2025-09-24",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
+  "routes": [
+    { "pattern": "hoatuoithanhngoc.com/*", "zone_name": "hoatuoithanhngoc.com" },
+    { "pattern": "www.hoatuoithanhngoc.com/*", "zone_name": "hoatuoithanhngoc.com" }
+  ]
 }
