@@ -132,20 +132,146 @@ const raw: RawProduct[] = [
   { slug: "hoa-lan-ho-diep-trang-quy-phai", name: "Hoa Lan Hồ Điệp Trắng Quý Phái", category: "lan-ho-diep", _img: "lan-ho-diep-trang-quy-phai", short: "Lan hồ điệp trắng thuần khiết, sang trọng — lựa chọn hoàn hảo cho mọi dịp đặc biệt.", description: "Chậu lan hồ điệp trắng thuần khiết — quý phái, sang trọng, biếu tặng cấp trên, đối tác, dịp khai trương cao cấp.", price: 3500000, keywords: ["lan hồ điệp", "lan hồ điệp trắng", "hoa lan biếu tặng"] },
 ];
 
-export const PRODUCTS: Product[] = raw.map((p) => ({
-  slug: p.slug,
-  name: p.name,
-  category: p.category,
-  badge: p.badge,
-  short: p.short,
-  description: p.description,
-  price: p.price,
-  keywords: p.keywords,
-  rating: p.rating ?? ratingFor(p.slug),
-  faqs: p.faqs ?? FAQ_BY_CATEGORY[p.category],
-  image: img(p._img, 800),
-  thumb: img(p._img, 400),
-}));
+// ----- Defaults theo category -----
+const SIZES_BY_CATEGORY: Record<Category, SizeOption[]> = {
+  "bo-hoa": [
+    { label: "Tiêu chuẩn", dimension: "Cao 35–45cm × Rộng 25–30cm", note: "Phù hợp cầm tay, tặng cá nhân" },
+    { label: "Lớn", dimension: "Cao 50–60cm × Rộng 35–40cm", note: "Ấn tượng hơn, phù hợp tặng dịp đặc biệt" },
+  ],
+  "gio-hoa": [
+    { label: "Tiêu chuẩn", dimension: "Cao 40–50cm × Rộng 30–35cm" },
+    { label: "Lớn", dimension: "Cao 55–65cm × Rộng 40–50cm", note: "Đặt bàn tiệc, sảnh nhỏ" },
+  ],
+  "khai-truong": [
+    { label: "Kệ 1 tầng", dimension: "Cao 1.6–1.8m × Rộng 0.8–1.0m" },
+    { label: "Kệ 2 tầng", dimension: "Cao 1.8–2.2m × Rộng 1.0–1.2m", note: "Phù hợp đặt sảnh lớn" },
+  ],
+  "chia-buon": [
+    { label: "Tiêu chuẩn", dimension: "Cao 1.6–1.8m × Rộng 0.8m" },
+    { label: "Lớn", dimension: "Cao 1.8–2.0m × Rộng 1.0m", note: "Trang trọng cho lễ viếng lớn" },
+  ],
+  "lan-ho-diep": [
+    { label: "5 cành", dimension: "Cao ~70cm", note: "Bàn làm việc, biếu tặng cá nhân" },
+    { label: "10 cành", dimension: "Cao ~85cm", note: "Khai trương, biếu tặng đối tác" },
+    { label: "20 cành+", dimension: "Cao ~95cm", note: "Sự kiện lớn, dịp trọng đại" },
+  ],
+};
+
+const MEANING_BY_CATEGORY: Record<Category, string[]> = {
+  "bo-hoa": [
+    "Thể hiện tình cảm chân thành, lãng mạn và sự trân trọng dành cho người nhận.",
+    "Bó hoa là món quà phổ biến nhất cho sinh nhật, kỷ niệm, tỏ tình và lễ tốt nghiệp.",
+  ],
+  "gio-hoa": [
+    "Giỏ hoa tượng trưng cho sự đầy đặn, viên mãn và lời chúc trọn vẹn.",
+    "Phù hợp biếu tặng cấp trên, khách hàng, thăm bệnh hoặc các dịp trang trọng.",
+  ],
+  "khai-truong": [
+    "Mang lời chúc thịnh vượng, phát tài, hanh thông và khởi đầu thuận lợi cho việc kinh doanh.",
+    "Tone vàng — đỏ — cam thường được chọn vì hợp phong thủy đại cát.",
+  ],
+  "chia-buon": [
+    "Gửi gắm sự đồng cảm, tiếc thương và lời tiễn biệt trang trọng đến gia đình người đã khuất.",
+    "Tone trắng tượng trưng cho sự thanh khiết, bình an và lòng thành kính.",
+  ],
+  "lan-ho-diep": [
+    "Lan hồ điệp đại diện cho sự sang trọng, quý phái, may mắn và tình yêu bền vững.",
+    "Là lựa chọn biếu tặng cao cấp cho dịp khai trương, tân gia, lễ Tết hoặc đối tác quan trọng.",
+  ],
+};
+
+const CARE_BY_CATEGORY: Record<Category, string[]> = {
+  "bo-hoa": [
+    "Cắt vát gốc 2–3cm, ngâm trong nước sạch ngay khi nhận.",
+    "Thay nước mỗi ngày, tránh ánh nắng trực tiếp và máy lạnh thổi thẳng.",
+    "Tỉa bỏ lá ngập trong nước để tránh thối thân.",
+  ],
+  "gio-hoa": [
+    "Tưới mút xốp 1 lần/ngày bằng nước sạch.",
+    "Đặt nơi thoáng mát, tránh nắng gắt và gió mạnh.",
+    "Có thể dùng được 3–5 ngày với điều kiện chăm sóc đúng.",
+  ],
+  "khai-truong": [
+    "Đặt nơi thông thoáng, tránh đặt sát máy lạnh hoặc nắng chiếu trực tiếp.",
+    "Xịt phun sương lên hoa 1–2 lần/ngày để giữ độ tươi.",
+    "Kệ hoa giữ đẹp 2–3 ngày trong điều kiện thường.",
+  ],
+  "chia-buon": [
+    "Đặt nơi thoáng, không cần tưới thêm nước trong điều kiện sử dụng ngắn hạn.",
+    "Hạn chế di chuyển kệ sau khi đã đặt cố định.",
+  ],
+  "lan-ho-diep": [
+    "Tưới phun sương 1–2 lần/tuần, không tưới đẫm gốc.",
+    "Đặt nơi có ánh sáng dịu, tránh nắng gắt và máy lạnh thổi trực tiếp.",
+    "Lan giữ tươi đẹp 30–60 ngày nếu chăm đúng cách.",
+  ],
+};
+
+const OCCASIONS_BY_CATEGORY: Record<Category, string[]> = {
+  "bo-hoa": ["Sinh nhật", "Kỷ niệm", "Tỏ tình", "Tốt nghiệp", "8/3 - 20/10", "Valentine"],
+  "gio-hoa": ["Sinh nhật", "Thăm bệnh", "Biếu tặng", "Cảm ơn", "Sự kiện công ty"],
+  "khai-truong": ["Khai trương", "Khánh thành", "Mừng sự kiện", "Khai xuân"],
+  "chia-buon": ["Tang lễ", "Lễ viếng", "Tưởng niệm"],
+  "lan-ho-diep": ["Khai trương", "Tân gia", "Lễ Tết", "Biếu đối tác", "Mừng thọ"],
+};
+
+// Bảng màu — suy ra từ tên sản phẩm
+const COLOR_DICT: { match: RegExp; name: string; hex: string }[] = [
+  { match: /trắng|tinh khôi|baby/i, name: "Trắng", hex: "#FFFFFF" },
+  { match: /kem|peach|đào/i, name: "Kem", hex: "#F5E1C8" },
+  { match: /hồng pastel|pastel/i, name: "Hồng pastel", hex: "#F8C8DC" },
+  { match: /hồng phấn|hồng hồng|hồng/i, name: "Hồng", hex: "#F4A6C0" },
+  { match: /đỏ/i, name: "Đỏ", hex: "#D62828" },
+  { match: /cam/i, name: "Cam", hex: "#F4811F" },
+  { match: /vàng/i, name: "Vàng", hex: "#F4C430" },
+  { match: /xanh/i, name: "Xanh", hex: "#7BB6A1" },
+  { match: /tím/i, name: "Tím", hex: "#9B7EBD" },
+  { match: /đen/i, name: "Đen", hex: "#1F1F1F" },
+];
+
+const inferColors = (text: string): { name: string; hex: string }[] => {
+  const seen = new Set<string>();
+  const out: { name: string; hex: string }[] = [];
+  for (const c of COLOR_DICT) {
+    if (c.match.test(text) && !seen.has(c.name)) {
+      seen.add(c.name);
+      out.push({ name: c.name, hex: c.hex });
+    }
+  }
+  return out.length > 0 ? out : [{ name: "Đa sắc", hex: "#E8C9A7" }];
+};
+
+const MATERIALS_BY_CATEGORY: Record<Category, string[]> = {
+  "bo-hoa": ["Hoa tươi nhập khẩu & Đà Lạt", "Giấy gói cao cấp", "Ruy băng lụa", "Thiệp viết tay"],
+  "gio-hoa": ["Hoa tươi cao cấp", "Giỏ mây / sắt vintage", "Mút xốp giữ ẩm", "Ruy băng & thiệp"],
+  "khai-truong": ["Hoa tươi cao cấp", "Kệ tre / sắt sơn tĩnh điện", "Banner chúc mừng", "Mút xốp giữ ẩm"],
+  "chia-buon": ["Hoa ly, cúc, lan trắng", "Kệ tre trang trọng", "Băng tang viết tay"],
+  "lan-ho-diep": ["Lan hồ điệp Đà Lạt / nhập khẩu", "Chậu sứ cao cấp", "Rêu trang trí", "Nơ lụa & thiệp"],
+};
+
+export const PRODUCTS: Product[] = raw.map((p) => {
+  const colors = p.colors ?? inferColors(`${p.name} ${p.short}`);
+  return {
+    slug: p.slug,
+    name: p.name,
+    category: p.category,
+    badge: p.badge,
+    short: p.short,
+    description: p.description,
+    price: p.price,
+    keywords: p.keywords,
+    rating: p.rating ?? ratingFor(p.slug),
+    faqs: p.faqs ?? FAQ_BY_CATEGORY[p.category],
+    meaning: p.meaning ?? MEANING_BY_CATEGORY[p.category],
+    colors,
+    sizes: p.sizes ?? SIZES_BY_CATEGORY[p.category],
+    occasions: p.occasions ?? OCCASIONS_BY_CATEGORY[p.category],
+    careTips: p.careTips ?? CARE_BY_CATEGORY[p.category],
+    materials: p.materials ?? MATERIALS_BY_CATEGORY[p.category],
+    image: img(p._img, 800),
+    thumb: img(p._img, 400),
+  };
+});
 
 export const findProduct = (slug: string) => PRODUCTS.find((p) => p.slug === slug);
 export const productsByCategory = (cat: Category) => PRODUCTS.filter((p) => p.category === cat);
