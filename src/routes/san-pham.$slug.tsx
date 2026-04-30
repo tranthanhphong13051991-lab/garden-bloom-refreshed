@@ -19,18 +19,27 @@ export const Route = createFileRoute("/san-pham/$slug")({
     const url = `${SITE.domain}/san-pham/${product.slug}`;
     const cat = CATEGORIES.find((c) => c.id === product.category);
     const title = `${product.name} — Giá ${product.price ? new Intl.NumberFormat("vi-VN").format(product.price) + "₫" : "Liên hệ"} | Hoa Tươi Thanh Ngọc`;
-    const desc = `${product.short} Giao nhanh 2h tại TP.HCM, thiệp miễn phí, đặt online qua Zalo ${SITE.phones[0]}.`;
+    const desc = `${product.short} Ý nghĩa, màu sắc ${product.colors.map(c=>c.name).join(", ")}, kích thước ${product.sizes[0]?.dimension}. Giao 2h tại TP.HCM, Zalo ${SITE.phones[0]}.`;
     const productLd = {
       "@context": "https://schema.org",
       "@type": "Product",
       name: product.name,
       image: [product.image],
-      description: product.description,
+      description: `${product.description} ${product.meaning.join(" ")}`,
       sku: product.slug,
       mpn: product.slug,
       brand: { "@type": "Brand", name: SITE.brand },
       category: cat?.label,
       url,
+      color: product.colors.map((c) => c.name).join(", "),
+      material: product.materials.join(", "),
+      size: product.sizes.map((s) => `${s.label}: ${s.dimension}`).join(" | "),
+      additionalProperty: [
+        ...product.colors.map((c) => ({ "@type": "PropertyValue", name: "Màu sắc", value: c.name })),
+        ...product.sizes.map((s) => ({ "@type": "PropertyValue", name: `Kích thước ${s.label}`, value: s.dimension })),
+        { "@type": "PropertyValue", name: "Dịp tặng", value: product.occasions.join(", ") },
+        { "@type": "PropertyValue", name: "Ý nghĩa", value: product.meaning.join(" ") },
+      ],
       aggregateRating: {
         "@type": "AggregateRating",
         ratingValue: product.rating.value.toFixed(1),
