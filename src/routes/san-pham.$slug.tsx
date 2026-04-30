@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ShoppingBag, MessageCircle, Phone, Truck, Sparkles, Mail } from "lucide-react";
+import { ArrowLeft, ShoppingBag, MessageCircle, Phone, Truck, Sparkles, Mail, Heart, Palette, Ruler, Leaf, AlertTriangle, Gift } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { ProductCard } from "@/components/site/ProductCard";
 import { findProduct, formatPrice, PRODUCTS, CATEGORIES } from "@/data/products";
@@ -19,18 +19,27 @@ export const Route = createFileRoute("/san-pham/$slug")({
     const url = `${SITE.domain}/san-pham/${product.slug}`;
     const cat = CATEGORIES.find((c) => c.id === product.category);
     const title = `${product.name} — Giá ${product.price ? new Intl.NumberFormat("vi-VN").format(product.price) + "₫" : "Liên hệ"} | Hoa Tươi Thanh Ngọc`;
-    const desc = `${product.short} Giao nhanh 2h tại TP.HCM, thiệp miễn phí, đặt online qua Zalo ${SITE.phones[0]}.`;
+    const desc = `${product.short} Ý nghĩa, màu sắc ${product.colors.map(c=>c.name).join(", ")}, kích thước ${product.sizes[0]?.dimension}. Giao 2h tại TP.HCM, Zalo ${SITE.phones[0]}.`;
     const productLd = {
       "@context": "https://schema.org",
       "@type": "Product",
       name: product.name,
       image: [product.image],
-      description: product.description,
+      description: `${product.description} ${product.meaning.join(" ")}`,
       sku: product.slug,
       mpn: product.slug,
       brand: { "@type": "Brand", name: SITE.brand },
       category: cat?.label,
       url,
+      color: product.colors.map((c) => c.name).join(", "),
+      material: product.materials.join(", "),
+      size: product.sizes.map((s) => `${s.label}: ${s.dimension}`).join(" | "),
+      additionalProperty: [
+        ...product.colors.map((c) => ({ "@type": "PropertyValue", name: "Màu sắc", value: c.name })),
+        ...product.sizes.map((s) => ({ "@type": "PropertyValue", name: `Kích thước ${s.label}`, value: s.dimension })),
+        { "@type": "PropertyValue", name: "Dịp tặng", value: product.occasions.join(", ") },
+        { "@type": "PropertyValue", name: "Ý nghĩa", value: product.meaning.join(" ") },
+      ],
       aggregateRating: {
         "@type": "AggregateRating",
         ratingValue: product.rating.value.toFixed(1),
@@ -231,6 +240,138 @@ function ProductDetail() {
               </div>
             )}
           </div>
+        </div>
+      </section>
+
+      {/* MÔ TẢ CHI TIẾT — Ý nghĩa, Màu sắc, Kích thước, Dịp tặng, Chất liệu, Chăm sóc */}
+      <section className="bg-cream/40 py-14">
+        <div className="mx-auto max-w-6xl px-4 md:px-8">
+          <header className="mb-10 max-w-2xl">
+            <div className="text-xs uppercase tracking-[0.3em] text-primary">Mô Tả Sản Phẩm</div>
+            <h2 className="mt-2 font-serif text-3xl font-semibold md:text-4xl">Chi Tiết {product.name}</h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              Tìm hiểu sâu hơn về ý nghĩa, bảng màu chủ đạo, kích thước tham khảo và cách giữ hoa tươi lâu nhất.
+            </p>
+          </header>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            {/* Ý nghĩa */}
+            <article className="rounded-2xl border border-border bg-background p-6 shadow-soft">
+              <h3 className="flex items-center gap-2 font-serif text-xl font-semibold text-foreground">
+                <Heart className="h-5 w-5 text-primary" /> Ý nghĩa & thông điệp
+              </h3>
+              <ul className="mt-4 space-y-2 text-sm leading-relaxed text-muted-foreground">
+                {product.meaning.map((m, i) => (
+                  <li key={i} className="flex gap-2">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+                    <span>{m}</span>
+                  </li>
+                ))}
+              </ul>
+              {product.occasions.length > 0 && (
+                <div className="mt-5 border-t border-border pt-4">
+                  <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    <Gift className="h-3.5 w-3.5" /> Dịp tặng phù hợp
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {product.occasions.map((o) => (
+                      <span key={o} className="rounded-full bg-primary/10 px-3 py-1 text-xs text-primary">{o}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </article>
+
+            {/* Màu sắc */}
+            <article className="rounded-2xl border border-border bg-background p-6 shadow-soft">
+              <h3 className="flex items-center gap-2 font-serif text-xl font-semibold text-foreground">
+                <Palette className="h-5 w-5 text-primary" /> Bảng màu chủ đạo
+              </h3>
+              <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {product.colors.map((c) => (
+                  <div key={c.name} className="flex items-center gap-3 rounded-xl border border-border bg-cream/40 px-3 py-2.5">
+                    <span
+                      className="h-7 w-7 shrink-0 rounded-full border border-border shadow-sm"
+                      style={{ backgroundColor: c.hex }}
+                      aria-label={c.name}
+                    />
+                    <span className="text-sm font-medium text-foreground">{c.name}</span>
+                  </div>
+                ))}
+              </div>
+              {product.materials.length > 0 && (
+                <div className="mt-5 border-t border-border pt-4">
+                  <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    <Leaf className="h-3.5 w-3.5" /> Chất liệu / Loài hoa chính
+                  </div>
+                  <p className="text-sm text-muted-foreground">{product.materials.join(" · ")}</p>
+                </div>
+              )}
+            </article>
+
+            {/* Kích thước */}
+            <article className="rounded-2xl border border-border bg-background p-6 shadow-soft">
+              <h3 className="flex items-center gap-2 font-serif text-xl font-semibold text-foreground">
+                <Ruler className="h-5 w-5 text-primary" /> Kích thước tham khảo
+              </h3>
+              <div className="mt-4 overflow-hidden rounded-xl border border-border">
+                <table className="w-full text-sm">
+                  <thead className="bg-cream/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
+                    <tr>
+                      <th className="px-4 py-2.5 font-medium">Phiên bản</th>
+                      <th className="px-4 py-2.5 font-medium">Kích thước</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {product.sizes.map((s) => (
+                      <tr key={s.label}>
+                        <td className="px-4 py-3 font-medium text-foreground">{s.label}</td>
+                        <td className="px-4 py-3 text-muted-foreground">
+                          {s.dimension}
+                          {s.note && <span className="block text-xs text-muted-foreground/80">{s.note}</span>}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">
+                * Kích thước có thể chênh lệch ±5–10% tuỳ kiểu thiết kế và loài hoa thực tế trong ngày.
+              </p>
+            </article>
+
+            {/* Chăm sóc */}
+            <article className="rounded-2xl border border-border bg-background p-6 shadow-soft">
+              <h3 className="flex items-center gap-2 font-serif text-xl font-semibold text-foreground">
+                <Sparkles className="h-5 w-5 text-primary" /> Cách giữ hoa tươi lâu
+              </h3>
+              <ol className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
+                {product.careTips.map((t, i) => (
+                  <li key={i} className="flex gap-3">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">{i + 1}</span>
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ol>
+            </article>
+          </div>
+
+          {/* LƯU Ý */}
+          <aside
+            role="note"
+            className="mt-8 flex gap-4 rounded-2xl border border-gold/40 bg-gold/10 p-5 shadow-soft"
+          >
+            <AlertTriangle className="h-6 w-6 shrink-0 text-primary" aria-hidden />
+            <div>
+              <div className="font-serif text-lg font-semibold text-foreground">Lưu ý quan trọng</div>
+              <p className="mt-1 text-sm leading-relaxed text-foreground/80">
+                Sản phẩm thực nhận có thể khác đôi chút so với hình đại diện trên website do
+                <strong> đặc điểm thủ công</strong> trong từng thiết kế và <strong>tính chất tự nhiên</strong> của
+                hàng nông nghiệp (màu sắc, kích cỡ bông, độ nở của hoa thay đổi theo mùa và lô hàng).
+                Chúng tôi cam kết giữ đúng tone màu, bố cục và chất lượng tươi mới của sản phẩm.
+              </p>
+            </div>
+          </aside>
         </div>
       </section>
 
