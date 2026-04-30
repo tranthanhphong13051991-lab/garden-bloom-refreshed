@@ -27,6 +27,14 @@ export type Product = {
   occasions: string[]; // dịp tặng phù hợp
   careTips: string[]; // hướng dẫn chăm sóc / giữ tươi
   materials: string[]; // chất liệu/loài hoa chính
+  gallery: GalleryShot[]; // ảnh thực nhận theo lô / góc khác nhau
+};
+
+export type GalleryShot = {
+  src: string;
+  alt: string;
+  variant: string; // tên lô/biến thể: "Lô tháng 3", "Tone hồng nhạt", "Góc nghiêng"...
+  note?: string; // ghi chú khác biệt với hình đại diện
 };
 
 // Hash slug → số ổn định để tạo rating "thật như thực" mà không random mỗi render
