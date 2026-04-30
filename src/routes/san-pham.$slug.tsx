@@ -253,6 +253,49 @@ function ProductDetail() {
         </section>
       )}
 
+
+      {tagSuggestions.length > 0 && (
+        <section className="py-16">
+          <div className="mx-auto max-w-7xl px-4 md:px-8">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <div className="text-xs uppercase tracking-[0.3em] text-primary">Khám phá thêm</div>
+                <h2 className="mt-2 font-serif text-3xl font-semibold md:text-4xl">Gợi Ý Theo Thẻ</h2>
+                <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+                  Những mẫu hoa cùng chủ đề với <strong>{product.name}</strong> — gợi ý nhanh khi bạn muốn so sánh phong cách hoặc tìm phương án thay thế.
+                </p>
+              </div>
+              <Link to="/the" className="hidden text-sm text-primary hover:underline md:inline">Tất cả thẻ →</Link>
+            </div>
+
+            <div className="mt-10 space-y-12">
+              {tagSuggestions.map((t) => (
+                <div key={t.slug}>
+                  <div className="flex items-center justify-between gap-4">
+                    <h3 className="font-serif text-xl font-semibold text-foreground">
+                      <Link to="/the/$tag" params={{ tag: t.slug }} className="hover:text-primary">
+                        #{t.label}
+                      </Link>
+                      <span className="ml-2 text-sm font-normal text-muted-foreground">({t.products.length} mẫu liên quan)</span>
+                    </h3>
+                    <Link
+                      to="/the/$tag"
+                      params={{ tag: t.slug }}
+                      className="text-xs text-primary hover:underline"
+                    >
+                      Xem tất cả →
+                    </Link>
+                  </div>
+                  <div className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    {t.products.map((p) => <ProductCard key={p.slug} product={p} />)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {related.length > 0 && (
         <section className="bg-cream py-16">
           <div className="mx-auto max-w-7xl px-4 md:px-8">
