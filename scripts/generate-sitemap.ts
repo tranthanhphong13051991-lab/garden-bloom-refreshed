@@ -11,6 +11,7 @@ const urls: Array<{ loc: string; priority: string; lastmod?: string }> = [
   { loc: `${SITE.domain}/blog`, priority: "0.8" },
   { loc: `${SITE.domain}/gioi-thieu`, priority: "0.6" },
   { loc: `${SITE.domain}/lien-he`, priority: "0.7" },
+  { loc: `${SITE.domain}/the`, priority: "0.7" },
   ...CATEGORIES.map((c) => ({ loc: `${SITE.domain}/san-pham?cat=${c.id}`, priority: "0.7" })),
   ...PRODUCTS.map((p) => ({ loc: `${SITE.domain}/san-pham/${p.slug}`, priority: "0.8" })),
   ...POSTS.map((p) => ({ loc: `${SITE.domain}/blog/${p.slug}`, priority: "0.7", lastmod: (p.updatedAt ?? p.publishedAt).slice(0, 10) })),
