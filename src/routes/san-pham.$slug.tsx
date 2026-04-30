@@ -25,7 +25,7 @@ export const Route = createFileRoute("/san-pham/$slug")({
       "@context": "https://schema.org",
       "@type": "Product",
       name: product.name,
-      image: [product.image],
+      image: [product.image, ...product.gallery.map((g) => g.src)],
       description: `${product.description} ${product.meaning.join(" ")}`,
       sku: product.slug,
       mpn: product.slug,
