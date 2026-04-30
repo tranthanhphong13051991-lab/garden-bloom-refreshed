@@ -151,6 +151,16 @@ function ProductDetail() {
   const cat = CATEGORIES.find((c) => c.id === product.category);
   const related = PRODUCTS.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4);
 
+  const tagSuggestions = product.keywords
+    .map((k) => findTag(tagSlug(k)))
+    .filter((t): t is NonNullable<typeof t> => !!t)
+    .map((t) => ({
+      ...t,
+      products: t.products.filter((p) => p.slug !== product.slug).slice(0, 4),
+    }))
+    .filter((t) => t.products.length > 0)
+    .slice(0, 3);
+
   const orderMsg = encodeURIComponent(
     `Xin chào Hoa Tươi Thanh Ngọc, tôi muốn đặt sản phẩm: ${product.name}${product.price ? ` — ${formatPrice(product.price)}` : ""}. Xin tư vấn giúp tôi.`,
   );
