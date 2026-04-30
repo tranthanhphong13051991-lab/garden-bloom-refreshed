@@ -6,6 +6,7 @@ export type Category =
   | "lan-ho-diep";
 
 export type FAQ = { q: string; a: string };
+export type SizeOption = { label: string; dimension: string; note?: string };
 
 export type Product = {
   slug: string;
@@ -20,6 +21,12 @@ export type Product = {
   keywords: string[];
   rating: { value: number; count: number };
   faqs: FAQ[];
+  meaning: string[]; // ý nghĩa & thông điệp
+  colors: { name: string; hex: string }[]; // bảng màu chủ đạo
+  sizes: SizeOption[]; // kích thước tham khảo
+  occasions: string[]; // dịp tặng phù hợp
+  careTips: string[]; // hướng dẫn chăm sóc / giữ tươi
+  materials: string[]; // chất liệu/loài hoa chính
 };
 
 // Hash slug → số ổn định để tạo rating "thật như thực" mà không random mỗi render
