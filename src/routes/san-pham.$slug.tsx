@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ShoppingBag, MessageCircle, Phone, Truck, Sparkles, Mail, Heart, Palette, Ruler, Leaf, AlertTriangle, Gift, Images, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
@@ -185,6 +185,31 @@ function ProductDetail() {
   const prev = () => setLightbox((i) => (i === null ? null : (i - 1 + galleryShots.length) % galleryShots.length));
   const next = () => setLightbox((i) => (i === null ? null : (i + 1) % galleryShots.length));
 
+  const [activeSection, setActiveSection] = useState("y-nghia");
+
+  useEffect(() => {
+    const ids = ["y-nghia", "mau-sac", "kich-thuoc", "faq"];
+    const observers = ids.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([e]) => { if (e.isIntersecting) setActiveSection(id); },
+        { rootMargin: "0px 0px -60% 0px" },
+      );
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach((o) => o?.disconnect());
+  }, []);
+
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    // 80px header + 56px sticky nav = 136px offset
+    const top = el.getBoundingClientRect().top + window.scrollY - 136;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
   return (
     <SiteLayout>
       <section className="bg-cream py-6">
@@ -357,6 +382,34 @@ function ProductDetail() {
         </div>
       )}
 
+      {/* ANCHOR NAV */}
+      <nav
+        aria-label="Điều hướng nội dung sản phẩm"
+        className="sticky top-20 z-30 border-b border-border/60 bg-background/95 backdrop-blur-sm"
+      >
+        <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 py-2.5 md:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {[
+            { id: "y-nghia",    label: "Ý nghĩa"    },
+            { id: "mau-sac",    label: "Màu sắc"    },
+            { id: "kich-thuoc", label: "Kích thước"  },
+            { id: "faq",        label: "FAQ"         },
+          ].map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => scrollTo(t.id)}
+              className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-all ${
+                activeSection === t.id
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:bg-cream hover:text-foreground"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </nav>
+
       {/* MÔ TẢ CHI TIẾT — Ý nghĩa, Màu sắc, Kích thước, Dịp tặng, Chất liệu, Chăm sóc */}
       <section className="bg-cream/40 py-14">
         <div className="mx-auto max-w-6xl px-4 md:px-8">
@@ -370,7 +423,7 @@ function ProductDetail() {
 
           <div className="grid gap-6 md:grid-cols-2">
             {/* Ý nghĩa */}
-            <article className="rounded-2xl border border-border bg-background p-6 shadow-soft">
+            <article id="y-nghia" className="rounded-2xl border border-border bg-background p-6 shadow-soft">
               <h3 className="flex items-center gap-2 font-serif text-xl font-semibold text-foreground">
                 <Heart className="h-5 w-5 text-primary" /> Ý nghĩa & thông điệp
               </h3>
@@ -397,7 +450,7 @@ function ProductDetail() {
             </article>
 
             {/* Màu sắc */}
-            <article className="rounded-2xl border border-border bg-background p-6 shadow-soft">
+            <article id="mau-sac" className="rounded-2xl border border-border bg-background p-6 shadow-soft">
               <h3 className="flex items-center gap-2 font-serif text-xl font-semibold text-foreground">
                 <Palette className="h-5 w-5 text-primary" /> Bảng màu chủ đạo
               </h3>
@@ -424,7 +477,7 @@ function ProductDetail() {
             </article>
 
             {/* Kích thước */}
-            <article className="rounded-2xl border border-border bg-background p-6 shadow-soft">
+            <article id="kich-thuoc" className="rounded-2xl border border-border bg-background p-6 shadow-soft">
               <h3 className="flex items-center gap-2 font-serif text-xl font-semibold text-foreground">
                 <Ruler className="h-5 w-5 text-primary" /> Kích thước tham khảo
               </h3>
@@ -490,7 +543,7 @@ function ProductDetail() {
       </section>
 
       {product.faqs.length > 0 && (
-        <section className="py-16">
+        <section id="faq" className="py-16">
           <div className="mx-auto max-w-3xl px-4 md:px-8">
             <h2 className="font-serif text-3xl font-semibold md:text-4xl">Câu Hỏi Thường Gặp</h2>
             <div className="mt-8 divide-y divide-border rounded-2xl border border-border bg-background shadow-soft">

@@ -58,6 +58,6 @@ export const useCart = create<CartState>()(
       count: () => get().items.reduce((a, b) => a + b.qty, 0),
       total: () => get().items.reduce((a, b) => a + (b.price ?? 0) * b.qty, 0),
     }),
-    { name: "thanh-ngoc-cart" },
+    { name: "thanh-ngoc-cart", skipHydration: true },
   ),
 );
