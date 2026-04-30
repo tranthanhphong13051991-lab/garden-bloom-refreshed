@@ -175,6 +175,16 @@ function ProductDetail() {
     `Xin chào Hoa Tươi Thanh Ngọc, tôi muốn đặt sản phẩm: ${product.name}${product.price ? ` — ${formatPrice(product.price)}` : ""}. Xin tư vấn giúp tôi.`,
   );
 
+  // Lightbox cho gallery "Hình ảnh thực nhận"
+  const galleryShots = [
+    { src: product.image, alt: product.name, variant: "Hình đại diện", note: "Ảnh mẫu hiển thị trên website — bố cục và tone màu chuẩn." },
+    ...product.gallery,
+  ];
+  const [lightbox, setLightbox] = useState<number | null>(null);
+  const closeLightbox = () => setLightbox(null);
+  const prev = () => setLightbox((i) => (i === null ? null : (i - 1 + galleryShots.length) % galleryShots.length));
+  const next = () => setLightbox((i) => (i === null ? null : (i + 1) % galleryShots.length));
+
   return (
     <SiteLayout>
       <section className="bg-cream py-6">
