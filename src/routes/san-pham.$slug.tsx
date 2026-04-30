@@ -68,6 +68,31 @@ export const Route = createFileRoute("/san-pham/$slug")({
         acceptedAnswer: { "@type": "Answer", text: f.a },
       })),
     } : null;
+
+    // Gợi ý theo thẻ — top 3 thẻ có nhiều sản phẩm liên quan nhất
+    const tagSuggestions = product.keywords
+      .map((k) => findTag(tagSlug(k)))
+      .filter((t): t is NonNullable<typeof t> => !!t)
+      .map((t) => ({
+        ...t,
+        products: t.products.filter((p) => p.slug !== product.slug).slice(0, 4),
+      }))
+      .filter((t) => t.products.length > 0)
+      .slice(0, 3);
+
+    const tagListLd = tagSuggestions.length > 0 ? tagSuggestions.map((t) => ({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: `Gợi ý theo thẻ ${t.label}`,
+      url: `${SITE.domain}/the/${t.slug}`,
+      numberOfItems: t.products.length,
+      itemListElement: t.products.map((p, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: `${SITE.domain}/san-pham/${p.slug}`,
+        name: p.name,
+      })),
+    })) : [];
     return {
       meta: [
         { title },
@@ -94,6 +119,7 @@ export const Route = createFileRoute("/san-pham/$slug")({
         { type: "application/ld+json", children: JSON.stringify(productLd) },
         { type: "application/ld+json", children: JSON.stringify(breadcrumbLd) },
         ...(faqLd ? [{ type: "application/ld+json", children: JSON.stringify(faqLd) }] : []),
+        ...tagListLd.map((ld) => ({ type: "application/ld+json", children: JSON.stringify(ld) })),
       ],
     };
   },
