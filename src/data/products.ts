@@ -90,7 +90,7 @@ export const CATEGORIES: { id: Category; label: string; description: string }[] 
   { id: "lan-ho-diep", label: "Lan Hồ Điệp", description: "Lan hồ điệp quý phái, biếu tặng cao cấp" },
 ];
 
-type RawProduct = Omit<Product, "image" | "thumb" | "rating" | "faqs" | "meaning" | "colors" | "sizes" | "occasions" | "careTips" | "materials"> & {
+type RawProduct = Omit<Product, "image" | "thumb" | "rating" | "faqs" | "meaning" | "colors" | "sizes" | "occasions" | "careTips" | "materials" | "gallery"> & {
   _img: string;
   rating?: Product["rating"];
   faqs?: FAQ[];
@@ -100,6 +100,8 @@ type RawProduct = Omit<Product, "image" | "thumb" | "rating" | "faqs" | "meaning
   occasions?: string[];
   careTips?: string[];
   materials?: string[];
+  gallery?: GalleryShot[];
+  galleryImgs?: string[]; // CDN slugs để build gallery nhanh
 };
 const raw: RawProduct[] = [
   // BÓ HOA
