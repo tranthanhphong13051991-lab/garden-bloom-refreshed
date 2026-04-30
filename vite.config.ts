@@ -6,4 +6,5 @@
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-export default defineConfig();
+// Disable Cloudflare Workers plugin on Vercel so Vite generates a standard SPA with index.html
+export default defineConfig({ cloudflare: !process.env.VERCEL });
