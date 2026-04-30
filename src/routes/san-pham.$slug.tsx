@@ -5,7 +5,7 @@ import { ProductCard } from "@/components/site/ProductCard";
 import { findProduct, formatPrice, PRODUCTS, CATEGORIES } from "@/data/products";
 import { useCart } from "@/store/cart";
 import { SITE } from "@/data/site";
-import { tagSlug } from "@/data/tags";
+import { tagSlug, findTag } from "@/data/tags";
 
 export const Route = createFileRoute("/san-pham/$slug")({
   loader: ({ params }) => {
