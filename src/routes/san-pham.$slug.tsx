@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ShoppingBag, MessageCircle, Phone, Truck, Sparkles, Mail, Heart, Palette, Ruler, Leaf, AlertTriangle, Gift } from "lucide-react";
+import { ArrowLeft, ShoppingBag, MessageCircle, Phone, Truck, Sparkles, Mail, Heart, Palette, Ruler, Leaf, AlertTriangle, Gift, Images, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { ProductCard } from "@/components/site/ProductCard";
 import { findProduct, formatPrice, PRODUCTS, CATEGORIES } from "@/data/products";
@@ -24,7 +25,7 @@ export const Route = createFileRoute("/san-pham/$slug")({
       "@context": "https://schema.org",
       "@type": "Product",
       name: product.name,
-      image: [product.image],
+      image: [product.image, ...product.gallery.map((g) => g.src)],
       description: `${product.description} ${product.meaning.join(" ")}`,
       sku: product.slug,
       mpn: product.slug,
@@ -174,6 +175,16 @@ function ProductDetail() {
     `Xin chào Hoa Tươi Thanh Ngọc, tôi muốn đặt sản phẩm: ${product.name}${product.price ? ` — ${formatPrice(product.price)}` : ""}. Xin tư vấn giúp tôi.`,
   );
 
+  // Lightbox cho gallery "Hình ảnh thực nhận"
+  const galleryShots = [
+    { src: product.image, alt: product.name, variant: "Hình đại diện", note: "Ảnh mẫu hiển thị trên website — bố cục và tone màu chuẩn." },
+    ...product.gallery,
+  ];
+  const [lightbox, setLightbox] = useState<number | null>(null);
+  const closeLightbox = () => setLightbox(null);
+  const prev = () => setLightbox((i) => (i === null ? null : (i - 1 + galleryShots.length) % galleryShots.length));
+  const next = () => setLightbox((i) => (i === null ? null : (i + 1) % galleryShots.length));
+
   return (
     <SiteLayout>
       <section className="bg-cream py-6">
@@ -242,6 +253,109 @@ function ProductDetail() {
           </div>
         </div>
       </section>
+
+      {/* HÌNH ẢNH THỰC NHẬN */}
+      <section className="py-14">
+        <div className="mx-auto max-w-6xl px-4 md:px-8">
+          <header className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-primary">
+                <Images className="h-3.5 w-3.5" /> Hình Ảnh Thực Nhận
+              </div>
+              <h2 className="mt-2 font-serif text-3xl font-semibold md:text-4xl">Sản phẩm thực tế qua từng lô</h2>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+                So sánh hình đại diện với ảnh thực tế từ các lô khác nhau để bạn hình dung rõ mức độ
+                chênh lệch tự nhiên về tone màu, độ nở của hoa và kiểu gói thủ công.
+              </p>
+            </div>
+            <span className="rounded-full bg-cream px-3 py-1 text-xs font-medium text-muted-foreground">
+              {galleryShots.length} ảnh
+            </span>
+          </header>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {galleryShots.map((shot, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setLightbox(i)}
+                className="group relative overflow-hidden rounded-2xl border border-border bg-cream shadow-soft transition hover:-translate-y-1 hover:shadow-elegant"
+                aria-label={`Xem ${shot.variant}`}
+              >
+                <div className="aspect-square overflow-hidden">
+                  <img
+                    src={shot.src}
+                    alt={shot.alt}
+                    width={400}
+                    height={400}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-3 text-left">
+                  <div className="text-[11px] font-medium uppercase tracking-wider text-white/80">
+                    {i === 0 ? "Mẫu chuẩn" : "Lô thực tế"}
+                  </div>
+                  <div className="text-sm font-semibold text-white">{shot.variant}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
+            <strong className="text-foreground">Vì sao có khác biệt?</strong> Hoa là hàng nông nghiệp tự nhiên — màu sắc, kích cỡ
+            và độ nở thay đổi theo mùa và từng lô nhập. Mỗi bó/giỏ được gói thủ công nên ruy băng, nếp
+            giấy có thể chênh lệch đôi chút. Chúng tôi luôn giữ đúng <em>bố cục, tone chủ đạo</em> và
+            <em> chất lượng hoa tươi</em> như mẫu.
+          </p>
+        </div>
+      </section>
+
+      {/* LIGHTBOX */}
+      {lightbox !== null && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Xem ảnh phóng to"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+          onClick={closeLightbox}
+        >
+          <button
+            onClick={closeLightbox}
+            aria-label="Đóng"
+            className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white transition hover:bg-white/20"
+          >
+            <X className="h-5 w-5" />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); prev(); }}
+            aria-label="Ảnh trước"
+            className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white transition hover:bg-white/20 md:left-6"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); next(); }}
+            aria-label="Ảnh sau"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white transition hover:bg-white/20 md:right-6"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+          <figure className="flex max-h-[90vh] max-w-5xl flex-col items-center gap-3" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={galleryShots[lightbox].src}
+              alt={galleryShots[lightbox].alt}
+              className="max-h-[75vh] w-auto rounded-2xl object-contain shadow-elegant"
+            />
+            <figcaption className="max-w-2xl rounded-xl bg-white/10 px-4 py-2.5 text-center text-sm text-white backdrop-blur">
+              <span className="font-semibold">{galleryShots[lightbox].variant}</span>
+              {galleryShots[lightbox].note && <> — <span className="text-white/80">{galleryShots[lightbox].note}</span></>}
+              <span className="mt-1 block text-xs text-white/60">{lightbox + 1} / {galleryShots.length}</span>
+            </figcaption>
+          </figure>
+        </div>
+      )}
 
       {/* MÔ TẢ CHI TIẾT — Ý nghĩa, Màu sắc, Kích thước, Dịp tặng, Chất liệu, Chăm sóc */}
       <section className="bg-cream/40 py-14">

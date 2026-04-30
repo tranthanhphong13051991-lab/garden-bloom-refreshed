@@ -27,6 +27,14 @@ export type Product = {
   occasions: string[]; // dịp tặng phù hợp
   careTips: string[]; // hướng dẫn chăm sóc / giữ tươi
   materials: string[]; // chất liệu/loài hoa chính
+  gallery: GalleryShot[]; // ảnh thực nhận theo lô / góc khác nhau
+};
+
+export type GalleryShot = {
+  src: string;
+  alt: string;
+  variant: string; // tên lô/biến thể: "Lô tháng 3", "Tone hồng nhạt", "Góc nghiêng"...
+  note?: string; // ghi chú khác biệt với hình đại diện
 };
 
 // Hash slug → số ổn định để tạo rating "thật như thực" mà không random mỗi render
@@ -82,7 +90,7 @@ export const CATEGORIES: { id: Category; label: string; description: string }[] 
   { id: "lan-ho-diep", label: "Lan Hồ Điệp", description: "Lan hồ điệp quý phái, biếu tặng cao cấp" },
 ];
 
-type RawProduct = Omit<Product, "image" | "thumb" | "rating" | "faqs" | "meaning" | "colors" | "sizes" | "occasions" | "careTips" | "materials"> & {
+type RawProduct = Omit<Product, "image" | "thumb" | "rating" | "faqs" | "meaning" | "colors" | "sizes" | "occasions" | "careTips" | "materials" | "gallery"> & {
   _img: string;
   rating?: Product["rating"];
   faqs?: FAQ[];
@@ -92,6 +100,8 @@ type RawProduct = Omit<Product, "image" | "thumb" | "rating" | "faqs" | "meaning
   occasions?: string[];
   careTips?: string[];
   materials?: string[];
+  gallery?: GalleryShot[];
+  galleryImgs?: string[]; // CDN slugs để build gallery nhanh
 };
 const raw: RawProduct[] = [
   // BÓ HOA
@@ -249,8 +259,48 @@ const MATERIALS_BY_CATEGORY: Record<Category, string[]> = {
   "lan-ho-diep": ["Lan hồ điệp Đà Lạt / nhập khẩu", "Chậu sứ cao cấp", "Rêu trang trí", "Nơ lụa & thiệp"],
 };
 
+// Pool ảnh theo category (dùng chính các _img đã có) để build gallery "lô khác / góc khác"
+const imgPoolByCat: Record<Category, string[]> = raw.reduce((acc, p) => {
+  (acc[p.category] ||= []).push(p._img);
+  return acc;
+}, {} as Record<Category, string[]>);
+
+const VARIANT_LABELS = [
+  { variant: "Lô tháng trước", note: "Cùng thiết kế nhưng tone hoa nhỉnh đậm hơn theo mùa" },
+  { variant: "Tone phối nhẹ", note: "Cùng bố cục, sắc hoa nhạt hơn so với hình đại diện" },
+  { variant: "Góc chụp khác", note: "Bó hoa thực tế từ góc nghiêng — gói và ruy băng có thể khác chút" },
+  { variant: "Khách hàng nhận", note: "Hình thực tế khách gửi về — bố cục giữ nguyên, độ nở hoa thay đổi tự nhiên" },
+];
+
+const buildDefaultGallery = (slug: string, cat: Category, mainImg: string): GalleryShot[] => {
+  const pool = (imgPoolByCat[cat] || []).filter((s) => s !== mainImg);
+  // Lấy ảnh ổn định theo hash slug để không random mỗi render
+  const h = hash(slug);
+  const picked: string[] = [];
+  for (let i = 0; i < Math.min(3, pool.length); i++) {
+    picked.push(pool[(h + i * 7) % pool.length]);
+  }
+  return picked.map((s, i) => ({
+    src: img(s, 800),
+    alt: `${VARIANT_LABELS[i].variant} — minh họa khác biệt thực tế`,
+    variant: VARIANT_LABELS[i].variant,
+    note: VARIANT_LABELS[i].note,
+  }));
+};
+
 export const PRODUCTS: Product[] = raw.map((p) => {
   const colors = p.colors ?? inferColors(`${p.name} ${p.short}`);
+  let gallery: GalleryShot[];
+  if (p.gallery) gallery = p.gallery;
+  else if (p.galleryImgs)
+    gallery = p.galleryImgs.map((s, i) => ({
+      src: img(s, 800),
+      alt: `${p.name} — ${VARIANT_LABELS[i % VARIANT_LABELS.length].variant}`,
+      variant: VARIANT_LABELS[i % VARIANT_LABELS.length].variant,
+      note: VARIANT_LABELS[i % VARIANT_LABELS.length].note,
+    }));
+  else gallery = buildDefaultGallery(p.slug, p.category, p._img);
+
   return {
     slug: p.slug,
     name: p.name,
@@ -268,6 +318,7 @@ export const PRODUCTS: Product[] = raw.map((p) => {
     occasions: p.occasions ?? OCCASIONS_BY_CATEGORY[p.category],
     careTips: p.careTips ?? CARE_BY_CATEGORY[p.category],
     materials: p.materials ?? MATERIALS_BY_CATEGORY[p.category],
+    gallery,
     image: img(p._img, 800),
     thumb: img(p._img, 400),
   };
