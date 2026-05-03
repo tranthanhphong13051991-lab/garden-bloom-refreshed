@@ -66,8 +66,11 @@ export const Route = createRootRoute({
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "canonical", href: SITE.domain },
+      { rel: "icon", type: "image/png", href: "/images/logo/logo.png" },
+      { rel: "apple-touch-icon", href: "/images/logo/logo.png" },
       { rel: "preconnect", href: "https://hoatuoithanhngoc.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+
     ],
     scripts: [
       { type: "application/ld+json", children: JSON.stringify(localBusiness) },

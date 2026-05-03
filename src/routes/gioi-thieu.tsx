@@ -28,30 +28,97 @@ function AboutPage() {
     <SiteLayout>
       <section className="bg-gradient-hero py-24 text-center text-primary-foreground md:py-32">
         <div className="mx-auto max-w-3xl px-4 md:px-8">
-          <p className="ornament text-xs uppercase tracking-[0.35em] text-gold">Về Chúng Tôi</p>
-          <h1 className="mt-4 font-serif text-5xl font-semibold md:text-6xl">Câu Chuyện Thanh Ngọc</h1>
+          <p className="ornament text-xs uppercase tracking-[0.35em] text-gold">Câu chuyện của chúng tôi</p>
+          <h1 className="mt-4 font-serif text-5xl font-semibold md:text-6xl">Người Giữ Hồn Tiệm Hoa</h1>
           <p className="mt-6 text-lg leading-relaxed text-primary-foreground/85">
-            Mỗi đoá hoa là một câu chuyện yêu thương được kể bằng ngôn ngữ của thiên nhiên.
+            Hơn hai mươi năm, không chỉ là hoa — đó là tình yêu, là ký ức, là những dấu mốc đời người.
           </p>
         </div>
       </section>
 
+      {/* Phần Người Giữ Hồn Tiệm Hoa */}
       <section className="py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl gap-12 px-4 md:grid-cols-2 md:px-8">
-          <div>
-            <h2 className="font-serif text-4xl font-semibold text-foreground md:text-5xl">Tiệm hoa nhỏ tại Bình Thạnh</h2>
-            <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-              Hoa Tươi Thanh Ngọc ra đời từ tình yêu với hoa và mong muốn mang vẻ đẹp tinh tế đến từng khách hàng tại TP.HCM. Toạ lạc tại {SITE.address}, chúng tôi tự hào là người đồng hành trong mọi khoảnh khắc đáng nhớ của bạn.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              Từ bó hoa sinh nhật ấm áp, giỏ hoa cưới tinh khôi, kệ hoa khai trương phú quý cho đến hoa chia buồn trang trọng — mỗi sản phẩm đều mang trọn tâm huyết của những người yêu hoa.
-            </p>
-          </div>
-          <div className="rounded-3xl bg-cream p-10 shadow-soft">
-            <p className="font-serif text-2xl italic leading-relaxed text-primary">
-              "Chúng tôi không chỉ bán hoa — chúng tôi gửi gắm yêu thương, nói lời chúc, và lưu giữ những khoảnh khắc đẹp của bạn."
-            </p>
-            <div className="mt-6 text-sm text-muted-foreground">— Thanh Ngọc Flower's</div>
+        <div className="mx-auto max-w-6xl px-4 md:px-8">
+          <div className="flex flex-col gap-16">
+            {/* Cô Thanh Ngọc */}
+            <div className="group overflow-hidden rounded-[2.5rem] bg-white shadow-elegant transition-all hover:shadow-2xl">
+              <div className="grid md:grid-cols-12 md:items-center">
+                <div className="relative aspect-square md:aspect-[4/5] overflow-hidden md:col-span-5">
+                  <img 
+                    src="/images/products/co-thanh-ngoc.jpg" 
+                    alt="Cô Thanh Ngọc - Người sáng lập" 
+                    className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute bottom-6 left-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary/20 backdrop-blur-md">
+                    <span className="text-xl font-serif font-bold text-white">20+</span>
+                    <span className="ml-1 text-[10px] uppercase tracking-tighter text-white/80">Năm</span>
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center p-8 lg:p-16 md:col-span-7">
+                  <span className="w-fit rounded-full bg-primary/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-primary">Người sáng lập</span>
+                  <h3 className="mt-6 font-serif text-3xl font-semibold">Cô Thanh Ngọc</h3>
+                  <p className="mt-1 text-sm italic text-muted-foreground">Người Giữ Hồn Tiệm Hoa</p>
+                  <div className="my-6 h-px w-12 bg-primary/30" />
+                  <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
+                    <p>Từ những buổi sáng tinh mơ ở chợ hoa Hồ Thị Kỷ, cô Thanh Ngọc đã tự tay chọn từng cành hoa — ngắm sắc, nghe hương, để chắc chắn rằng mỗi bó hoa tới tay khách đều là điều tươi đẹp nhất trong ngày của họ.</p>
+                    <p>20 năm, ba thế hệ khách hàng. Có những người đặt hoa cưới từ thời còn trẻ, nay đã quay lại đặt hoa cho con gái lấy chồng. Cô Thanh Ngọc nhớ hết — vì với cô, mỗi khách hàng là một câu chuyện, mỗi bó hoa là một dấu mốc đáng nhớ.</p>
+                  </div>
+                  <div className="mt-8 space-y-2">
+                    <span className="flex items-center text-[11px] font-medium text-primary/70">
+                      <Heart className="mr-2 h-3 w-3" /> Chợ hoa Hồ Thị Kỷ
+                    </span>
+                    <span className="flex items-center text-[11px] font-medium text-primary/70">
+                      <Heart className="mr-2 h-3 w-3" /> Ba thế hệ
+                    </span>
+                    <span className="flex items-center text-[11px] font-medium text-primary/70">
+                      <Heart className="mr-2 h-3 w-3" /> 20 năm tận tâm
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Thanh Tiền */}
+            <div className="group overflow-hidden rounded-[2.5rem] bg-white shadow-elegant transition-all hover:shadow-2xl">
+              <div className="grid md:grid-cols-12 md:items-center">
+                <div className="order-2 flex flex-col justify-center p-8 lg:p-16 md:order-1 md:col-span-7">
+                  <span className="w-fit rounded-full bg-gold/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-gold">Thế hệ tiếp nối</span>
+                  <h3 className="mt-6 font-serif text-3xl font-semibold">Thanh Tiền</h3>
+                  <p className="mt-1 text-sm italic text-muted-foreground">Đôi Tay Giữ Lửa Nghề</p>
+                  <div className="my-6 h-px w-12 bg-gold/30" />
+                  <div className="space-y-4 text-sm leading-relaxed text-muted-foreground">
+                    <p>Lớn lên giữa hương hoa và tiếng bước chân sớm của mẹ, Thanh Tiền thấm vào mình tình yêu dành cho hoa từ khi còn nhỏ. Với anh, hoa không chỉ là hàng hoá — đó là ngôn ngữ của những cảm xúc mà ta khó nói thành lời.</p>
+                    <p>Hôm nay, đôi tay ấy — đôi tay được mẹ dạy cách trân trọng từng cành hoa, từng nhuỵ hoa mong manh — đang ngày ngày tạo nên những tác phẩm nghệ thuật tươi sống.</p>
+                  </div>
+                  <div className="mt-8 rounded-2xl bg-cream/50 p-6 italic text-primary/80">
+                    <p className="relative z-10 text-xs leading-relaxed">
+                      "Mỗi bó hoa mình làm ra, mình muốn người nhận cảm nhận được — có một người đã dành cả tâm huyết cho họ."
+                    </p>
+                  </div>
+                  <div className="mt-8 space-y-2">
+                    <span className="flex items-center text-[11px] font-medium text-gold/80">
+                      <Award className="mr-2 h-3 w-3" /> Nghệ thuật hoa
+                    </span>
+                    <span className="flex items-center text-[11px] font-medium text-gold/80">
+                      <Award className="mr-2 h-3 w-3" /> Truyền thống gia đình
+                    </span>
+                  </div>
+                </div>
+                <div className="order-1 relative aspect-square md:aspect-[4/5] overflow-hidden md:order-2 md:col-span-5">
+                  <img 
+                    src="/images/products/thanh-tien.jpg" 
+                    alt="Thanh Tiền - Thế hệ tiếp nối" 
+                    className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 flex items-end justify-center bg-gradient-to-t from-black/40 to-transparent p-8">
+                    <div className="text-center text-white">
+                      <Heart className="mx-auto mb-2 h-5 w-5 fill-white" />
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em]">Tâm Huyết</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

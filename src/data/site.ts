@@ -12,6 +12,8 @@ export const SITE = {
   zalo: "https://zalo.me/3297391822230372190",
   facebook: "https://www.facebook.com/hoatuoithanhngoc",
   geo: { lat: 10.7944, lng: 106.7144 },
+  logo: "/images/logo/logo.png",
+  ogImage: "/images/bg/nen-moi.png",
 } as const;
 
 export const usps = [

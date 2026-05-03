@@ -80,7 +80,11 @@ const FAQ_BY_CATEGORY: Record<Category, FAQ[]> = {
 };
 
 const CDN = "https://hoatuoithanhngoc.com/image/responsive";
-const img = (slug: string, size: 400 | 800 = 800) => `${CDN}/${slug}-${size}.webp`;
+const img = (slug: string, _size: 400 | 800 = 800) => {
+  if (slug.includes(".")) return `/images/products/${slug}`;
+  // Chỉ có phiên bản 800px trên CDN — dùng chung cho cả thumb
+  return `${CDN}/${slug}-800.webp`;
+};
 
 export const CATEGORIES: { id: Category; label: string; description: string }[] = [
   { id: "bo-hoa", label: "Bó Hoa", description: "Bó hoa tươi cho mọi dịp: sinh nhật, tình yêu, tốt nghiệp" },
@@ -104,42 +108,1978 @@ type RawProduct = Omit<Product, "image" | "thumb" | "rating" | "faqs" | "meaning
   galleryImgs?: string[]; // CDN slugs để build gallery nhanh
 };
 const raw: RawProduct[] = [
-  // BÓ HOA
-  { slug: "bo-hoa-hong-kem-tinh-te", name: "Bó Hoa Hồng Kem Tinh Tế", category: "bo-hoa", badge: "Bán Chạy", _img: "hoa-hong-kem-tinh-te", short: "Hoa hồng kem thuần khiết, gói kraft thủ công, dành tặng những khoảnh khắc đặc biệt.", description: "Bó hoa hồng kem tinh tế — sự kết hợp giữa hồng kem ngọt ngào và lớp giấy kraft mộc mạc. Mẫu bán chạy bậc nhất tại tiệm, phù hợp tặng người yêu, mẹ, bạn thân vào sinh nhật, kỷ niệm hay những ngày đặc biệt.", price: 650000, keywords: ["hoa hồng kem", "bó hoa tặng người yêu", "bó hoa sinh nhật"] },
-  { slug: "bo-hoa-mua-xuan-ruc-ro", name: "Bó Hoa Mùa Xuân Rực Rỡ", category: "bo-hoa", badge: "Premium", _img: "bo-hong-do-trang-hong-mix", short: "Tổng hòa các loài hoa mùa xuân — rực rỡ, tươi vui, trọn vẹn yêu thương.", description: "Bó hoa mùa xuân rực rỡ kết hợp hồng đỏ, hồng phấn và trắng — mang sắc xuân tươi mới và năng lượng tích cực vào mọi không gian.", price: 850000, keywords: ["bó hoa mix", "bó hoa premium", "hoa mùa xuân"] },
-  { slug: "bo-hong-phat-trang-giay-hong", name: "Bó Hồng Phấn Trắng Giấy Hồng", category: "bo-hoa", _img: "bo-hong-phat-trang-giay-hong", short: "Hồng phấn và trắng hòa quyện trong lớp giấy hồng tinh tế — nhẹ nhàng, nữ tính.", description: "Bó hồng phấn trắng gói giấy hồng — vẻ đẹp dịu dàng, nữ tính, lý tưởng tặng phái nữ trong các dịp lãng mạn.", price: 580000, keywords: ["bó hồng phấn", "hoa nữ tính"] },
-  { slug: "bo-hoa-trang-xanh-tot-nghiep", name: "Bó Hoa Trắng Xanh Tốt Nghiệp", category: "bo-hoa", badge: "Tốt Nghiệp", _img: "bo-hoa-trang-xanh-tot-nghiep", short: "Trắng xanh tinh khôi — bó hoa tốt nghiệp truyền thống, khởi đầu mới đầy hy vọng.", description: "Bó hoa tốt nghiệp tone trắng xanh tinh khôi, mang ý nghĩa khởi đầu mới và thành công. Phù hợp tặng học sinh, sinh viên ngày tốt nghiệp.", price: 520000, keywords: ["bó hoa tốt nghiệp", "hoa trắng xanh"] },
-  { slug: "bo-tram-hong-do-sinh-nhat", name: "Bó Trăm Hồng Đỏ Sinh Nhật", category: "bo-hoa", badge: "Hot", _img: "bo-tram-hong-do-sinh-nhat", short: "Trăm bông hồng đỏ rực rỡ — món quà sinh nhật hoành tráng và đầy tình cảm nhất.", description: "Bó 100 bông hồng đỏ rực rỡ — món quà sinh nhật ấn tượng, thể hiện tình yêu nồng nàn và mãnh liệt.", price: 2500000, keywords: ["bó 100 hoa hồng", "hoa hồng đỏ", "quà sinh nhật"] },
-  { slug: "bo-hong-dao-peach-boc-to", name: "Bó Hồng Đào Peach Bọc Tơ", category: "bo-hoa", _img: "bo-hong-dao-peach-boc-to", short: "Hồng đào peach mềm mại, bọc tơ lụa sang trọng — vẻ đẹp tinh tế.", description: "Bó hồng đào tone peach mềm mại bọc tơ lụa — sang trọng, tinh tế dành cho người phụ nữ bạn yêu.", price: 720000, keywords: ["hồng đào", "hoa peach"] },
-  { slug: "bo-hong-do-goi-den-sang-trong", name: "Bó Hồng Đỏ Gói Đen Sang Trọng", category: "bo-hoa", badge: "Premium", _img: "bo-hong-do-goi-den-sang-trong", short: "Hồng đỏ nồng nàn trong lớp giấy đen huyền bí — sự tương phản hoàn hảo của tình yêu mạnh mẽ.", description: "Bó hồng đỏ gói giấy đen — lựa chọn sang trọng, mạnh mẽ, dành cho tình yêu nồng cháy.", price: 780000, keywords: ["hồng đỏ", "bó hoa sang trọng", "tặng người yêu"] },
-  { slug: "bo-hong-hong-trang-mix-tiem", name: "Bó Hồng Hồng Trắng Mix Tiệm", category: "bo-hoa", _img: "bo-hong-hong-trang-mix-tiem", short: "Hồng và trắng hòa quyện tự nhiên — bó hoa đa dụng, phù hợp mọi dịp.", description: "Bó hồng hồng trắng mix theo phong cách tiệm — đa dụng, phù hợp mọi dịp trong năm.", price: 480000, keywords: ["bó hoa mix", "hoa hồng trắng"] },
-  { slug: "bo-huong-duong-hong-hong-vui-tuoi", name: "Bó Hướng Dương Hồng Hồng Vui Tươi", category: "bo-hoa", _img: "bo-huong-duong-hong-hong-vui-tuoi", short: "Hướng dương vàng và hồng hồng — năng lượng tích cực, tươi vui và đầy sức sống.", description: "Bó hướng dương kết hợp hồng phấn — mang năng lượng tích cực, lời chúc thành công và vui vẻ.", price: 550000, keywords: ["hoa hướng dương", "bó hoa vui tươi"] },
-  { slug: "bo-baby-breath-trang-tinh-khoi", name: "Bó Baby Breath Trắng Tinh Khôi", category: "bo-hoa", badge: "Độc Đáo", _img: "bo-baby-breath-trang-tinh-khoi", short: "Baby breath trắng tinh khôi như những đám mây nhỏ — nhẹ nhàng, lãng mạn và thuần khiết.", description: "Bó baby breath (hoa bi) trắng tinh khôi, lãng mạn như đám mây — phù hợp các bạn nữ yêu phong cách thuần khiết.", price: 420000, keywords: ["baby breath", "hoa bi trắng"] },
-  { slug: "bo-hong-do-goi-giay-trang", name: "Bó Hồng Đỏ Gói Giấy Trắng", category: "bo-hoa", _img: "bo-hong-do-goi-giay-trang", short: "Hồng đỏ cổ điển trong giấy trắng — cái đẹp không bao giờ lỗi thời của tình yêu.", description: "Bó hồng đỏ cổ điển gói giấy trắng — vẻ đẹp truyền thống, kinh điển không lỗi thời.", price: 520000, keywords: ["hồng đỏ", "bó hoa cổ điển"] },
-  { slug: "bo-hong-do-cam-mix-tinh-te", name: "Bó Hồng Đỏ Cam Mix Tinh Tế", category: "bo-hoa", _img: "bo-hong-do-cam-mix-tinh-te", short: "Hồng đỏ và cam hòa quyện ấm áp — bó hoa mang sắc lửa nhiệt tình và ngọt ngào.", description: "Bó hồng đỏ cam mix tinh tế — phối màu ấm áp, mang cảm xúc nhiệt thành và ngọt ngào.", price: 600000, keywords: ["bó hoa cam đỏ", "hoa mix tone"] },
+  // SẢN PHẨM AUTO IMPORT TỪ ẢNH
+  {
+    slug: "img3755-1",
+    name: "Img3755",
+    category: "bo-hoa",
+    _img: "img3755.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3762-2",
+    name: "Img 3762",
+    category: "bo-hoa",
+    _img: "img-3762.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-39-1-3",
+    name: "Hoa Hong Kem Tinh Te Webp 39 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-39-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-44-1-4",
+    name: "Hoa Hong Kem Tinh Te Webp 44 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-44-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-35-1-5",
+    name: "Hoa Hong Kem Tinh Te Webp 35 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-35-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3743-6",
+    name: "Img3743",
+    category: "bo-hoa",
+    _img: "img3743.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "bo-hoa-7",
+    name: "Bo Hoa",
+    category: "bo-hoa",
+    _img: "bo-hoa.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-34-8",
+    name: "Hoa1 34",
+    category: "bo-hoa",
+    _img: "hoa1-34.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-37-9",
+    name: "Hoa Hong Kem Tinh Te Webp 37",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-37.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "bo-hoa-10",
+    name: "Bo Hoa",
+    category: "bo-hoa",
+    _img: "bo-hoa.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "bo-hong-11",
+    name: "Bo Hong",
+    category: "bo-hoa",
+    _img: "bo-hong.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-33-12",
+    name: "Hoa Hong Kem Tinh Tewebp 33",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-33.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3763-13",
+    name: "Img 3763",
+    category: "bo-hoa",
+    _img: "img-3763.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "co-thanh-ngoc-14",
+    name: "Co Thanh Ngoc",
+    category: "bo-hoa",
+    _img: "co-thanh-ngoc.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3470-15",
+    name: "Img3470",
+    category: "bo-hoa",
+    _img: "img3470.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3749-16",
+    name: "Img 3749",
+    category: "bo-hoa",
+    _img: "img-3749.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3759-17",
+    name: "Img3759",
+    category: "bo-hoa",
+    _img: "img3759.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3761-18",
+    name: "Img 3761",
+    category: "bo-hoa",
+    _img: "img-3761.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-44-19",
+    name: "Hoa Hong Kem Tinh Tewebp 44",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-44.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-40-20",
+    name: "Hoa Hong Kem Tinh Te Webp 40",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-40.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3766-1-21",
+    name: "Img3766 1",
+    category: "bo-hoa",
+    _img: "img3766-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-43-22",
+    name: "Hoa1 43",
+    category: "bo-hoa",
+    _img: "hoa1-43.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-38-23",
+    name: "Hoa1 38",
+    category: "bo-hoa",
+    _img: "hoa1-38.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-29-24",
+    name: "Hoa Hong Kem Tinh Tewebp 29",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-29.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3763-25",
+    name: "Img3763",
+    category: "bo-hoa",
+    _img: "img3763.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3750-1-26",
+    name: "Img3750 1",
+    category: "bo-hoa",
+    _img: "img3750-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3760-27",
+    name: "Img 3760",
+    category: "bo-hoa",
+    _img: "img-3760.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "gio-hoa-trang-xanh-thanh-nha-28",
+    name: "Gio Hoa Trang Xanh Thanh Nha",
+    category: "gio-hoa",
+    _img: "gio-hoa-trang-xanh-thanh-nha.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3748-29",
+    name: "Img 3748",
+    category: "bo-hoa",
+    _img: "img-3748.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3742-1-30",
+    name: "Img3742 1",
+    category: "bo-hoa",
+    _img: "img3742-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "banner-hoa-thanh-ngoc-1-31",
+    name: "Banner Hoa Thanh Ngoc 1",
+    category: "bo-hoa",
+    _img: "banner-hoa-thanh-ngoc-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3764-32",
+    name: "Img 3764",
+    category: "bo-hoa",
+    _img: "img-3764.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3764-1-33",
+    name: "Img3764 1",
+    category: "bo-hoa",
+    _img: "img3764-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3758-34",
+    name: "Img 3758",
+    category: "bo-hoa",
+    _img: "img-3758.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "founder1-35",
+    name: "Founder1",
+    category: "bo-hoa",
+    _img: "founder1.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3762-36",
+    name: "Img3762",
+    category: "bo-hoa",
+    _img: "img3762.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "logo-moi-37",
+    name: "Logo Moi",
+    category: "bo-hoa",
+    _img: "logo-moi.png",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-39-38",
+    name: "Hoa1 39",
+    category: "bo-hoa",
+    _img: "hoa1-39.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "bo-hong1-39",
+    name: "Bo Hong1",
+    category: "bo-hoa",
+    _img: "bo-hong1.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3768-1-40",
+    name: "Img3768 1",
+    category: "bo-hoa",
+    _img: "img3768-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "bo-hong-1-2-41",
+    name: "Bo Hong 1 2",
+    category: "bo-hoa",
+    _img: "bo-hong-1-2.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-42-42",
+    name: "Hoa1 42",
+    category: "bo-hoa",
+    _img: "hoa1-42.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-41-43",
+    name: "Hoa Hong Kem Tinh Te Webp 41",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-41.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-chia-buon-ly-bach-hop-1-44",
+    name: "Hoa Chia Buon Ly Bach Hop 1",
+    category: "chia-buon",
+    _img: "hoa-chia-buon-ly-bach-hop-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3752-1-45",
+    name: "Img3752 1",
+    category: "bo-hoa",
+    _img: "img3752-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3759-46",
+    name: "Img 3759",
+    category: "bo-hoa",
+    _img: "img-3759.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3758-47",
+    name: "Img3758",
+    category: "bo-hoa",
+    _img: "img3758.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3765-48",
+    name: "Img 3765",
+    category: "bo-hoa",
+    _img: "img-3765.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "founder-thanh-tien-49",
+    name: "Founder Thanh Tien",
+    category: "bo-hoa",
+    _img: "founder-thanh-tien.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "nen-hoa-about-1-50",
+    name: "Nen Hoa About 1",
+    category: "bo-hoa",
+    _img: "nen-hoa-about-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-29-1-51",
+    name: "Hoa Hong Kem Tinh Te Webp 29 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-29-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3767-52",
+    name: "Img 3767",
+    category: "bo-hoa",
+    _img: "img-3767.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-37-1-53",
+    name: "Hoa Hong Kem Tinh Te Webp 37 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-37-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "founder2-54",
+    name: "Founder2",
+    category: "bo-hoa",
+    _img: "founder2.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-32-55",
+    name: "Hoa Hong Kem Tinh Tewebp 32",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-32.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-36-56",
+    name: "Hoa Hong Kem Tinh Te Webp 36",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-36.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-35-57",
+    name: "Hoa1 35",
+    category: "bo-hoa",
+    _img: "hoa1-35.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3475-1-58",
+    name: "Img3475 1",
+    category: "bo-hoa",
+    _img: "img3475-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3742-59",
+    name: "Img3742",
+    category: "bo-hoa",
+    _img: "img3742.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "banner-60",
+    name: "Banner",
+    category: "bo-hoa",
+    _img: "banner.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3766-61",
+    name: "Img 3766",
+    category: "bo-hoa",
+    _img: "img-3766.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3754-62",
+    name: "Img3754",
+    category: "bo-hoa",
+    _img: "img3754.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3756-1-63",
+    name: "Img3756 1",
+    category: "bo-hoa",
+    _img: "img3756-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa3-2-64",
+    name: "Hoa3 2",
+    category: "bo-hoa",
+    _img: "hoa3-2.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-42-65",
+    name: "Hoa Hong Kem Tinh Tewebp 42",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-42.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3748-1-66",
+    name: "Img3748 1",
+    category: "bo-hoa",
+    _img: "img3748-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3482-1-67",
+    name: "Img3482 1",
+    category: "bo-hoa",
+    _img: "img3482-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3749-68",
+    name: "Img3749",
+    category: "bo-hoa",
+    _img: "img3749.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "banner-hoa-thanh-ngoc-69",
+    name: "Banner Hoa Thanh Ngoc",
+    category: "bo-hoa",
+    _img: "banner-hoa-thanh-ngoc.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-chia-buon-ly-bach-hop-70",
+    name: "Hoa Chia Buon Ly Bach Hop",
+    category: "chia-buon",
+    _img: "hoa-chia-buon-ly-bach-hop.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3765-71",
+    name: "Img3765",
+    category: "bo-hoa",
+    _img: "img3765.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3760-1-72",
+    name: "Img3760 1",
+    category: "bo-hoa",
+    _img: "img3760-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-39-73",
+    name: "Hoa Hong Kem Tinh Tewebp 39",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-39.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa5-74",
+    name: "Hoa5",
+    category: "bo-hoa",
+    _img: "hoa5.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3753-75",
+    name: "Img3753",
+    category: "bo-hoa",
+    _img: "img3753.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "founder-thanh-ngoc-76",
+    name: "Founder Thanh Ngoc",
+    category: "bo-hoa",
+    _img: "founder-thanh-ngoc.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3474-77",
+    name: "Img 3474",
+    category: "bo-hoa",
+    _img: "img-3474.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3745-78",
+    name: "Img3745",
+    category: "bo-hoa",
+    _img: "img3745.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-42-1-79",
+    name: "Hoa Hong Kem Tinh Te Webp 42 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-42-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-32-80",
+    name: "Hoa1 32",
+    category: "bo-hoa",
+    _img: "hoa1-32.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "nen-hoa-about-81",
+    name: "Nen Hoa About",
+    category: "bo-hoa",
+    _img: "nen-hoa-about.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-31-82",
+    name: "Hoa Hong Kem Tinh Te Webp 31",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-31.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3475-83",
+    name: "Img 3475",
+    category: "bo-hoa",
+    _img: "img-3475.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3449-84",
+    name: "Img 3449",
+    category: "bo-hoa",
+    _img: "img-3449.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3455-1-85",
+    name: "Img3455 1",
+    category: "bo-hoa",
+    _img: "img3455-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-35-86",
+    name: "Hoa Hong Kem Tinh Tewebp 35",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-35.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-33-1-87",
+    name: "Hoa Hong Kem Tinh Te Webp 33 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-33-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa4-88",
+    name: "Hoa4",
+    category: "bo-hoa",
+    _img: "hoa4.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "lan-ho-diep-trang-quy-phai-89",
+    name: "Lan Ho Diep Trang Quy Phai",
+    category: "lan-ho-diep",
+    _img: "lan-ho-diep-trang-quy-phai.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "bo-hong-1-90",
+    name: "Bo Hong 1",
+    category: "bo-hoa",
+    _img: "bo-hong-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-34-91",
+    name: "Hoa Hong Kem Tinh Tewebp 34",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-34.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "logo-thanh-ngoc-flower-1-92",
+    name: "Logo Thanh Ngoc Flower 1",
+    category: "bo-hoa",
+    _img: "logo-thanh-ngoc-flower-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3768-93",
+    name: "Img3768",
+    category: "bo-hoa",
+    _img: "img3768.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-30-94",
+    name: "Hoa Hong Kem Tinh Te Webp 30",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-30.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-33-95",
+    name: "Hoa1 33",
+    category: "bo-hoa",
+    _img: "hoa1-33.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3482-96",
+    name: "Img3482",
+    category: "bo-hoa",
+    _img: "img3482.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3449-1-97",
+    name: "Img3449 1",
+    category: "bo-hoa",
+    _img: "img3449-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-31-1-98",
+    name: "Hoa Hong Kem Tinh Te Webp 31 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-31-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3470-99",
+    name: "Img 3470",
+    category: "bo-hoa",
+    _img: "img-3470.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "thanh-tien-100",
+    name: "Thanh Tien",
+    category: "bo-hoa",
+    _img: "thanh-tien.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-40-1-101",
+    name: "Hoa Hong Kem Tinh Te Webp 40 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-40-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-102",
+    name: "Hoa1",
+    category: "bo-hoa",
+    _img: "hoa1.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3752-103",
+    name: "Img3752",
+    category: "bo-hoa",
+    _img: "img3752.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3758-1-104",
+    name: "Img3758 1",
+    category: "bo-hoa",
+    _img: "img3758-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa3-105",
+    name: "Hoa3",
+    category: "bo-hoa",
+    _img: "hoa3.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-29-106",
+    name: "Hoa1 29",
+    category: "bo-hoa",
+    _img: "hoa1-29.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-38-107",
+    name: "Hoa Hong Kem Tinh Tewebp 38",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-38.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3764-108",
+    name: "Img3764",
+    category: "bo-hoa",
+    _img: "img3764.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3754-1-109",
+    name: "Img3754 1",
+    category: "bo-hoa",
+    _img: "img3754-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-44-110",
+    name: "Hoa1 44",
+    category: "bo-hoa",
+    _img: "hoa1-44.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3748-111",
+    name: "Img3748",
+    category: "bo-hoa",
+    _img: "img3748.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3762-1-112",
+    name: "Img3762 1",
+    category: "bo-hoa",
+    _img: "img3762-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-43-113",
+    name: "Hoa Hong Kem Tinh Tewebp 43",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-43.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa2-114",
+    name: "Hoa2",
+    category: "bo-hoa",
+    _img: "hoa2.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-29-115",
+    name: "Hoa Hong Kem Tinh Te Webp 29",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-29.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3743-1-116",
+    name: "Img3743 1",
+    category: "bo-hoa",
+    _img: "img3743-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3767-117",
+    name: "Img3767",
+    category: "bo-hoa",
+    _img: "img3767.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-44-118",
+    name: "Hoa Hong Kem Tinh Te Webp 44",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-44.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3767-1-119",
+    name: "Img3767 1",
+    category: "bo-hoa",
+    _img: "img3767-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-40-120",
+    name: "Hoa Hong Kem Tinh Tewebp 40",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-40.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3474-121",
+    name: "Img3474",
+    category: "bo-hoa",
+    _img: "img3474.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3454-122",
+    name: "Img3454",
+    category: "bo-hoa",
+    _img: "img3454.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-37-123",
+    name: "Hoa Hong Kem Tinh Tewebp 37",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-37.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3482-124",
+    name: "Img 3482",
+    category: "bo-hoa",
+    _img: "img-3482.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3455-125",
+    name: "Img 3455",
+    category: "bo-hoa",
+    _img: "img-3455.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-33-126",
+    name: "Hoa Hong Kem Tinh Te Webp 33",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-33.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-30-127",
+    name: "Hoa1 30",
+    category: "bo-hoa",
+    _img: "hoa1-30.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-38-1-128",
+    name: "Hoa Hong Kem Tinh Te Webp 38 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-38-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3454-129",
+    name: "Img 3454",
+    category: "bo-hoa",
+    _img: "img-3454.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-34-1-130",
+    name: "Hoa Hong Kem Tinh Te Webp 34 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-34-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3750-131",
+    name: "Img3750",
+    category: "bo-hoa",
+    _img: "img3750.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3474-1-132",
+    name: "Img3474 1",
+    category: "bo-hoa",
+    _img: "img3474-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3487-133",
+    name: "Img 3487",
+    category: "bo-hoa",
+    _img: "img-3487.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-31-134",
+    name: "Hoa1 31",
+    category: "bo-hoa",
+    _img: "hoa1-31.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-36-1-135",
+    name: "Hoa Hong Kem Tinh Te Webp 36 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-36-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-32-136",
+    name: "Hoa Hong Kem Tinh Te Webp 32",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-32.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3455-137",
+    name: "Img3455",
+    category: "bo-hoa",
+    _img: "img3455.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-36-138",
+    name: "Hoa Hong Kem Tinh Tewebp 36",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-36.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-khai-truong-thinh-vuong-139",
+    name: "Hoa Khai Truong Thinh Vuong",
+    category: "khai-truong",
+    _img: "hoa-khai-truong-thinh-vuong.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3475-140",
+    name: "Img3475",
+    category: "bo-hoa",
+    _img: "img3475.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "gio-hoa-trang-xanh-thanh-nha-1-141",
+    name: "Gio Hoa Trang Xanh Thanh Nha 1",
+    category: "gio-hoa",
+    _img: "gio-hoa-trang-xanh-thanh-nha-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-41-142",
+    name: "Hoa Hong Kem Tinh Tewebp 41",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-41.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3487-1-143",
+    name: "Img3487 1",
+    category: "bo-hoa",
+    _img: "img3487-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3753-1-144",
+    name: "Img3753 1",
+    category: "bo-hoa",
+    _img: "img3753-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3765-1-145",
+    name: "Img3765 1",
+    category: "bo-hoa",
+    _img: "img3765-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3766-146",
+    name: "Img3766",
+    category: "bo-hoa",
+    _img: "img3766.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "lan-ho-diep-trang-quy-phai-1-147",
+    name: "Lan Ho Diep Trang Quy Phai 1",
+    category: "lan-ho-diep",
+    _img: "lan-ho-diep-trang-quy-phai-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3743-148",
+    name: "Img 3743",
+    category: "bo-hoa",
+    _img: "img-3743.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3757-149",
+    name: "Img 3757",
+    category: "bo-hoa",
+    _img: "img-3757.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-31-150",
+    name: "Hoa Hong Kem Tinh Tewebp 31",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-31.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-151",
+    name: "Hoa Hong Kem Tinh Te",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-43-1-152",
+    name: "Hoa Hong Kem Tinh Te Webp 43 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-43-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "bo-hong-153",
+    name: "Bo Hong",
+    category: "bo-hoa",
+    _img: "bo-hong.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-32-1-154",
+    name: "Hoa Hong Kem Tinh Te Webp 32 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-32-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-35-155",
+    name: "Hoa Hong Kem Tinh Te Webp 35",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-35.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-36-156",
+    name: "Hoa1 36",
+    category: "bo-hoa",
+    _img: "hoa1-36.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3454-1-157",
+    name: "Img3454 1",
+    category: "bo-hoa",
+    _img: "img3454-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3487-158",
+    name: "Img3487",
+    category: "bo-hoa",
+    _img: "img3487.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-1-159",
+    name: "Hoa Hong Kem Tinh Te 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3756-160",
+    name: "Img 3756",
+    category: "bo-hoa",
+    _img: "img-3756.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3742-161",
+    name: "Img 3742",
+    category: "bo-hoa",
+    _img: "img-3742.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3757-162",
+    name: "Img3757",
+    category: "bo-hoa",
+    _img: "img3757.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3470-1-163",
+    name: "Img3470 1",
+    category: "bo-hoa",
+    _img: "img3470-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3768-164",
+    name: "Img 3768",
+    category: "bo-hoa",
+    _img: "img-3768.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3754-165",
+    name: "Img 3754",
+    category: "bo-hoa",
+    _img: "img-3754.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "bo-hoa-1-166",
+    name: "Bo Hoa 1",
+    category: "bo-hoa",
+    _img: "bo-hoa-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3761-167",
+    name: "Img3761",
+    category: "bo-hoa",
+    _img: "img3761.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-39-168",
+    name: "Hoa Hong Kem Tinh Te Webp 39",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-39.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3761-1-169",
+    name: "Img3761 1",
+    category: "bo-hoa",
+    _img: "img3761-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-41-170",
+    name: "Hoa1 41",
+    category: "bo-hoa",
+    _img: "hoa1-41.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "bo-hong-1-1-171",
+    name: "Bo Hong 1 1",
+    category: "bo-hoa",
+    _img: "bo-hong-1-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-42-172",
+    name: "Hoa Hong Kem Tinh Te Webp 42",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-42.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3749-1-173",
+    name: "Img3749 1",
+    category: "bo-hoa",
+    _img: "img3749-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3757-1-174",
+    name: "Img3757 1",
+    category: "bo-hoa",
+    _img: "img3757-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3755-175",
+    name: "Img 3755",
+    category: "bo-hoa",
+    _img: "img-3755.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3745-1-176",
+    name: "Img3745 1",
+    category: "bo-hoa",
+    _img: "img3745-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa3-1-177",
+    name: "Hoa3 1",
+    category: "bo-hoa",
+    _img: "hoa3-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3745-178",
+    name: "Img 3745",
+    category: "bo-hoa",
+    _img: "img-3745.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3763-1-179",
+    name: "Img3763 1",
+    category: "bo-hoa",
+    _img: "img3763-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-43-180",
+    name: "Hoa Hong Kem Tinh Te Webp 43",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-43.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-40-181",
+    name: "Hoa1 40",
+    category: "bo-hoa",
+    _img: "hoa1-40.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-38-182",
+    name: "Hoa Hong Kem Tinh Te Webp 38",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-38.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa3-183",
+    name: "Hoa3",
+    category: "bo-hoa",
+    _img: "hoa3.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3449-184",
+    name: "Img3449",
+    category: "bo-hoa",
+    _img: "img3449.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3759-1-185",
+    name: "Img3759 1",
+    category: "bo-hoa",
+    _img: "img3759-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3760-186",
+    name: "Img3760",
+    category: "bo-hoa",
+    _img: "img3760.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3755-1-187",
+    name: "Img3755 1",
+    category: "bo-hoa",
+    _img: "img3755-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3750-188",
+    name: "Img 3750",
+    category: "bo-hoa",
+    _img: "img-3750.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img3756-189",
+    name: "Img3756",
+    category: "bo-hoa",
+    _img: "img3756.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3752-190",
+    name: "Img 3752",
+    category: "bo-hoa",
+    _img: "img-3752.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-khai-truong-thinh-vuong-1-191",
+    name: "Hoa Khai Truong Thinh Vuong 1",
+    category: "khai-truong",
+    _img: "hoa-khai-truong-thinh-vuong-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-30-1-192",
+    name: "Hoa Hong Kem Tinh Te Webp 30 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-30-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-41-1-193",
+    name: "Hoa Hong Kem Tinh Te Webp 41 1",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-41-1.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa1-37-194",
+    name: "Hoa1 37",
+    category: "bo-hoa",
+    _img: "hoa1-37.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-te-webp-34-195",
+    name: "Hoa Hong Kem Tinh Te Webp 34",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-te-webp-34.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "hoa-hong-kem-tinh-tewebp-30-196",
+    name: "Hoa Hong Kem Tinh Tewebp 30",
+    category: "bo-hoa",
+    _img: "hoa-hong-kem-tinh-tewebp-30.webp",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
+  {
+    slug: "img-3753-197",
+    name: "Img 3753",
+    category: "bo-hoa",
+    _img: "img-3753.jpg",
+    short: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao.",
+    description: "Sản phẩm được thiết kế thủ công từ hoa tươi chất lượng cao. Cam kết mang đến bó hoa tươi thắm nhất để bạn gửi gắm yêu thương.",
+    price: 500000,
+    keywords: ["hoa tươi", "hoa thiết kế"]
+  },
 
-  // GIỎ HOA
-  { slug: "gio-hoa-trang-xanh-thanh-nha", name: "Giỏ Hoa Trắng Xanh Thanh Nhã", category: "gio-hoa", badge: "Mới", _img: "gio-hoa-trang-xanh-thanh-nha", short: "Hồng trắng, cúc trắng, cẩm tú cầu xanh — vẻ đẹp thanh nhã trong một giỏ hoa sang trọng.", description: "Giỏ hoa trắng xanh kết hợp hồng trắng, cúc trắng và cẩm tú cầu xanh — thanh nhã, sang trọng.", price: 950000, keywords: ["giỏ hoa trắng xanh", "giỏ hoa sang trọng"] },
-  { slug: "gio-sat-hong-hong-tram-bong", name: "Giỏ Sắt Hồng Hồng Trăm Bông", category: "gio-hoa", badge: "Sang Trọng", _img: "gio-sat-hong-hong-tram-bong", short: "Giỏ sắt vintage chứa hàng trăm bông hồng hồng — món quà sang trọng và ấn tượng.", description: "Giỏ sắt vintage chứa hàng trăm bông hồng phấn — lựa chọn sang trọng cho dịp kỷ niệm, cầu hôn.", price: 2200000, keywords: ["giỏ hoa hồng", "trăm bông hồng"] },
-  { slug: "gio-hoa-trang-ly-cuc-xanh", name: "Giỏ Hoa Trắng Ly Cúc Xanh", category: "gio-hoa", _img: "gio-hoa-trang-ly-cuc-xanh", short: "Hoa ly trắng, cúc xanh và lá tươi — giỏ hoa thanh lịch cho những dịp trang trọng.", description: "Giỏ hoa trắng ly cúc xanh — thanh lịch, sang trọng, phù hợp các dịp trang trọng và biếu tặng cấp trên.", price: 880000, keywords: ["giỏ hoa ly", "giỏ hoa trắng"] },
-
-  // KHAI TRƯƠNG
-  { slug: "hoa-khai-truong-thinh-vuong", name: "Hoa Khai Trương Thịnh Vượng", category: "khai-truong", _img: "hoa-khai-truong-thinh-vuong", short: "Rực rỡ, tươi vui, đầy sức sống — bó hoa khai trương mang trọn ý nghĩa thịnh vượng.", description: "Hoa khai trương thịnh vượng — mẫu kệ rực rỡ mang ý nghĩa phú quý, may mắn cho ngày khai trương.", price: 1500000, keywords: ["hoa khai trương", "kệ hoa thịnh vượng"] },
-  { slug: "ke-hoa-gerbera-vang-do-2-tang-sanh", name: "Kệ Hoa Gerbera Vàng Đỏ 2 Tầng Sảnh", category: "khai-truong", _img: "ke-hoa-gerbera-vang-do-2-tang-sanh", short: "Kệ hoa 2 tầng gerbera vàng đỏ đặt sảnh — ấn tượng ngay từ cái nhìn đầu tiên.", description: "Kệ hoa 2 tầng gerbera vàng đỏ — kích thước lớn, đặt sảnh, gây ấn tượng mạnh ngay từ cái nhìn đầu tiên.", price: 1800000, keywords: ["kệ hoa gerbera", "kệ hoa 2 tầng"] },
-  { slug: "ke-hoa-trang-xanh-sang-trong-2-tang", name: "Kệ Hoa Trắng Xanh Sang Trọng 2 Tầng", category: "khai-truong", badge: "Sang Trọng", _img: "ke-hoa-trang-xanh-sang-trong-2-tang", short: "Kệ hoa 2 tầng trắng xanh thanh lịch — khác biệt, sang trọng, phù hợp văn phòng cao cấp.", description: "Kệ hoa khai trương 2 tầng trắng xanh sang trọng — phù hợp văn phòng, công ty, showroom cao cấp.", price: 2000000, keywords: ["kệ hoa trắng xanh", "kệ khai trương cao cấp"] },
-  { slug: "ke-hoa-vang-cam-do-2-tang-khai-truong", name: "Kệ Hoa Vàng Cam Đỏ 2 Tầng Khai Trương", category: "khai-truong", badge: "Bán Chạy", _img: "ke-hoa-vang-cam-do-2-tang-khai-truong", short: "Kệ hoa 2 tầng vàng cam đỏ — bộ màu phong thủy chuẩn nhất cho ngày khai trương.", description: "Kệ hoa 2 tầng vàng cam đỏ — bộ màu phong thủy đại cát, mẫu bán chạy nhất cho ngày khai trương.", price: 1750000, keywords: ["kệ hoa khai trương", "kệ hoa phong thủy"] },
-  { slug: "ke-hoa-ly-vang-cuc-vang-2-tang", name: "Kệ Hoa Ly Vàng Cúc Vàng 2 Tầng", category: "khai-truong", _img: "ke-hoa-ly-vang-cuc-vang-2-tang", short: "Kệ hoa 2 tầng ly vàng cúc vàng — tone vàng thuần khiết tượng trưng cho phú quý.", description: "Kệ hoa 2 tầng ly vàng cúc vàng — tone vàng phú quý, mang lời chúc tài lộc thịnh vượng.", price: 1850000, keywords: ["kệ hoa vàng", "kệ hoa ly"] },
-  { slug: "ke-hoa-vang-sang-trong-cot-vang", name: "Kệ Hoa Vàng Sang Trọng Cột Vàng", category: "khai-truong", badge: "Cao Cấp", _img: "ke-hoa-vang-sang-trong-cot-vang", short: "Kệ hoa cột vàng sang trọng — thiết kế độc đáo, tạo điểm nhấn đẳng cấp cho ngày khai trương.", description: "Kệ hoa cột vàng cao cấp — thiết kế độc đáo, đẳng cấp cho khai trương sự kiện lớn.", price: 2500000, keywords: ["kệ hoa cột", "kệ hoa cao cấp"] },
-  { slug: "ke-hoa-hong-do-phat-2-tang-sang-trong", name: "Kệ Hoa Hồng Đỏ Phát 2 Tầng Sang Trọng", category: "khai-truong", badge: "Phổ Biến", _img: "ke-hoa-hong-do-phat-2-tang-sang-trong", short: "Kệ hoa 2 tầng hồng đỏ sang trọng — mẫu kệ bán chạy nhất, phù hợp mọi ngành nghề.", description: "Kệ hoa 2 tầng hồng đỏ sang trọng — mẫu phổ biến nhất, phù hợp mọi loại hình kinh doanh.", price: 1700000, keywords: ["kệ hoa hồng đỏ", "kệ khai trương"] },
-  { slug: "ke-hoa-hong-pastel-gia-go-dep", name: "Kệ Hoa Hồng Pastel Giá Gỗ Đẹp", category: "khai-truong", badge: "Trend", _img: "ke-hoa-hong-pastel-gia-go-dep", short: "Kệ hoa giá gỗ tone hồng pastel nhẹ nhàng — sang trọng theo phong cách Hàn Quốc hiện đại.", description: "Kệ hoa giá gỗ tone hồng pastel — phong cách Hàn Quốc hiện đại, trendy và ấn tượng.", price: 1650000, keywords: ["kệ hoa pastel", "kệ hoa Hàn Quốc"] },
-  { slug: "ke-hoa-hong-kem-lan-trang-2-tang", name: "Kệ Hoa Hồng Kem Lan Trắng 2 Tầng", category: "khai-truong", badge: "Premium", _img: "ke-hoa-hong-kem-lan-trang-2-tang", short: "Kệ hoa 2 tầng hồng kem và lan trắng — sang trọng, quý phái và đầy ý nghĩa.", description: "Kệ hoa 2 tầng hồng kem kết hợp lan trắng — premium, quý phái cho khai trương cao cấp.", price: 2300000, keywords: ["kệ hoa lan trắng", "kệ hoa premium"] },
-  { slug: "ke-hoa-cuc-vang-anthurium-lan-trang", name: "Kệ Hoa Cúc Vàng Anthurium Lan Trắng", category: "khai-truong", badge: "Cao Cấp", _img: "ke-hoa-cuc-vang-anthurium-lan-trang", short: "Kệ hoa cao cấp cúc vàng, anthurium đỏ và lan trắng — sự kết hợp 3 loài hoa quý phái.", description: "Kệ hoa cao cấp kết hợp cúc vàng, anthurium đỏ và lan trắng — quý phái, đẳng cấp.", price: 2600000, keywords: ["kệ hoa cao cấp", "kệ hoa anthurium"] },
-
-  // CHIA BUỒN
-  { slug: "hoa-chia-buon-ly-bach-hop", name: "Hoa Chia Buồn Lý Bạch Hợp", category: "chia-buon", badge: "Phổ Biến", _img: "hoa-chia-buon-ly-bach-hop", short: "Trắng tinh thanh lịch, trang trọng — lời đồng cảm chân thành trong những giây phút khó khăn nhất.", description: "Hoa chia buồn ly bạch hợp — trắng tinh thanh lịch, trang trọng, gửi lời đồng cảm chân thành trong giờ phút tiễn biệt.", price: 1200000, keywords: ["hoa chia buồn", "hoa tang lễ", "hoa ly trắng"] },
-
-  // LAN HỒ ĐIỆP
-  { slug: "hoa-lan-ho-diep-trang-quy-phai", name: "Hoa Lan Hồ Điệp Trắng Quý Phái", category: "lan-ho-diep", _img: "lan-ho-diep-trang-quy-phai", short: "Lan hồ điệp trắng thuần khiết, sang trọng — lựa chọn hoàn hảo cho mọi dịp đặc biệt.", description: "Chậu lan hồ điệp trắng thuần khiết — quý phái, sang trọng, biếu tặng cấp trên, đối tác, dịp khai trương cao cấp.", price: 3500000, keywords: ["lan hồ điệp", "lan hồ điệp trắng", "hoa lan biếu tặng"] },
 ];
 
 // ----- Defaults theo category -----
@@ -326,7 +2266,10 @@ export const PRODUCTS: Product[] = raw.map((p) => {
 
 export const findProduct = (slug: string) => PRODUCTS.find((p) => p.slug === slug);
 export const productsByCategory = (cat: Category) => PRODUCTS.filter((p) => p.category === cat);
-export const featuredProducts = () => PRODUCTS.filter((p) => p.badge).slice(0, 8);
+export const featuredProducts = () => {
+  const featured = PRODUCTS.filter((p) => p.badge);
+  return featured.length > 0 ? featured.slice(0, 8) : PRODUCTS.slice(0, 8);
+};
 
 export const formatPrice = (vnd?: number) =>
   vnd ? new Intl.NumberFormat("vi-VN").format(vnd) + "₫" : "Liên hệ";

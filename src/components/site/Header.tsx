@@ -21,8 +21,8 @@ export function Header() {
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/85 backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 md:px-8">
         <Link to="/" className="flex items-center gap-3 group" aria-label={SITE.name}>
-          <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-primary/80 text-primary transition-transform group-hover:scale-105">
-            <span className="font-serif text-2xl italic font-semibold">N</span>
+          <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-primary/20 bg-white transition-transform group-hover:scale-105">
+            <img src={SITE.logo} alt="Logo Hoa Tươi Thanh Ngọc" className="h-full w-full object-contain" />
           </div>
           <div className="leading-tight">
             <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Hoa Tươi</div>

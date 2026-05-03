@@ -12,6 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SanPhamRouteImport } from './routes/san-pham'
 import { Route as LienHeRouteImport } from './routes/lien-he'
 import { Route as GioiThieuRouteImport } from './routes/gioi-thieu'
+import { Route as ChinhSachThanhToanRouteImport } from './routes/chinh-sach-thanh-toan'
+import { Route as ChinhSachGiaoHangRouteImport } from './routes/chinh-sach-giao-hang'
+import { Route as ChinhSachDoiTraRouteImport } from './routes/chinh-sach-doi-tra'
+import { Route as ChinhSachBaoMatRouteImport } from './routes/chinh-sach-bao-mat'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TheIndexRouteImport } from './routes/the.index'
 import { Route as SanPhamIndexRouteImport } from './routes/san-pham.index'
@@ -33,6 +37,26 @@ const LienHeRoute = LienHeRouteImport.update({
 const GioiThieuRoute = GioiThieuRouteImport.update({
   id: '/gioi-thieu',
   path: '/gioi-thieu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChinhSachThanhToanRoute = ChinhSachThanhToanRouteImport.update({
+  id: '/chinh-sach-thanh-toan',
+  path: '/chinh-sach-thanh-toan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChinhSachGiaoHangRoute = ChinhSachGiaoHangRouteImport.update({
+  id: '/chinh-sach-giao-hang',
+  path: '/chinh-sach-giao-hang',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChinhSachDoiTraRoute = ChinhSachDoiTraRouteImport.update({
+  id: '/chinh-sach-doi-tra',
+  path: '/chinh-sach-doi-tra',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChinhSachBaoMatRoute = ChinhSachBaoMatRouteImport.update({
+  id: '/chinh-sach-bao-mat',
+  path: '/chinh-sach-bao-mat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -73,6 +97,10 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/chinh-sach-bao-mat': typeof ChinhSachBaoMatRoute
+  '/chinh-sach-doi-tra': typeof ChinhSachDoiTraRoute
+  '/chinh-sach-giao-hang': typeof ChinhSachGiaoHangRoute
+  '/chinh-sach-thanh-toan': typeof ChinhSachThanhToanRoute
   '/gioi-thieu': typeof GioiThieuRoute
   '/lien-he': typeof LienHeRoute
   '/san-pham': typeof SanPhamRouteWithChildren
@@ -85,6 +113,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/chinh-sach-bao-mat': typeof ChinhSachBaoMatRoute
+  '/chinh-sach-doi-tra': typeof ChinhSachDoiTraRoute
+  '/chinh-sach-giao-hang': typeof ChinhSachGiaoHangRoute
+  '/chinh-sach-thanh-toan': typeof ChinhSachThanhToanRoute
   '/gioi-thieu': typeof GioiThieuRoute
   '/lien-he': typeof LienHeRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -97,6 +129,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/chinh-sach-bao-mat': typeof ChinhSachBaoMatRoute
+  '/chinh-sach-doi-tra': typeof ChinhSachDoiTraRoute
+  '/chinh-sach-giao-hang': typeof ChinhSachGiaoHangRoute
+  '/chinh-sach-thanh-toan': typeof ChinhSachThanhToanRoute
   '/gioi-thieu': typeof GioiThieuRoute
   '/lien-he': typeof LienHeRoute
   '/san-pham': typeof SanPhamRouteWithChildren
@@ -111,6 +147,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/chinh-sach-bao-mat'
+    | '/chinh-sach-doi-tra'
+    | '/chinh-sach-giao-hang'
+    | '/chinh-sach-thanh-toan'
     | '/gioi-thieu'
     | '/lien-he'
     | '/san-pham'
@@ -123,6 +163,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/chinh-sach-bao-mat'
+    | '/chinh-sach-doi-tra'
+    | '/chinh-sach-giao-hang'
+    | '/chinh-sach-thanh-toan'
     | '/gioi-thieu'
     | '/lien-he'
     | '/blog/$slug'
@@ -134,6 +178,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/chinh-sach-bao-mat'
+    | '/chinh-sach-doi-tra'
+    | '/chinh-sach-giao-hang'
+    | '/chinh-sach-thanh-toan'
     | '/gioi-thieu'
     | '/lien-he'
     | '/san-pham'
@@ -147,6 +195,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ChinhSachBaoMatRoute: typeof ChinhSachBaoMatRoute
+  ChinhSachDoiTraRoute: typeof ChinhSachDoiTraRoute
+  ChinhSachGiaoHangRoute: typeof ChinhSachGiaoHangRoute
+  ChinhSachThanhToanRoute: typeof ChinhSachThanhToanRoute
   GioiThieuRoute: typeof GioiThieuRoute
   LienHeRoute: typeof LienHeRoute
   SanPhamRoute: typeof SanPhamRouteWithChildren
@@ -177,6 +229,34 @@ declare module '@tanstack/react-router' {
       path: '/gioi-thieu'
       fullPath: '/gioi-thieu'
       preLoaderRoute: typeof GioiThieuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chinh-sach-thanh-toan': {
+      id: '/chinh-sach-thanh-toan'
+      path: '/chinh-sach-thanh-toan'
+      fullPath: '/chinh-sach-thanh-toan'
+      preLoaderRoute: typeof ChinhSachThanhToanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chinh-sach-giao-hang': {
+      id: '/chinh-sach-giao-hang'
+      path: '/chinh-sach-giao-hang'
+      fullPath: '/chinh-sach-giao-hang'
+      preLoaderRoute: typeof ChinhSachGiaoHangRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chinh-sach-doi-tra': {
+      id: '/chinh-sach-doi-tra'
+      path: '/chinh-sach-doi-tra'
+      fullPath: '/chinh-sach-doi-tra'
+      preLoaderRoute: typeof ChinhSachDoiTraRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chinh-sach-bao-mat': {
+      id: '/chinh-sach-bao-mat'
+      path: '/chinh-sach-bao-mat'
+      fullPath: '/chinh-sach-bao-mat'
+      preLoaderRoute: typeof ChinhSachBaoMatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -246,6 +326,10 @@ const SanPhamRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChinhSachBaoMatRoute: ChinhSachBaoMatRoute,
+  ChinhSachDoiTraRoute: ChinhSachDoiTraRoute,
+  ChinhSachGiaoHangRoute: ChinhSachGiaoHangRoute,
+  ChinhSachThanhToanRoute: ChinhSachThanhToanRoute,
   GioiThieuRoute: GioiThieuRoute,
   LienHeRoute: LienHeRoute,
   SanPhamRoute: SanPhamRouteWithChildren,
