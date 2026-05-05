@@ -695,6 +695,19 @@ const raw: RawProduct[] = [
     keywords: ["hoa tươi thanh ngọc","giỏ hoa tươi","hoa màu sắc","tphcm","hoa hộp gỗ","quà tặng hoa"],
     galleryImgs: [],
   },
+
+  // ── THÊM 5/5/2026 ────────────────────────────────────────────
+  {
+    slug: "bo-hoa-tuoi-da-mau",
+    name: "Bó Hoa Tươi Đa Màu",
+    category: "bo-hoa",
+    badge: "Nổi bật",
+    _img: "bo-hoa-tuoi-da-mau.png",
+    short: "Thanh Ngọc - Bó hoa đa màu sắc, tươi sáng, phù hợp dịp lễ, sinh nhật.",
+    description: "Bó hoa tươi đa màu sắc từ các loại hoa như cẩm chướng, hướng dương, hoa cúc, được thiết kế trong hộp gỗ sang trọng. Màu sắc nổi bật gồm vàng, hồng, cam, tím. Phù hợp cho các dịp lễ, sinh nhật, tặng người thân. Giao 2 giờ tại TP.HCM.",
+    keywords: ["hoa tươi thanh ngọc","hoa hộp gỗ","hoa đa màu","tphcm","hoa tươi đẹp","hoa lễ"],
+    galleryImgs: ["bo-hoa-tuoi-da-mau-chinh-dien.jpg","bo-hoa-tuoi-da-mau-anh-sang.jpg"],
+  },
 ];
 
 // ----- Defaults theo category -----
