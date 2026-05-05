@@ -708,6 +708,32 @@ const raw: RawProduct[] = [
     keywords: ["hoa tươi thanh ngọc","hoa hộp gỗ","hoa đa màu","tphcm","hoa tươi đẹp","hoa lễ"],
     galleryImgs: ["bo-hoa-tuoi-da-mau-chinh-dien.jpg","bo-hoa-tuoi-da-mau-anh-sang.jpg"],
   },
+
+  // ── THÊM 5/5/2026 ────────────────────────────────────────────
+  {
+    slug: "bo-hoa-tuoi-mau-sac",
+    name: "Bó Hoa Tươi Màu Sắc",
+    category: "gio-hoa",
+    badge: "Nổi bật",
+    _img: "bo-hoa-tuoi-mau-sac.jpg",
+    short: "Thanh Ngọc - Bó hoa rực rỡ với hồng, vàng, cam, tím, phù hợp mọi dịp.",
+    description: "Bó hoa tươi trong hộp gỗ từ shop Hoa Tươi Thanh Ngọc, với sự kết hợp của nhiều loài hoa như hoa cúc, hoa hồng, hoa hướng dương, tạo nên một tác phẩm nghệ thuật rực rỡ. Màu sắc đa dạng bao gồm hồng, vàng, cam, tím, xanh, mang lại không gian tươi mới và tràn đầy năng lượng. Giao 2 giờ tại TP.HCM.",
+    keywords: ["hoa tươi thanh ngọc","hoa tươi tphcm","bó hoa màu sắc","hoa hộp gỗ","hoa tươi đẹp"],
+    galleryImgs: [],
+  },
+
+  // ── THÊM 5/5/2026 ────────────────────────────────────────────
+  {
+    slug: "bo-hoa-mau-sac-ruc-ro",
+    name: "Bó Hoa Màu Sắc Rực Rỡ",
+    category: "gio-hoa",
+    badge: "Nổi bật",
+    _img: "bo-hoa-mau-sac-ruc-ro.png",
+    short: "Thanh Ngọc - Bó hoa rực rỡ với hồng, vàng, cam, tím, trắng, phù hợp khai trương, tặng quà.",
+    description: "Bó hoa này gồm nhiều loại hoa như hoa cúc, hoa hồng, hoa hướng dương, Protea và hoa chrysanthemum với màu sắc phong phú như hồng, vàng, cam, tím và trắng. Thiết kế trong hộp gỗ giúp tăng thêm sự sang trọng và phù hợp cho các dịp khai trương, tặng quà. Giao 2 giờ tại TP.HCM.",
+    keywords: ["hoa tuoi thanh ngoc","hoa hop go","bo hoa mau sac","khai truong","qua tang","tphcm"],
+    galleryImgs: ["bo-hoa-mau-sac-ruc-ro-chinh-dien.jpg","bo-hoa-mau-sac-ruc-ro-can-canh.jpg","bo-hoa-mau-sac-ruc-ro-tren-cao.jpg","bo-hoa-mau-sac-ruc-ro-anh-sang.jpg"],
+  },
 ];
 
 // ----- Defaults theo category -----
