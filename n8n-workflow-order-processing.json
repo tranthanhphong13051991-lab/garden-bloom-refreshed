@@ -1,0 +1,209 @@
+{
+  "name": "Order Processing - Hoa Tuoi Thanh Ngoc",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-order",
+        "options": {}
+      },
+      "id": "node-webhook-order",
+      "name": "Webhook Receive Order",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "hoa-ngoc-order"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate và chuẩn hóa dữ liệu đơn hàng\nconst data = $input.first().json;\n\n// Kiểm tra thông tin bắt buộc\nconst requiredFields = ['customerName', 'phone', 'product', 'quantity', 'deliveryAddress', 'deliveryTime'];\nconst missingFields = requiredFields.filter(f => !data[f]);\n\nif (missingFields.length > 0) {\n  return [{\n    json: {\n      success: false,\n      error: `Thiếu thông tin: ${missingFields.join(', ')}`,\n      missingFields: missingFields\n    }\n  }];\n}\n\n// Format đơn hàng\nconst order = {\n  orderId: `DH${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).substring(2, 6).toUpperCase()}`,\n  customerName: data.customerName.trim(),\n  phone: data.phone.trim(),\n  email: data.email || '',\n  product: data.product.trim(),\n  quantity: parseInt(data.quantity) || 1,\n  price: parseFloat(data.price) || 0,\n  totalAmount: (parseInt(data.quantity) || 1) * (parseFloat(data.price) || 0),\n  deliveryAddress: data.deliveryAddress.trim(),\n  deliveryTime: data.deliveryTime,\n  note: data.note || '',\n  specialRequest: data.specialRequest || '',\n  status: 'pending',\n  source: data.source || 'webhook',\n  createdAt: new Date().toISOString(),\n  updatedAt: new Date().toISOString(),\n  giftWrap: data.giftWrap || false,\n  cardMessage: data.cardMessage || '',\n  paymentMethod: data.paymentMethod || 'cod',\n  estimatedDelivery: data.estimatedDelivery || ''\n};\n\nconsole.log(`[ORDER] Đơn hàng mới: ${order.orderId} - ${order.customerName} - ${order.product} x${order.quantity}`);\n\nreturn [{ json: order }];"
+      },
+      "id": "node-validate-order",
+      "name": "Validate & Format Order",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Kiểm tra nếu thiếu thông tin thì dừng xử lý\nconst data = $input.first().json;\n\nif (data.success === false) {\n  // Trả về lỗi cho webhook\n  return [{\n    json: data\n  }];\n}\n\nreturn [{\n  json: {\n    ...data,\n    totalFormatted: (data.totalAmount || 0).toLocaleString('vi-VN') + '₫',\n    priceFormatted: (data.price || 0).toLocaleString('vi-VN') + '₫'\n  }\n}];"
+      },
+      "id": "node-check-error",
+      "name": "Check Validation",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "dataType": 3,
+        "dataPropertyName": "success",
+        "mode": "expression",
+        "value1": "={{ $json.success }}",
+        "fallbackOutput": true,
+        "parameters": {
+          "conditions": {
+            "boolean": [
+              {"value1": "={{ $json.success }}", "value2": false}
+            ]
+          }
+        }
+      },
+      "id": "node-validation-switch",
+      "name": "Validation Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Gửi phản hồi lỗi cho webhook\nconst data = $input.first().json;\nreturn [{\n  json: {\n    orderId: null,\n    success: false,\n    message: data.error || 'Dữ liệu không hợp lệ',\n    missingFields: data.missingFields || []\n  }\n}];"
+      },
+      "id": "node-error-response",
+      "name": "Error Response",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [960, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lưu đơn hàng vào file/Google Sheet (có thể thay bằng database)\n// Ở đây dùng static data để lưu tạm\nconst data = $input.first().json;\n\n// Lấy danh sách đơn hàng hiện tại từ workflow data\nconst orders = $getWorkflowStaticData('global')['orders'] || [];\n\n// Thêm đơn hàng mới\norders.push({\n  ...data,\n  id: orders.length + 1\n});\n\n// Giới hạn lưu 100 đơn gần nhất\nif (orders.length > 100) {\n  orders.splice(0, orders.length - 100);\n}\n\n$getWorkflowStaticData('global')['orders'] = orders;\n\nconsole.log(`[STORAGE] Đã lưu đơn hàng: ${data.orderId}. Tổng số đơn: ${orders.length}`);\n\nreturn [{ json: { ...data, saved: true, totalOrders: orders.length } }];"
+      },
+      "id": "node-save-order",
+      "name": "Save Order (Static Data)",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [960, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Gửi xác nhận đến khách hàng qua Telegram\nconst data = $input.first().json;\n\nconst customerMessage = `✅ *XÁC NHẬN ĐƠN HÀNG*\n\n📋 *Mã đơn:* ${data.orderId}\n👤 *Khách hàng:* ${data.customerName}\n🌸 *Sản phẩm:* ${data.product} x${data.quantity}\n💰 *Tổng tiền:* ${data.totalFormatted}\n🏠 *Địa chỉ giao:* ${data.deliveryAddress}\n🕐 *Thời gian:* ${data.deliveryTime}\n💳 *Thanh toán:* ${data.paymentMethod === 'cod' ? 'Tiền mặt (COD)' : 'Chuyển khoản'}\n\n📝 *Ghi chú:* ${data.note || 'Không có'}\n\nCảm ơn bạn đã đặt hàng tại Hoa Tươi Thanh Ngọc! 🌸\nChúng tôi sẽ giao hàng đúng hẹn và kèm thiệp miễn phí.\n\n📞 *Hotline:* 0934 926 092 (nếu cần thay đổi đơn hàng)`;\n\nreturn [{\n  json: {\n    chatId: data.customerChatId,\n    text: customerMessage,\n    type: 'customer_confirmation'\n  }\n}];"
+      },
+      "id": "node-customer-notify",
+      "name": "Customer Confirmation",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1200, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Content-Type", "value": "application/json"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"{{ $json.chatId }}\",\n  \"text\": \"{{ $json.text }}\",\n  \"parse_mode\": \"Markdown\"\n}"
+      },
+      "id": "node-telegram-customer",
+      "name": "Send to Customer (Telegram)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1440, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Chuẩn bị thông báo cho Admin (chủ shop)\nconst data = $input.first().json;\n\n// Admin chat ID - cần cập nhật sau khi test\nconst ADMIN_CHAT_IDS = []; // TODO: Thêm chat ID của chủ shop\n\n// Chi tiết đơn hàng\nconst orderDetail = `🏪 *ĐƠN HÀNG MỚI - CẦN XỬ LÝ*\n\n📋 *Mã đơn:* ${data.orderId}\n🆔 *ID:* ${data.id}\n📅 *Thời gian:* ${new Date(data.createdAt).toLocaleString('vi-VN')}\n📱 *Nguồn:* ${data.source}\n\n👤 *Khách hàng:* ${data.customerName}\n📞 *SĐT:* ${data.phone}\n✉️ *Email:* ${data.email || 'Không có'}\n\n🌸 *Sản phẩm:* ${data.product}\n🔢 *Số lượng:* ${data.quantity}\n💰 *Đơn giá:* ${data.priceFormatted}\n💵 *Tổng tiền:* ${data.totalFormatted}\n💳 *Thanh toán:* ${data.paymentMethod === 'cod' ? 'COD' : 'Chuyển khoản'}\n\n🏠 *Địa chỉ giao:* ${data.deliveryAddress}\n🕐 *Giao lúc:* ${data.deliveryTime}\n📝 *Ghi chú:* ${data.note || 'Không có'}\n🎁 *Thiệp:* ${data.cardMessage ? `\"${data.cardMessage}\"` : 'Không'}\n\n⚠️ *Hành động:* Gọi xác nhận đơn hàng với khách!\n👉 Hotline: 0934 926 092`;\n\n// Trả về dữ liệu để gửi đến admin (bỏ qua nếu chưa có admin chat ID)\nif (ADMIN_CHAT_IDS.length === 0) {\n  console.log('[ADMIN] Chưa cấu hình admin chat ID. Bỏ qua gửi thông báo.');\n  return [{ json: { ...data, adminNotified: false, reason: 'No admin chat IDs configured' } }];\n}\n\n// Gửi đến từng admin\nconst results = ADMIN_CHAT_IDS.map(adminId => ({\n  chatId: adminId,\n  text: orderDetail,\n  type: 'admin_notification'\n}));\n\nreturn results;\n"
+      },
+      "id": "node-admin-prepare",
+      "name": "Prepare Admin Notification",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1200, 600]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Content-Type", "value": "application/json"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"{{ $json.chatId }}\",\n  \"text\": \"{{ $json.text }}\",\n  \"parse_mode\": \"Markdown\"\n}"
+      },
+      "id": "node-telegram-admin",
+      "name": "Send to Admin (Telegram)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1440, 600]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Tổng hợp kết quả và trả về cho webhook\nconst inputs = $input.all();\nconst data = inputs[0].json;\n\n// Kiểm tra nếu có notify admin không\nconst adminNotified = data.adminNotified !== false;\n\nreturn [{\n  json: {\n    success: true,\n    orderId: data.orderId,\n    message: `Đơn hàng ${data.orderId} đã được tạo thành công! Nhân viên sẽ liên hệ xác nhận trong ít phút.`,\n    order: {\n      id: data.orderId,\n      customerName: data.customerName,\n      product: data.product,\n      quantity: data.quantity,\n      total: data.totalFormatted,\n      deliveryAddress: data.deliveryAddress,\n      deliveryTime: data.deliveryTime,\n      status: 'pending',\n      createdAt: data.createdAt\n    }\n  }\n}];"
+      },
+      "id": "node-format-response",
+      "name": "Format Final Response",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1680, 300]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "node-webhook-response",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1920, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Receive Order": {
+      "main": [[{"node": "Validate & Format Order", "type": "main", "index": 0}]]
+    },
+    "Validate & Format Order": {
+      "main": [[{"node": "Check Validation", "type": "main", "index": 0}]]
+    },
+    "Check Validation": {
+      "main": [[{"node": "Validation Switch", "type": "main", "index": 0}]]
+    },
+    "Validation Switch": {
+      "main": [
+        [{"node": "Error Response", "type": "main", "index": 0}],
+        [{"node": "Save Order (Static Data)", "type": "main", "index": 0}]
+      ]
+    },
+    "Error Response": {
+      "main": [[{"node": "Webhook Response", "type": "main", "index": 0}]]
+    },
+    "Save Order (Static Data)": {
+      "main": [
+        [{"node": "Customer Confirmation", "type": "main", "index": 0}],
+        [{"node": "Prepare Admin Notification", "type": "main", "index": 0}]
+      ]
+    },
+    "Customer Confirmation": {
+      "main": [[{"node": "Send to Customer (Telegram)", "type": "main", "index": 0}]]
+    },
+    "Send to Customer (Telegram)": {
+      "main": [[{"node": "Format Final Response", "type": "main", "index": 0}]]
+    },
+    "Prepare Admin Notification": {
+      "main": [[{"node": "Send to Admin (Telegram)", "type": "main", "index": 0}]]
+    },
+    "Send to Admin (Telegram)": {
+      "main": [[{"node": "Format Final Response", "type": "main", "index": 0}]]
+    },
+    "Format Final Response": {
+      "main": [[{"node": "Webhook Response", "type": "main", "index": 0}]}
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "none",
+    "timezone": "Asia/Ho_Chi_Minh"
+  },
+  "tags": [
+    {"name": "order-processing"},
+    {"name": "ecommerce"},
+    {"name": "hoa-tuoi-thanh-ngoc"}
+  ],
+  "active": false
+}

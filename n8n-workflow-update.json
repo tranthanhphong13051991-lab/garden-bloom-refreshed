@@ -1,0 +1,69 @@
+{
+  "name": "Telegram Bot - Hoa Tuoi Thanh Ngoc",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": ["message"],
+        "additionalFields": {}
+      },
+      "id": "2f6152e9-9a0c-439c-bc13-ff3ece3c810c",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "credentials": {
+        "telegramApi": {
+          "id": "vYpGpJ7Q2tkH37jX",
+          "name": "Telegram API - Hoa Ngoc Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:11434/api/chat",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Content-Type", "value": "application/json"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"qwen2.5:3b\",\n  \"stream\": false,\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Ban la Ngoc - tu van vien cua Hoa Tuoi Thanh Ngoc, Binh Thanh TP.HCM. Nhiem vu: tu van hoa tuoi, gia ca, dip su dung, giao hang. Luon than thien, nhiet tinh, dung tieng Viet. Khong biet thi noi se ho tro them.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"={{ $json.message.text }}\"\n    }\n  ]\n}"
+      },
+      "id": "d6560681-f978-4902-9add-7d2d9f604dcf",
+      "name": "Ollama AI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.message.content }}",
+        "additionalFields": {}
+      },
+      "id": "5b7defb4-fd8c-4d76-be2f-a23d25730ae6",
+      "name": "Telegram Reply",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [720, 300],
+      "credentials": {
+        "telegramApi": {
+          "id": "vYpGpJ7Q2tkH37jX",
+          "name": "Telegram API - Hoa Ngoc Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [[{"node": "Ollama AI", "type": "main", "index": 0}]]
+    },
+    "Ollama AI": {
+      "main": [[{"node": "Telegram Reply", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

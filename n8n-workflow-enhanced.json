@@ -1,0 +1,327 @@
+{
+  "name": "Telegram Bot - Hoa Tuoi Thanh Ngoc (Enhanced)",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": ["message"],
+        "additionalFields": {}
+      },
+      "id": "node-telegram-trigger",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "credentials": {
+        "telegramApi": {
+          "id": "vYpGpJ7Q2tkH37jX",
+          "name": "Telegram API - Hoa Ngoc Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Phân tích intent từ tin nhắn Telegram\nconst msg = $input.first().json.message;\nconst chatId = msg.chat.id;\nconst text = (msg.text || '').toLowerCase().trim();\nconst username = msg.from?.first_name || 'Khách';\n\n// Danh sách intent patterns\nconst intents = {\n  greeting: /^(chào|hi|hello|hey|chao|xin chào|hí|hì|alo|bot|ngọc)/i,\n  order: /^(đặt|mua|order|muốn mua|đặt hàng|thanh toán|mua ngay|cho mình đặt|đặt mua)/i,\n  price: /(giá|bao nhiêu|bảng giá|price|cost|tiền|khoảng|tầm giá|tổng)/i,\n  delivery: /(giao hàng|ship|giao|nhận hàng|bao lâu|giao tận nơi|phí giao|thời gian giao)/i,\n  info: /(địa chỉ|liên hệ|hotline|số điện thoại|zalo|facebook|giờ mở|làm việc|ở đâu)/i,\n  care: /(chăm sóc|bảo quản|giữ tươi|cách cắm|cắt cành|thay nước|tưới)/i,\n  meaning: /(ý nghĩa|thông điệp|tượng trưng|biểu tượng|có nghĩa|tặng gì|dịp nào)/i,\n  reset: /^(reset|xóa lịch sử|làm mới)/i,\n};\n\n// Xác định intent chính\nlet detectedIntent = 'general';\nfor (const [intent, pattern] of Object.entries(intents)) {\n  if (pattern.test(text)) {\n    detectedIntent = intent;\n    break;\n  }\n}\n\nconsole.log(`[${chatId}] ${username}: \"${text}\" -> intent: ${detectedIntent}`);\n\nreturn [{\n  json: {\n    chatId: chatId,\n    text: msg.text,\n    username: username,\n    intent: detectedIntent,\n    messageId: msg.message_id,\n    date: msg.date,\n    chatType: msg.chat.type,\n    firstName: msg.from?.first_name || '',\n    lastName: msg.from?.last_name || '',\n    usernameFrom: msg.from?.username || '',\n    isGroup: msg.chat.type !== 'private',\n  }\n}];"
+      },
+      "id": "node-intent-analyzer",
+      "name": "Intent Analyzer",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy lịch sử chat từ workflow static data\nconst chatId = $input.first().json.chatId;\nconst historyKey = `tg_history_${chatId}`;\nconst chatHistory = $getWorkflowStaticData('global')[historyKey] || [];\n\nreturn [{\n  json: {\n    ...$input.first().json,\n    chatHistory: chatHistory\n  }\n}];"
+      },
+      "id": "node-history-reader",
+      "name": "Chat History Reader",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "dataType": 3,
+        "dataPropertyName": "intent",
+        "mode": "expression",
+        "value1": "={{ $json.intent }}",
+        "fallbackOutput": true,
+        "parameters": {
+          "conditions": {
+            "string": [
+              {
+                "value1": "={{ $json.intent }}",
+                "value2": "greeting"
+              },
+              {
+                "value1": "={{ $json.intent }}",
+                "value2": "reset"
+              },
+              {
+                "value1": "={{ $json.intent }}",
+                "value2": "order"
+              },
+              {
+                "value1": "={{ $json.intent }}",
+                "value2": "price"
+              },
+              {
+                "value1": "={{ $json.intent }}",
+                "value2": "delivery"
+              },
+              {
+                "value1": "={{ $json.intent }}",
+                "value2": "info"
+              },
+              {
+                "value1": "={{ $json.intent }}",
+                "value2": "care"
+              },
+              {
+                "value1": "={{ $json.intent }}",
+                "value2": "meaning"
+              }
+            ]
+          }
+        }
+      },
+      "id": "node-intent-router",
+      "name": "Intent Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Xử lý greeting - Chào hỏi\nconst data = $input.first().json;\nconst username = data.username;\n\nconst greetings = [\n  `🌸 Chào ${username} ơi! Mình là Ngọc, nhân viên tư vấn của Hoa Tươi Thanh Ngọc đây. Bạn muốn xem hoa gì không? Mình tư vấn nhiệt tình nha!`,\n  `👋 ${username} ơi, chào bạn! Ngọc đây — tiệm hoa Thanh Ngọc Bình Thạnh. Hôm nay bạn muốn tìm loại hoa nào để tặng vậy?`,\n  `🌷 Chào ${username}, mình là Ngọc! Bên Thanh Ngọc có đủ loại hoa tươi đẹp lắm. Bạn cần tư vấn gì cứ nói mình nha!`,\n  `💐 ${username} ơi, chào bạn nha! Mình là Ngọc từ Hoa Tươi Thanh Ngọc. Bữa nay bạn muốn đặt hoa tặng ai zậy? Để mình gợi ý cho!`\n];\nconst reply = greetings[Math.floor(Math.random() * greetings.length)];\n\nreturn [{ json: { chatId: data.chatId, text: reply } }];"
+      },
+      "id": "node-greeting",
+      "name": "Greeting Handler",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [960, 150]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Xử lý reset - Xóa lịch sử trò chuyện\nconst data = $input.first().json;\n$getWorkflowStaticData('global')[`tg_history_${data.chatId}`] = [];\nconst reply = `🔄 Đã xóa lịch sử trò chuyện nha ${data.username}! Có gì cần tư vấn cứ nhắn mình lại nhé 🌸`;\nreturn [{ json: { chatId: data.chatId, text: reply } }];"
+      },
+      "id": "node-reset-handler",
+      "name": "Reset Handler",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [960, 250]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Xử lý order - Tiếp nhận đơn hàng\nconst data = $input.first().json;\nconst reply = `📦 *Tiếp nhận đặt hàng*\n\nCảm ơn ${data.username} đã quan tâm! Để mình xác nhận, bạn vui lòng cho mình biết:\n\n1️⃣ Bạn muốn đặt *sản phẩm* nào?\n2️⃣ Số lượng bao nhiêu?\n3️⃣ Tên người nhận & SĐT?\n4️⃣ Địa chỉ giao hàng?\n5️⃣ Thời gian mong muốn nhận?\n6️⃣ Yêu cầu đặc biệt? (màu sắc, thiệp, ghi chú...)\n\nMình sẽ báo giá và xác nhận lại cho bạn ngay nha! 🌸\n\n👉 Hoặc gọi hotline *0934 926 092* để đặt nhanh hơn!`;\nreturn [{ json: { chatId: data.chatId, text: reply, intent: 'order', username: data.username } }];"
+      },
+      "id": "node-order-handler",
+      "name": "Order Intake Handler",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [960, 350]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Xử lý price - Bảng giá\nconst data = $input.first().json;\nconst reply = `💰 *Bảng giá tham khảo:*\n\n🌸 *Bó hoa hồng:* 500k - 850k\n   • Hồng Kem Tinh Tế: 650k\n   • Hồng Kem Classic: 680k\n   • Hồng Kem Sang Trọng: 850k\n   • Hồng Tươi Thắm: 550k\n   • Hồng Đỏ Nồng Nàn: 600k\n\n💐 *Bó mix nhiều loài:* 580k - 620k\n🧺 *Giỏ hoa:* 750k\n🏢 *Kệ hoa khai trương:* 980k - 2.5tr (miễn phí giao + lắp)\n💟 *Hoa chia buồn:* 680k (kèm băng tang)\n🌿 *Lan hồ điệp:* 890k\n\n🚚 Miễn phí giao nội thành TP.HCM (2 tiếng)\n👉 Xem chi tiết: hoatuoithanhngoc.com\n📞 Hotline: 0934 926 092`;\nreturn [{ json: { chatId: data.chatId, text: reply } }];"
+      },
+      "id": "node-price-handler",
+      "name": "Price Info Handler",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [960, 450]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Xử lý delivery - Giao hàng\nconst data = $input.first().json;\nconst reply = `🚚 *Thông tin giao hàng*\n\n✅ *Phạm vi:* Nội thành TP.HCM\n⏱ *Thời gian:* Giao trong 2 giờ (đặt trước 18:00)\n💵 *Phí ship:* Miễn phí nội thành\n🎯 *Giao đúng giờ* theo yêu cầu\n📦 *Nhận hàng:* Kiểm tra trước khi thanh toán\n\n*Ngoại thành:* Liên hệ riêng để báo giá.\n👉 Hotline: 0934 926 092 | 0866 086 574`;\nreturn [{ json: { chatId: data.chatId, text: reply } }];"
+      },
+      "id": "node-delivery-handler",
+      "name": "Delivery Info Handler",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [960, 550]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Xử lý info - Thông tin cửa hàng\nconst data = $input.first().json;\nconst reply = `📞 *Thông tin Hoa Tươi Thanh Ngọc*\n\n🏪 *Địa chỉ:* 8 Phan Văn Hân, Phường 19, Bình Thạnh, TP.HCM\n📱 *Hotline:* 0934 926 092 | 0866 086 574\n🕐 *Giờ mở cửa:* 07:00 - 21:00 (tất cả các ngày)\n🌐 *Website:* hoatuoithanhngoc.com\n💬 *Zalo:* https://zalo.me/3297391822230372190\n📘 *Facebook:* fb.com/hoatuoithanhngoc\n\n*Dịch vụ:* Giao hoa 2h - Thiết kế theo yêu cầu - Kèm thiệp miễn phí - Có xuất hóa đơn VAT`;\nreturn [{ json: { chatId: data.chatId, text: reply } }];"
+      },
+      "id": "node-info-handler",
+      "name": "Shop Info Handler",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [960, 650]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Xử lý care - Chăm sóc hoa\nconst data = $input.first().json;\nconst tips = [\n  `🌿 *Cách chăm sóc hoa tươi tại nhà:*\n\n1️⃣ *Cắt cành:* Cắt vát góc 45° dưới vòi nước chảy\n2️⃣ *Tỉa lá:* Bỏ hết lá ngập trong nước\n3️⃣ *Nước:* Thay nước mỗi ngày, thêm vài giọt nước rửa chén\n4️⃣ *Vị trí:* Tránh nắng trực tiếp và máy lạnh\n5️⃣ *Phun sương:* Xịt nhẹ lên cánh hoa mỗi sáng\n\n👉 Giữ tươi 3-7 ngày nếu chăm đúng cách!`,\n  `🌸 *Bí quyết giữ hoa tươi lâu:*\n\n🌊 Cắt gốc mới mỗi ngày 1cm\n🧊 Dùng nước mát, không lạnh quá\n🍬 Cho 1 thìa đường + vài giọt chanh vào nước\n🌬 Tránh gần quả chín (thải ethylene làm hoa nhanh tàn)\n\nMẹo hay: Hoa hơi rũ? Quấn giấy báo + ngâm gốc nước ấm 40°C 30 phút là hồi sinh!`\n];\nconst reply = tips[Math.floor(Math.random() * tips.length)];\nreturn [{ json: { chatId: data.chatId, text: reply } }];"
+      },
+      "id": "node-care-handler",
+      "name": "Care Tips Handler",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [960, 750]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Xử lý meaning - Ý nghĩa hoa\nconst data = $input.first().json;\nconst reply = `💖 *Ý nghĩa các loại hoa theo màu sắc:*\n\n🌸 *Hoa hồng đỏ* - Tình yêu nồng cháy\n💗 *Hoa hồng phấn* - Dịu dàng, biết ơn\n🤍 *Hoa hồng trắng* - Thuần khiết, khởi đầu mới\n💛 *Hoa hồng vàng* - Tình bạn, niềm vui\n🧁 *Hoa hồng kem* - Tinh tế, sang trọng\n🌷 *Hoa cẩm chướng* - Tình mẹ, lòng biết ơn\n🌻 *Hoa hướng dương* - Thành công, năng lượng tích cực\n🌿 *Lan hồ điệp* - Sang trọng, may mắn, phú quý\n\n✨ Tặng đúng màu = gửi đúng thông điệp!`;\nreturn [{ json: { chatId: data.chatId, text: reply } }];"
+      },
+      "id": "node-meaning-handler",
+      "name": "Meaning Handler",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [960, 850]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Chuẩn bị request cho Ollama AI (xử lý hỏi về sản phẩm và các câu hỏi chung)\nconst data = $input.first().json;\nconst chatId = data.chatId;\n\nconst SYSTEM_PROMPT = `Mày tên Ngọc, nhân viên tư vấn tại Hoa Tươi Thanh Ngọc — tiệm hoa ở 8 Phan Văn Hân, Bình Thạnh, TP.HCM.\nMày đang nhắn tin với khách trên Telegram, nói chuyện tự nhiên như người thật, KHÔNG phải robot.\n\nCÁCH NÓI CHUYỆN:\n- Xưng \"mình\", gọi khách là \"bạn\" hoặc \"anh/chị\" tùy ngữ cảnh\n- Ngắn gọn, tự nhiên — tối đa 3 câu mỗi tin, không dùng bullet point dài dòng\n- Chỉ hỏi tối đa 1 câu hỏi mỗi lần, không hỏi dồn\n- Khi đã hiểu nhu cầu thì gợi ý sản phẩm cụ thể luôn\n- Được dùng \"nha\", \"nè\", \"á\", \"hen\" cho tự nhiên\n- Không chắc thì nói: \"để mình hỏi lại chị chủ nha\"\n\nSẢN PHẨM ĐANG CÓ (tên + giá):\nBó hoa hồng: Hồng Kem Tinh Tế 650k, Hồng Kem Classic 680k, Hồng Kem Sang Trọng 850k, Hồng Kem Mix Trắng 700k, Hồng Kem Tròn Đầy 720k, Hồng Tươi Thắm 550k, Hồng Phấn Lãng Mạn 580k, Hồng Đỏ Nồng Nàn 600k, Bó Hoa Tươi Ngày Vui 500k\nBó mix: Mix Pastel Ngọt Ngào 580k, Mix Trắng Tím Dịu Dàng 600k, Mix Tông Ấm Rực Rỡ 620k, Mix Sắc Mát Tươi Sáng 590k\nGiỏ hoa: Giỏ Hoa Trắng Xanh Thanh Nhã 750k\nKhai trương: Kệ Hoa Khai Trương Thịnh Vượng 980k, Kệ Hoa Hồng Pastel 1.5tr, Kệ Hoa Thịnh Vượng 1.8tr, Kệ Hoa Lan Hồ Điệp Kem 2tr (giao + lắp miễn phí)\nChia buồn: Lẵng Hoa Lys Bạch Hợp 680k (kèm băng tang)\nLan hồ điệp: Chậu Lan Hồ Điệp Trắng Quý Phái 890k\n\nTHÔNG TIN SHOP:\nĐịa chỉ: 8 Phan Văn Hân, Bình Thạnh, TP.HCM\nHotline: 0934 926 092 | 0866 086 574 | Mở 7:00–21:00 mỗi ngày\nGiao hàng 2 giờ nội thành TP.HCM, kèm thiệp viết tay miễn phí\nCó thể đổi màu hoa, giấy gói theo yêu cầu\nCó xuất hóa đơn VAT khi yêu cầu\n\nTrả lời bằng tiếng Việt. Nếu hỏi ngoài chủ đề hoa thì nhẹ nhàng lái về.`;\n\nlet history = data.chatHistory || [];\nhistory.push({ role: \"user\", content: data.text });\nif (history.length > 20) {\n  history = history.slice(-20);\n}\n\nreturn [{\n  json: {\n    chatId: chatId,\n    systemPrompt: SYSTEM_PROMPT,\n    history: JSON.stringify(history),\n    userMessage: data.text,\n    username: data.username\n  }\n}];"
+      },
+      "id": "node-ollama-prepare",
+      "name": "Prepare AI Request",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1200, 950]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:11434/api/chat",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{"name": "Content-Type", "value": "application/json"}]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"qwen2.5:3b\",\n  \"stream\": false,\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"{{ $json.systemPrompt }}\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.userMessage }}\"\n    }\n  ]\n}"
+      },
+      "id": "node-ollama-ai",
+      "name": "Ollama AI Chat",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1440, 950]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Xử lý phản hồi từ Ollama và cập nhật lịch sử\nconst data = $input.first().json;\nconst chatId = data.chatId;\n\n// Lấy nội dung reply\nconst replyContent = data.message?.content \n  || data?.json?.message?.content \n  || 'Xin lỗi, mình chưa hiểu. Bạn nói lại giúp mình nhé! 🌸';\n\n// Cập nhật lịch sử\nconst historyKey = `tg_history_${chatId}`;\nlet history = $getWorkflowStaticData('global')[historyKey] || [];\nhistory.push({ role: \"assistant\", content: replyContent });\nif (history.length > 20) {\n  history = history.slice(-20);\n}\n$getWorkflowStaticData('global')[historyKey] = history;\n\nreturn [{ json: { chatId: chatId, text: replyContent } }];"
+      },
+      "id": "node-ollama-response",
+      "name": "Process AI Response",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1680, 950]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lưu lịch sử chat và chuẩn bị gửi reply\nconst data = $input.first().json;\nconst chatId = data.chatId;\n\n// Lưu lịch sử cho các handler không phải AI\nconst historyKey = `tg_history_${chatId}`;\nlet history = $getWorkflowStaticData('global')[historyKey] || [];\n// Tránh lưu duplicate nếu AI đã lưu rồi\nconst lastEntry = history[history.length - 1];\nif (!lastEntry || lastEntry.content !== data.text) {\n  history.push({ role: \"assistant\", content: data.text });\n  if (history.length > 20) history = history.slice(-20);\n  $getWorkflowStaticData('global')[historyKey] = history;\n}\n\nreturn [{ json: { chatId: chatId, text: data.text } }];"
+      },
+      "id": "node-history-saver",
+      "name": "History Saver",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1920, 600]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "node-telegram-reply",
+      "name": "Telegram Reply",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [2100, 600],
+      "credentials": {
+        "telegramApi": {
+          "id": "vYpGpJ7Q2tkH37jX",
+          "name": "Telegram API - Hoa Ngoc Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Gửi thông báo đến Admin khi có đơn hàng mới\nconst data = $input.first().json;\nconst reply = `⚠️ *CÓ ĐƠN HÀNG MỚI TỪ TELEGRAM*\n\n👤 Khách: ${data.username} (Chat ID: ${data.chatId})\n💬 Nội dung: ${data.text?.substring(0, 200)}\n🕐 Thời gian: ${new Date().toLocaleString('vi-VN')}\n\n👉 Cần xử lý ngay!`;\nreturn [{ json: { chatId: data.chatId, text: reply, type: 'admin_notification' } }];"
+      },
+      "id": "node-admin-notify",
+      "name": "Admin Notification",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [1200, 350]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [[{"node": "Intent Analyzer", "type": "main", "index": 0}]]
+    },
+    "Intent Analyzer": {
+      "main": [[{"node": "Chat History Reader", "type": "main", "index": 0}]]
+    },
+    "Chat History Reader": {
+      "main": [[{"node": "Intent Router", "type": "main", "index": 0}]]
+    },
+    "Intent Router": {
+      "main": [
+        [{"node": "Greeting Handler", "type": "main", "index": 0}],
+        [{"node": "Reset Handler", "type": "main", "index": 0}],
+        [{"node": "Order Intake Handler", "type": "main", "index": 0}],
+        [{"node": "Price Info Handler", "type": "main", "index": 0}],
+        [{"node": "Delivery Info Handler", "type": "main", "index": 0}],
+        [{"node": "Shop Info Handler", "type": "main", "index": 0}],
+        [{"node": "Care Tips Handler", "type": "main", "index": 0}],
+        [{"node": "Meaning Handler", "type": "main", "index": 0}],
+        [{"node": "Prepare AI Request", "type": "main", "index": 0}]
+      ]
+    },
+    "Order Intake Handler": {
+      "main": [[{"node": "Admin Notification", "type": "main", "index": 0}]]
+    },
+    "Admin Notification": {
+      "main": [[{"node": "History Saver", "type": "main", "index": 0}]]
+    },
+    "Greeting Handler": {
+      "main": [[{"node": "History Saver", "type": "main", "index": 0}]]
+    },
+    "Reset Handler": {
+      "main": [[{"node": "History Saver", "type": "main", "index": 0}]]
+    },
+    "Price Info Handler": {
+      "main": [[{"node": "History Saver", "type": "main", "index": 0}]]
+    },
+    "Delivery Info Handler": {
+      "main": [[{"node": "History Saver", "type": "main", "index": 0}]]
+    },
+    "Shop Info Handler": {
+      "main": [[{"node": "History Saver", "type": "main", "index": 0}]]
+    },
+    "Care Tips Handler": {
+      "main": [[{"node": "History Saver", "type": "main", "index": 0}]]
+    },
+    "Meaning Handler": {
+      "main": [[{"node": "History Saver", "type": "main", "index": 0}]]
+    },
+    "Prepare AI Request": {
+      "main": [[{"node": "Ollama AI Chat", "type": "main", "index": 0}]]
+    },
+    "Ollama AI Chat": {
+      "main": [[{"node": "Process AI Response", "type": "main", "index": 0}]]
+    },
+    "Process AI Response": {
+      "main": [[{"node": "History Saver", "type": "main", "index": 0}]]
+    },
+    "History Saver": {
+      "main": [[{"node": "Telegram Reply", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "none",
+    "timezone": "Asia/Ho_Chi_Minh"
+  },
+  "tags": [
+    {"name": "telegram"},
+    {"name": "chatbot"},
+    {"name": "hoa-tuoi-thanh-ngoc"}
+  ],
+  "active": false
+}

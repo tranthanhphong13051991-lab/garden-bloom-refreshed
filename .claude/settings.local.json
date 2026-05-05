@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(\"D:\\\\04_Phan_Mem\\\\Program Files\\\\nodejs\\\\npx.cmd\" tsc --noEmit)",
+      "Bash(cd /d \"d:\\\\01_Cong_Viec\\\\garden-bloom-refreshed\")",
+      "Bash(npx tsc *)",
+      "Bash(ollama list *)",
+      "Bash(curl -s \"https://api.telegram.org/bot8590496749:AAFcEF-33poUP8E-msNSL_WgKSVCZPzv4uc/getMe\")",
+      "Bash(curl -s \"https://api.telegram.org/bot8590496749:AAFcEF-33poUP8E-msNSL_WgKSVCZPzv4uc/getWebhookInfo\")",
+      "Bash(sqlite3 database.sqlite \"SELECT id, name FROM workflow_entity LIMIT 5;\")",
+      "PowerShell(Stop-Process -Name \"node\" -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"npx n8n start --tunnel\"; Start-Sleep -Seconds 25; Invoke-WebRequest -Uri \"http://localhost:5678\" -UseBasicParsing -TimeoutSec 5 | Select-Object StatusCode)",
+      "PowerShell(Stop-Process -Name \"node\" -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'd:\\\\01_Cong_Viec\\\\garden-bloom-refreshed'; node telegram-bot.js\"; Write-Host \"Bot restarted\")",
+      "WebFetch(domain:developers.zalo.me)",
+      "WebSearch",
+      "PowerShell($appId = \"4391377450967727174\"; $callbackUrl = \"https://zalo-bot-hoa-ngoc.tranthanhphong13051991.workers.dev/callback\"; Start-Process \"https://oauth.zaloapp.com/v4/oa/permission?app_id=$appId&redirect_uri=$\\([System.Uri]::EscapeDataString\\($callbackUrl\\)\\)\")",
+      "WebFetch(domain:www.beehexa.com)",
+      "PowerShell(Stop-Process -Name \"node\" -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'd:\\\\01_Cong_Viec\\\\garden-bloom-refreshed'; node telegram-bot.js\"; Write-Host \"Telegram bot restarted\")"
+    ]
+  }
+}

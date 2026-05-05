@@ -1,0 +1,13 @@
+name = "zalo-bot-hoa-ngoc"
+main = "src/index.js"
+compatibility_date = "2025-09-24"
+
+[ai]
+binding = "AI"
+
+[[kv_namespaces]]
+binding = "BOT_KV"
+id = "25bb93d952a4490db3a9e35797e76f35"
+
+[vars]
+OA_ID = "3297391822230372190"
