@@ -3,7 +3,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ShoppingBag, MessageCircle, Phone, Truck, Sparkles, Mail, Heart, Palette, Ruler, Leaf, AlertTriangle, Gift, Images, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { ProductCard } from "@/components/site/ProductCard";
-import { findProduct, formatPrice, PRODUCTS, CATEGORIES } from "@/data/products";
+import { findProduct, PRODUCTS, CATEGORIES } from "@/data/products";
 import { useCart } from "@/store/cart";
 import { SITE } from "@/data/site";
 import { tagSlug, findTag } from "@/data/tags";
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/san-pham/$slug")({
     const { product } = loaderData;
     const url = `${SITE.domain}/san-pham/${product.slug}`;
     const cat = CATEGORIES.find((c) => c.id === product.category);
-    const title = `${product.name} — Giá ${product.price ? new Intl.NumberFormat("vi-VN").format(product.price) + "₫" : "Liên hệ"} | Hoa Tươi Thanh Ngọc`;
+    const title = `${product.name} — Liên hệ báo giá | Hoa Tươi Thanh Ngọc`;
     const desc = `${product.short} Ý nghĩa, màu sắc ${product.colors.map(c=>c.name).join(", ")}, kích thước ${product.sizes[0]?.dimension}. Giao 2h tại TP.HCM, Zalo ${SITE.phones[0]}.`;
     const productLd = {
       "@context": "https://schema.org",
@@ -51,12 +51,10 @@ export const Route = createFileRoute("/san-pham/$slug")({
       offers: {
         "@type": "Offer",
         url,
-        priceCurrency: "VND",
-        price: product.price ?? 0,
-        priceValidUntil: "2026-12-31",
         availability: "https://schema.org/InStock",
         itemCondition: "https://schema.org/NewCondition",
         seller: { "@type": "Organization", name: SITE.name, url: SITE.domain },
+        description: "Liên hệ Zalo/điện thoại để được báo giá và tư vấn miễn phí.",
       },
     };
     const breadcrumbLd = {
@@ -115,8 +113,6 @@ export const Route = createFileRoute("/san-pham/$slug")({
         { property: "og:image:alt", content: product.name },
         { property: "og:type", content: "product" },
         { property: "og:url", content: url },
-        { property: "product:price:amount", content: String(product.price ?? 0) },
-        { property: "product:price:currency", content: "VND" },
         { property: "product:availability", content: "in stock" },
         { property: "product:category", content: cat?.label ?? "" },
         { name: "twitter:card", content: "summary_large_image" },
@@ -172,7 +168,7 @@ function ProductDetail() {
     .slice(0, 3);
 
   const orderMsg = encodeURIComponent(
-    `Xin chào Hoa Tươi Thanh Ngọc, tôi muốn đặt sản phẩm: ${product.name}${product.price ? ` — ${formatPrice(product.price)}` : ""}. Xin tư vấn giúp tôi.`,
+    `Xin chào Hoa Tươi Thanh Ngọc, tôi muốn đặt sản phẩm: ${product.name}. Xin tư vấn và báo giá giúp tôi.`,
   );
 
   // Lightbox cho gallery "Hình ảnh thực nhận"
@@ -235,8 +231,8 @@ function ProductDetail() {
             </div>
             <h1 className="mt-3 font-serif text-4xl font-semibold leading-tight text-foreground md:text-5xl">{product.name}</h1>
             <div className="mt-5 flex items-baseline gap-3">
-              <div className="font-serif text-3xl font-semibold text-primary">{formatPrice(product.price)}</div>
-              <span className="text-xs text-muted-foreground">đã bao gồm thiệp & gói quà</span>
+              <div className="font-serif text-2xl font-semibold text-primary">Liên hệ báo giá</div>
+              <span className="text-xs text-muted-foreground">Tư vấn miễn phí — kèm thiệp & gói quà</span>
             </div>
             <p className="mt-5 text-base leading-relaxed text-muted-foreground">{product.description}</p>
 

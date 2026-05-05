@@ -1,11 +1,10 @@
 import { X, Minus, Plus, Trash2, MessageCircle } from "lucide-react";
 import { useEffect } from "react";
 import { useCart } from "@/store/cart";
-import { formatPrice } from "@/data/products";
 import { SITE } from "@/data/site";
 
 export function CartDrawer() {
-  const { items, open, setOpen, setQty, remove, total, clear } = useCart();
+  const { items, open, setOpen, setQty, remove, clear } = useCart();
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -13,11 +12,9 @@ export function CartDrawer() {
   }, [open]);
 
   const buildOrderMessage = () => {
-    const lines = items.map(
-      (i, idx) => `${idx + 1}. ${i.name} × ${i.qty}${i.price ? ` — ${formatPrice(i.price * i.qty)}` : ""}`,
-    );
+    const lines = items.map((i, idx) => `${idx + 1}. ${i.name} × ${i.qty}`);
     return encodeURIComponent(
-      `Xin chào Hoa Tươi Thanh Ngọc, tôi muốn đặt:\n${lines.join("\n")}\n\nTổng tạm tính: ${formatPrice(total())}\n\nXin tư vấn giúp tôi, cảm ơn!`,
+      `Xin chào Hoa Tươi Thanh Ngọc, tôi muốn đặt:\n${lines.join("\n")}\n\nXin tư vấn và báo giá giúp tôi, cảm ơn!`,
     );
   };
 
@@ -52,7 +49,7 @@ export function CartDrawer() {
                   <img src={i.thumb} alt={i.name} width={80} height={80} className="h-20 w-20 rounded-lg object-cover" loading="lazy" />
                   <div className="flex flex-1 flex-col">
                     <div className="font-serif text-base leading-tight text-foreground">{i.name}</div>
-                    <div className="mt-1 text-sm text-primary">{formatPrice(i.price)}</div>
+                    <div className="mt-1 text-xs text-muted-foreground">Liên hệ để báo giá</div>
                     <div className="mt-auto flex items-center justify-between">
                       <div className="flex items-center rounded-full border border-border">
                         <button onClick={() => setQty(i.slug, i.qty - 1)} aria-label="Giảm" className="flex h-7 w-7 items-center justify-center text-muted-foreground hover:text-primary">
@@ -76,11 +73,7 @@ export function CartDrawer() {
 
         {items.length > 0 && (
           <footer className="space-y-3 border-t border-border bg-cream px-6 py-5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Tạm tính</span>
-              <span className="font-serif text-2xl font-semibold text-primary">{formatPrice(total())}</span>
-            </div>
-            <p className="text-xs text-muted-foreground">Phí giao hàng và đơn cuối được xác nhận khi tư vấn.</p>
+            <p className="text-xs text-muted-foreground">Giá sẽ được tư vấn và xác nhận qua Zalo/điện thoại.</p>
             <a
               href={`${SITE.zalo}?body=${buildOrderMessage()}`}
               target="_blank"

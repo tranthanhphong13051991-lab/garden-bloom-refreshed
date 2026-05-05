@@ -16,6 +16,7 @@ import { Route as ChinhSachThanhToanRouteImport } from './routes/chinh-sach-than
 import { Route as ChinhSachGiaoHangRouteImport } from './routes/chinh-sach-giao-hang'
 import { Route as ChinhSachDoiTraRouteImport } from './routes/chinh-sach-doi-tra'
 import { Route as ChinhSachBaoMatRouteImport } from './routes/chinh-sach-bao-mat'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TheIndexRouteImport } from './routes/the.index'
 import { Route as SanPhamIndexRouteImport } from './routes/san-pham.index'
@@ -59,6 +60,11 @@ const ChinhSachBaoMatRoute = ChinhSachBaoMatRouteImport.update({
   path: '/chinh-sach-bao-mat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -97,6 +103,7 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/chinh-sach-bao-mat': typeof ChinhSachBaoMatRoute
   '/chinh-sach-doi-tra': typeof ChinhSachDoiTraRoute
   '/chinh-sach-giao-hang': typeof ChinhSachGiaoHangRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/chinh-sach-bao-mat': typeof ChinhSachBaoMatRoute
   '/chinh-sach-doi-tra': typeof ChinhSachDoiTraRoute
   '/chinh-sach-giao-hang': typeof ChinhSachGiaoHangRoute
@@ -129,6 +137,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/chinh-sach-bao-mat': typeof ChinhSachBaoMatRoute
   '/chinh-sach-doi-tra': typeof ChinhSachDoiTraRoute
   '/chinh-sach-giao-hang': typeof ChinhSachGiaoHangRoute
@@ -147,6 +156,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/chinh-sach-bao-mat'
     | '/chinh-sach-doi-tra'
     | '/chinh-sach-giao-hang'
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/chinh-sach-bao-mat'
     | '/chinh-sach-doi-tra'
     | '/chinh-sach-giao-hang'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/chinh-sach-bao-mat'
     | '/chinh-sach-doi-tra'
     | '/chinh-sach-giao-hang'
@@ -195,6 +207,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   ChinhSachBaoMatRoute: typeof ChinhSachBaoMatRoute
   ChinhSachDoiTraRoute: typeof ChinhSachDoiTraRoute
   ChinhSachGiaoHangRoute: typeof ChinhSachGiaoHangRoute
@@ -257,6 +270,13 @@ declare module '@tanstack/react-router' {
       path: '/chinh-sach-bao-mat'
       fullPath: '/chinh-sach-bao-mat'
       preLoaderRoute: typeof ChinhSachBaoMatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -326,6 +346,7 @@ const SanPhamRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   ChinhSachBaoMatRoute: ChinhSachBaoMatRoute,
   ChinhSachDoiTraRoute: ChinhSachDoiTraRoute,
   ChinhSachGiaoHangRoute: ChinhSachGiaoHangRoute,

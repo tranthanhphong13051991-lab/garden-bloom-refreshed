@@ -18,7 +18,8 @@
       "WebSearch",
       "PowerShell($appId = \"4391377450967727174\"; $callbackUrl = \"https://zalo-bot-hoa-ngoc.tranthanhphong13051991.workers.dev/callback\"; Start-Process \"https://oauth.zaloapp.com/v4/oa/permission?app_id=$appId&redirect_uri=$\\([System.Uri]::EscapeDataString\\($callbackUrl\\)\\)\")",
       "WebFetch(domain:www.beehexa.com)",
-      "PowerShell(Stop-Process -Name \"node\" -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'd:\\\\01_Cong_Viec\\\\garden-bloom-refreshed'; node telegram-bot.js\"; Write-Host \"Telegram bot restarted\")"
+      "PowerShell(Stop-Process -Name \"node\" -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'd:\\\\01_Cong_Viec\\\\garden-bloom-refreshed'; node telegram-bot.js\"; Write-Host \"Telegram bot restarted\")",
+      "Bash(dir public *)"
     ]
   }
 }
