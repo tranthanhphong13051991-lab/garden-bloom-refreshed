@@ -689,6 +689,19 @@ const raw: RawProduct[] = [
     keywords: ["hoa tươi tphcm","giỏ hoa hồng kem","hoa sinh nhật","hoa tặng sếp","hoa hồng kem","giỏ hoa thanh ngọc"],
     galleryImgs: [],
   },
+
+  // ── THÊM 5/5/2026 ────────────────────────────────────────────
+  {
+    slug: "bo-hoa-tuoi-mau-sac",
+    name: "Bó Hoa Tươi Màu Sắc",
+    category: "gio-hoa",
+    badge: "Nổi bật",
+    _img: "bo-hoa-tuoi-mau-sac.jpg",
+    short: "Hoa Tươi Thanh Ngọc: Sáng với hồng, vàng, cam, phù hợp tặng quà.",
+    description: "Sản phẩm này là một giỏ hoa tươi đa màu sắc, bao gồm các loại hoa như cẩm chướng, hồng, cúc, và các loại hoa nhỏ khác. Màu sắc nổi bật gồm hồng, vàng và cam. Thiết kế trong hộp gỗ giúp tăng thêm sự sang trọng và phù hợp để tặng quà hoặc trang trí. Giao 2 giờ tại TP.HCM.",
+    keywords: ["hoa tươi thanh ngọc","giỏ hoa tươi","hoa màu sắc","tphcm","hoa hộp gỗ","quà tặng hoa"],
+    galleryImgs: [],
+  },
 ];
 
 // ----- Defaults theo category -----
