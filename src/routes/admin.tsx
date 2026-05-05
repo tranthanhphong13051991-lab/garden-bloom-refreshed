@@ -315,10 +315,9 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
     setSaveStatus("saving");
     try {
-      // 1. Lưu ảnh vào public/images/images/
+      // 1. Lưu ảnh vào public/images/
       const publicDir = await dirHandle.getDirectoryHandle("public");
-      const img1Dir = await publicDir.getDirectoryHandle("images");
-      const img2Dir = await img1Dir.getDirectoryHandle("images");
+      const img2Dir = await publicDir.getDirectoryHandle("images");
 
       for (const draft of done) {
         const ext = draft.file.name.split(".").pop()?.toLowerCase() || "jpg";

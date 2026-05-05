@@ -77,15 +77,8 @@ const FAQ_BY_CATEGORY: Record<Category, FAQ[]> = {
   ],
 };
 
-// Sử dụng ảnh local từ public/images/ thay vì CDN (CDN không hoạt động)
 const img = (slug: string, _size: 400 | 800 = 800) => {
-  // Nếu slug có extension (vd: bo-hong1.jpg) thì dùng đường dẫn products
-  if (slug.includes(".")) {
-    const ext = slug.split(".").pop();
-    return `/images/products/${slug}`;
-  }
-  // Ảnh không có extension: thử .webp, fallback .jpg
-  // File thực tế nằm trong public/images/ (vd: hoa-hong-kem-tinh-te.webp)
+  if (slug.includes(".")) return `/images/${slug}`;
   return `/images/${slug}.webp`;
 };
 
