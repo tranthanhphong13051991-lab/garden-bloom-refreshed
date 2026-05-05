@@ -291,8 +291,16 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
   // Restore saved folder handle from IndexedDB on mount
   useEffect(() => {
-    idbLoad().then((handle) => {
-      if (handle) setDirHandle(handle);
+    idbLoad().then(async (handle: any) => {
+      if (!handle) return;
+      // Kiểm tra quyền truy cập — handle từ IndexedDB cần xác nhận lại
+      const perm = await handle.queryPermission({ mode: "readwrite" }).catch(() => "denied");
+      if (perm === "granted") {
+        setDirHandle(handle);
+      } else {
+        // Lưu handle để hiển thị nút "Xác nhận lại quyền truy cập"
+        setDirHandle(handle);
+      }
     }).catch(() => {});
   }, []);
 
@@ -407,11 +415,22 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     if (!done.length) return;
     if (!dirHandle) { alert("Vui lòng chọn thư mục dự án trước!"); return; }
 
+    // Xác nhận quyền nếu chưa được cấp (sau khi restore từ IndexedDB)
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const perm = await (dirHandle as any).queryPermission({ mode: "readwrite" });
+      if (perm !== "granted") {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const newPerm = await (dirHandle as any).requestPermission({ mode: "readwrite" });
+        if (newPerm !== "granted") { alert("Cần cấp quyền truy cập thư mục để lưu!"); return; }
+      }
+    } catch { /* ignore nếu API không hỗ trợ */ }
+
     setSaveStatus("saving");
     try {
       // 1. Lưu ảnh vào public/images/
-      const publicDir = await dirHandle.getDirectoryHandle("public");
-      const img2Dir = await publicDir.getDirectoryHandle("images");
+      const publicDir = await dirHandle.getDirectoryHandle("public", { create: true });
+      const img2Dir = await publicDir.getDirectoryHandle("images", { create: true });
 
       for (const draft of done) {
         // Lưu ảnh chính
