@@ -77,7 +77,10 @@ export function Footer() {
       <div className="border-t border-primary-foreground/15">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs text-primary-foreground/60 md:flex-row md:px-8">
           <div>© {new Date().getFullYear()} Hoa Tươi Thanh Ngọc. Mọi quyền được bảo lưu.</div>
-          <div>Thiết kế bởi Thanh Ngọc Flower's · hoatuoithanhngoc.com</div>
+          <div className="flex items-center gap-4">
+            <span>Thiết kế bởi Thanh Ngọc Flower's · hoatuoithanhngoc.com</span>
+            <Link to="/admin" className="opacity-30 transition hover:opacity-80">⚙</Link>
+          </div>
         </div>
       </div>
     </footer>
