@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import {
   Upload,
   FolderOpen,
@@ -16,7 +16,7 @@ import { checkAdminPassword, analyzeProductImage } from "@/server/adminAnalyze.f
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Category = "bo-hoa" | "gio-hoa" | "khai-truong" | "chia-buon" | "lan-ho-diep";
+type Category = "bo-hoa" | "gio-hoa" | "khai-truong" | "chia-buon" | "lan-ho-diep" | "hoa-lua";
 
 const GALLERY_ANGLES = [
   { key: "chinh-dien", label: "Góc chính diện" },
@@ -169,7 +169,41 @@ const CATEGORIES: { value: Category; label: string }[] = [
   { value: "khai-truong", label: "Khai trương" },
   { value: "chia-buon", label: "Chia buồn" },
   { value: "lan-ho-diep", label: "Lan hồ điệp" },
+  { value: "hoa-lua", label: "Hoa lụa" },
 ];
+
+// ─── IndexedDB helpers để nhớ thư mục qua các lần refresh ───────────────────
+
+const IDB_NAME = "admin-store";
+const IDB_KEY = "dirHandle";
+
+async function idbSave(handle: unknown) {
+  return new Promise<void>((res, rej) => {
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore("kv");
+    req.onsuccess = () => {
+      const tx = req.result.transaction("kv", "readwrite");
+      tx.objectStore("kv").put(handle, IDB_KEY);
+      tx.oncomplete = () => res();
+      tx.onerror = () => rej(tx.error);
+    };
+    req.onerror = () => rej(req.error);
+  });
+}
+
+async function idbLoad(): Promise<unknown> {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore("kv");
+    req.onsuccess = () => {
+      const tx = req.result.transaction("kv", "readonly");
+      const get = tx.objectStore("kv").get(IDB_KEY);
+      get.onsuccess = () => res(get.result ?? null);
+      get.onerror = () => rej(get.error);
+    };
+    req.onerror = () => rej(req.error);
+  });
+}
 
 // ─── Route ────────────────────────────────────────────────────────────────────
 
@@ -255,11 +289,19 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "done" | "error">("idle");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Restore saved folder handle from IndexedDB on mount
+  useEffect(() => {
+    idbLoad().then((handle) => {
+      if (handle) setDirHandle(handle);
+    }).catch(() => {});
+  }, []);
+
   const pickDirectory = async () => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const handle = await (window as any).showDirectoryPicker({ mode: "readwrite" });
       setDirHandle(handle);
+      idbSave(handle).catch(() => {});
     } catch {
       // User cancelled
     }

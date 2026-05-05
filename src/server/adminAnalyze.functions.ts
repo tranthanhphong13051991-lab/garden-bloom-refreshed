@@ -14,7 +14,7 @@ Phân tích ảnh sản phẩm hoa này và trả về JSON object (KHÔNG có t
 
 {
   "name": "Tên tiếng Việt ngắn gọn hấp dẫn (3-6 từ, Hoa đầu mỗi từ, ví dụ: Bó Hoa Hồng Kem Tinh Tế)",
-  "category": "bo-hoa | gio-hoa | khai-truong | chia-buon | lan-ho-diep",
+  "category": "bo-hoa | gio-hoa | khai-truong | chia-buon | lan-ho-diep | hoa-lua",
   "short": "1 câu tiếng Việt, đề cập 'Thanh Ngọc', nêu màu sắc/loài hoa nổi bật và dịp phù hợp (tối đa 120 ký tự)",
   "description": "2-3 câu tiếng Việt chi tiết: loài hoa, màu sắc, thiết kế, dịp phù hợp. Câu cuối phải là: Giao 2 giờ tại TP.HCM.",
   "keywords": ["5-7 từ khóa SEO tiếng Việt, bao gồm 1 keyword có chữ tphcm"],
@@ -28,6 +28,7 @@ PHÂN LOẠI category:
 - khai-truong: Kệ hoa đứng cao 1-2 tầng, dùng khai trương/sự kiện
 - chia-buon: Hoa chia buồn/tang lễ, màu trắng/nhạt, lẵng nghiêm trang
 - lan-ho-diep: Chậu lan hồ điệp (phalaenopsis)
+- hoa-lua: Hoa giả/hoa lụa nhân tạo, không phải hoa tươi, thường bày trí nội thất
 
 Không cần trả về giá — shop không hiển thị giá trên web.`;
 
