@@ -10,6 +10,7 @@ import {
   ChevronDown,
   ChevronUp,
   Trash2,
+  Download,
 } from "lucide-react";
 import { checkAdminPassword, analyzeProductImage } from "@/server/adminAnalyze.functions";
 
@@ -138,6 +139,28 @@ function generateCode(p: ProductDraft): string {
     `  },`,
   );
   return lines.join("\n");
+}
+
+function downloadFile(file: File, filename: string) {
+  const url = URL.createObjectURL(file);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function downloadDraftImages(draft: ProductDraft) {
+  const ext = draft.file.name.split(".").pop()?.toLowerCase() || "jpg";
+  downloadFile(draft.file, `${draft.slug}.${ext}`);
+  for (const { key } of GALLERY_ANGLES) {
+    const slot = draft.gallery[key];
+    if (!slot.file) continue;
+    const gExt = slot.file.name.split(".").pop()?.toLowerCase() || "jpg";
+    setTimeout(() => downloadFile(slot.file!, `${draft.slug}-${key}.${gExt}`), 300);
+  }
 }
 
 const CATEGORIES: { value: Category; label: string }[] = [
@@ -508,6 +531,18 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                 )}
                 {doneCount > 0 && (
                   <button
+                    onClick={() => {
+                      drafts.filter((d) => d.status === "done").forEach((d, i) => {
+                        setTimeout(() => downloadDraftImages(d), i * 500);
+                      });
+                    }}
+                    className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-5 py-2.5 text-sm font-medium transition hover:bg-muted"
+                  >
+                    <Download className="h-4 w-4" /> Tải {doneCount} ảnh về máy
+                  </button>
+                )}
+                {doneCount > 0 && (
+                  <button
                     onClick={saveToProject}
                     disabled={saveStatus === "saving"}
                     className="inline-flex items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-medium text-primary transition hover:scale-[1.02] disabled:opacity-60"
@@ -641,14 +676,25 @@ function DraftCard({
           )}
         </div>
 
-        {/* Remove */}
-        <button
-          onClick={onRemove}
-          className="shrink-0 p-1 text-muted-foreground transition hover:text-red-500"
-          title="Xoá"
-        >
-          <Trash2 className="h-4 w-4" />
-        </button>
+        {/* Actions */}
+        <div className="flex shrink-0 items-center gap-1">
+          {draft.status === "done" && (
+            <button
+              onClick={() => downloadDraftImages(draft)}
+              className="p-1 text-muted-foreground transition hover:text-primary"
+              title={`Tải ảnh: ${draft.slug}.${draft.file.name.split(".").pop()}`}
+            >
+              <Download className="h-4 w-4" />
+            </button>
+          )}
+          <button
+            onClick={onRemove}
+            className="p-1 text-muted-foreground transition hover:text-red-500"
+            title="Xoá"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       {/* Expanded edit panel */}
