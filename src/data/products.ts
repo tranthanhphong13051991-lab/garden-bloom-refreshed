@@ -819,10 +819,10 @@ const imgPoolByCat: Record<Category, string[]> = raw.reduce((acc, p) => {
 }, {} as Record<Category, string[]>);
 
 const VARIANT_LABELS = [
-  { variant: "Lô tháng trước", note: "Cùng thiết kế nhưng tone hoa nhỉnh đậm hơn theo mùa" },
-  { variant: "Tone phối nhẹ", note: "Cùng bố cục, sắc hoa nhạt hơn so với hình đại diện" },
-  { variant: "Góc chụp khác", note: "Bó hoa thực tế từ góc nghiêng — gói và ruy băng có thể khác chút" },
-  { variant: "Khách hàng nhận", note: "Hình thực tế khách gửi về — bố cục giữ nguyên, độ nở hoa thay đổi tự nhiên" },
+  { variant: "Góc chính diện", note: "Nhìn thẳng vào sản phẩm — bố cục tổng thể rõ nhất" },
+  { variant: "Góc cận cảnh", note: "Chi tiết hoa, màu sắc và chất liệu" },
+  { variant: "Góc từ trên cao", note: "Nhìn toàn bộ từ trên xuống — bố cục và tỉ lệ" },
+  { variant: "Ánh sáng tự nhiên", note: "Chụp ngoài trời — màu sắc thực nhất" },
 ];
 
 const buildDefaultGallery = (slug: string, cat: Category, mainImg: string): GalleryShot[] => {

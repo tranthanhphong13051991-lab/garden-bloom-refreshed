@@ -17,6 +17,20 @@ import { checkAdminPassword, analyzeProductImage } from "@/server/adminAnalyze.f
 
 type Category = "bo-hoa" | "gio-hoa" | "khai-truong" | "chia-buon" | "lan-ho-diep";
 
+const GALLERY_ANGLES = [
+  { key: "chinh-dien", label: "Góc chính diện" },
+  { key: "can-canh",   label: "Góc cận cảnh" },
+  { key: "tren-cao",   label: "Góc từ trên cao" },
+  { key: "anh-sang",   label: "Ánh sáng tự nhiên" },
+] as const;
+
+type GalleryAngleKey = typeof GALLERY_ANGLES[number]["key"];
+
+type GallerySlot = {
+  file: File | null;
+  previewUrl: string;
+};
+
 type ProductDraft = {
   id: string;
   file: File;
@@ -31,6 +45,7 @@ type ProductDraft = {
   keywords: string[];
   badge: string | null;
   colorNames: string[];
+  gallery: Record<GalleryAngleKey, GallerySlot>;
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -91,9 +106,22 @@ async function resizeToBase64(
   });
 }
 
+function emptyGallery(): Record<GalleryAngleKey, GallerySlot> {
+  return Object.fromEntries(
+    GALLERY_ANGLES.map(({ key }) => [key, { file: null, previewUrl: "" }])
+  ) as Record<GalleryAngleKey, GallerySlot>;
+}
+
 function generateCode(p: ProductDraft): string {
   const ext = p.file.name.split(".").pop()?.toLowerCase() || "jpg";
   const imgFile = `${p.slug}.${ext}`;
+  const galleryImgs = GALLERY_ANGLES
+    .filter(({ key }) => p.gallery[key].file !== null)
+    .map(({ key }) => {
+      const f = p.gallery[key].file!;
+      const gExt = f.name.split(".").pop()?.toLowerCase() || "jpg";
+      return `${p.slug}-${key}.${gExt}`;
+    });
   const lines: string[] = [
     `  {`,
     `    slug: ${JSON.stringify(p.slug)},`,
@@ -106,7 +134,7 @@ function generateCode(p: ProductDraft): string {
     `    short: ${JSON.stringify(p.short)},`,
     `    description: ${JSON.stringify(p.description)},`,
     `    keywords: ${JSON.stringify(p.keywords)},`,
-    `    galleryImgs: [],`,
+    `    galleryImgs: ${JSON.stringify(galleryImgs)},`,
     `  },`,
   );
   return lines.join("\n");
@@ -229,6 +257,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       keywords: [],
       badge: null,
       colorNames: [],
+      gallery: emptyGallery(),
     }));
     setDrafts((prev) => [...prev, ...newDrafts]);
   }, []);
@@ -320,12 +349,25 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       const img2Dir = await publicDir.getDirectoryHandle("images");
 
       for (const draft of done) {
+        // Lưu ảnh chính
         const ext = draft.file.name.split(".").pop()?.toLowerCase() || "jpg";
         const imgName = `${draft.slug}.${ext}`;
         const fh = await img2Dir.getFileHandle(imgName, { create: true });
         const writable = await fh.createWritable();
         await writable.write(draft.file);
         await writable.close();
+
+        // Lưu ảnh gallery theo góc
+        for (const { key } of GALLERY_ANGLES) {
+          const slot = draft.gallery[key];
+          if (!slot.file) continue;
+          const gExt = slot.file.name.split(".").pop()?.toLowerCase() || "jpg";
+          const gName = `${draft.slug}-${key}.${gExt}`;
+          const gFh = await img2Dir.getFileHandle(gName, { create: true });
+          const gWritable = await gFh.createWritable();
+          await gWritable.write(slot.file);
+          await gWritable.close();
+        }
       }
 
       // 2. Cập nhật src/data/products.ts
@@ -649,6 +691,53 @@ function DraftCard({
               className="mt-1 w-full rounded border border-border px-3 py-2 font-mono text-sm outline-none focus:ring-2 focus:ring-primary/30"
             />
           </Field>
+
+          {/* Gallery angles */}
+          <div>
+            <label className="text-xs font-medium text-muted-foreground">Ảnh gallery (4 góc — tùy chọn)</label>
+            <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {GALLERY_ANGLES.map(({ key, label }) => {
+                const slot = draft.gallery[key];
+                return (
+                  <label key={key} className="cursor-pointer">
+                    <div className={`relative flex h-24 items-center justify-center overflow-hidden rounded-lg border-2 border-dashed transition ${slot.previewUrl ? "border-primary/40" : "border-border hover:border-primary/40"}`}>
+                      {slot.previewUrl ? (
+                        <>
+                          <img src={slot.previewUrl} alt={label} className="h-full w-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (slot.previewUrl) URL.revokeObjectURL(slot.previewUrl);
+                              onUpdate({ gallery: { ...draft.gallery, [key]: { file: null, previewUrl: "" } } });
+                            }}
+                            className="absolute right-1 top-1 rounded-full bg-black/50 p-0.5 text-white hover:bg-red-500"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        </>
+                      ) : (
+                        <Upload className="h-5 w-5 text-muted-foreground" />
+                      )}
+                    </div>
+                    <p className="mt-1 text-center text-xs text-muted-foreground">{label}</p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (!f) return;
+                        if (slot.previewUrl) URL.revokeObjectURL(slot.previewUrl);
+                        onUpdate({ gallery: { ...draft.gallery, [key]: { file: f, previewUrl: URL.createObjectURL(f) } } });
+                        e.target.value = "";
+                      }}
+                    />
+                  </label>
+                );
+              })}
+            </div>
+          </div>
 
           {/* Code preview */}
           <Field label="Preview TypeScript code sẽ được chèn vào products.ts">
