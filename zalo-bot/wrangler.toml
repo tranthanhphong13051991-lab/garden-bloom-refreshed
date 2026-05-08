@@ -1,13 +1,12 @@
 name = "zalo-bot-hoa-ngoc"
 main = "src/index.js"
 compatibility_date = "2025-09-24"
-
-[ai]
-binding = "AI"
+compatibility_flags = ["nodejs_compat"]
 
 [[kv_namespaces]]
-binding = "BOT_KV"
-id = "25bb93d952a4490db3a9e35797e76f35"
+binding = "BOT_STORAGE"
+id = "dbde16950a7b4b3d8e814d97a566540b"
 
 [vars]
-OA_ID = "3297391822230372190"
+# Các biến không nhạy cảm
+ZALO_APP_ID = "4391377450967727174"
