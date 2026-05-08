@@ -1,17 +1,21 @@
 // Script tự động tạo dist/server/wrangler.json sau khi build
-// Đọc GROQ_API_KEY từ .env và đưa vào vars để process.env có thể đọc được
 import { writeFileSync, readFileSync } from 'fs';
 
-// Đọc API key từ .env file
-let groqApiKey = process.env.GROQ_API_KEY;
-if (!groqApiKey) {
-  try {
-    const envContent = readFileSync('.env', 'utf8');
-    const match = envContent.match(/^GROQ_API_KEY\s*=\s*(.+)$/m);
-    if (match) groqApiKey = match[1].trim().replace(/^["']|["']$/g, '');
-  } catch {
-    console.warn('⚠️  Không đọc được .env file');
+// Đọc API key TỪNG FILE .env (Ưu tiên tuyệt đối để tránh dính biến môi trường cũ của Windows)
+let groqApiKey = '';
+try {
+  const envContent = readFileSync('.env', 'utf8');
+  const match = envContent.match(/^GROQ_API_KEY\s*=\s*(.+)$/m);
+  if (match) {
+    groqApiKey = match[1].trim().replace(/^["']|["']$/g, '');
   }
+} catch {
+  console.warn('⚠️  Không đọc được .env file');
+}
+
+if (!groqApiKey) {
+  // Fallback nếu không có trong .env
+  groqApiKey = process.env.GROQ_API_KEY;
 }
 
 if (!groqApiKey) {
@@ -25,8 +29,8 @@ const config = {
   compatibility_flags: ["nodejs_compat", "nodejs_compat_populate_process_env"],
   vars: {
 
-    // vars được truy cập qua process.env với nodejs_compat
-    ...(groqApiKey ? { GROQ_API_KEY: groqApiKey } : {})
+    // Đổi tên biến thành GROQ_KEY để né bị kẹt secret cũ trên Cloudflare Dashboard
+    ...(groqApiKey ? { GROQ_KEY: groqApiKey } : {})
   },
   assets: {
     directory: "../client",

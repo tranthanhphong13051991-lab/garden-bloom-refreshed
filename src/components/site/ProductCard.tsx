@@ -40,7 +40,7 @@ export function ProductCard({ product, eager = false }: { product: Product; eage
         <p className="mt-2 line-clamp-2 flex-1 text-sm text-muted-foreground">{product.short}</p>
 
         <div className="mt-4 flex items-center justify-between gap-3">
-          <div className="font-serif text-xl font-semibold text-primary">{formatPrice(product.price)}</div>
+          <div />
           <button
             onClick={() => add(product)}
             aria-label={`Thêm ${product.name} vào giỏ`}
