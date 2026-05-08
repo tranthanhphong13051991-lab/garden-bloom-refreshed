@@ -7,7 +7,15 @@ Khi gợi ý sản phẩm, chỉ nêu tên.`;
 
 export async function getNgocResponse(userMessage: string, history: any[] = []) {
   const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) throw new Error("Missing GROQ_API_KEY");
+
+  if (!apiKey) {
+    console.error("LỖI: Không tìm thấy GROQ_API_KEY");
+    return { 
+      reply: "Ngọc đang gặp chút vấn đề về kết nối AI. Bạn đợi một lát hoặc nhắn qua Zalo nhé! 🌸", 
+      products: [] 
+    };
+  }
+
 
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",

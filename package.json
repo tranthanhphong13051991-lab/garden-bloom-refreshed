@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
+    "postbuild": "node scripts/post-build.js",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
-    "deploy": "vite build && node node_modules/.bin/wrangler deploy -c dist/server/wrangler.json",
+    "deploy": "vite build && wrangler deploy -c dist/server/wrangler.json",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
