@@ -2,6 +2,18 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚡ ĐỌC NGAY KHI BẮT ĐẦU SESSION
+
+```
+[project-root]/
+├── CLAUDE.md   ← File này (stack, kiến trúc, quy tắc project)
+├── anger.md    ← Agent SEO/Design: đánh giá, lên kế hoạch, audit
+├── MEMORY.md   ← BỘ NHỚ CHUNG: lịch sử, kết quả, backlog — ĐỌC TRƯỚC KHI LÀM
+└── TODO.md     ← Task list hiện tại (nếu có)
+```
+
+> **Quy tắc:** Claude thực thi code. Anger lên kế hoạch & audit SEO/UI. Sau mỗi task → ghi kết quả vào `MEMORY.md`.
+
 ## Commands
 
 Node.js is installed at `D:\04_Phan_Mem\Program Files\nodejs`. Use full path or ensure it's in PATH when running commands.

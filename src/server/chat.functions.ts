@@ -40,55 +40,14 @@ Mở 7:00–21:00 tất cả các ngày
 Giao hàng 2 giờ nội thành TP.HCM, kèm thiệp viết tay miễn phí
 Xem toàn bộ sản phẩm tại: hoatuoithanhngoc.com`;
 
+import { getNgocResponse } from "./ai.service";
+
 export const chatWithFlorist = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => InputSchema.parse(data))
   .handler(async ({ data }) => {
-    const apiKey = process.env.GROQ_API_KEY;
-    if (!apiKey) throw new Error("GROQ_API_KEY chưa được cấu hình");
-
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          ...data.messages,
-        ],
-        max_tokens: 512,
-        temperature: 0.7,
-      }),
-    });
-
-    if (res.status === 429) throw new Error("Hệ thống đang quá tải, vui lòng thử lại sau ít phút.");
-    if (!res.ok) {
-      const t = await res.text().catch(() => "");
-      console.error("Groq API error", res.status, t);
-      throw new Error("Không thể kết nối tư vấn AI lúc này.");
-    }
-
-    const json = await res.json();
-    const reply: string = json?.choices?.[0]?.message?.content ?? "Xin lỗi, mình chưa nghe rõ. Bạn có thể nói lại giúp Ngọc nhé! 🌸";
-
-    // Tìm sản phẩm từ reply (tìm tên sản phẩm trong text)
-    const text = reply.toLowerCase();
-    const matchedProducts = PRODUCTS.filter((p) => {
-      const searchText = [p.name, ...p.keywords, ...p.occasions, p.category, ...p.colors.map((c) => c.name)].join(" ").toLowerCase();
-      return searchText.split(/\s+/).some((term) => term.length > 2 && text.includes(term));
-    }).slice(0, 3);
-
-    const products = matchedProducts.length > 0
-      ? matchedProducts.map((p) => ({
-          slug: p.slug,
-          name: p.name,
-          thumb: p.thumb,
-          price: formatPrice(p.price),
-          short: p.short,
-        }))
-      : undefined;
-
-    return { reply, products };
+    // Chuyển đổi format tin nhắn cho phù hợp với service chung
+    const lastMessage = data.messages[data.messages.length - 1].content;
+    const history = data.messages.slice(0, -1);
+    
+    return await getNgocResponse(lastMessage, history);
   });

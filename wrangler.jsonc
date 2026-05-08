@@ -7,5 +7,11 @@
   "routes": [
     { "pattern": "hoatuoithanhngoc.com/*", "zone_name": "hoatuoithanhngoc.com" },
     { "pattern": "www.hoatuoithanhngoc.com/*", "zone_name": "hoatuoithanhngoc.com" }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "BOT_STORAGE",
+      "id": "dbde16950a7b4b3d8e814d97a566540b"
+    }
   ]
 }
