@@ -10,11 +10,14 @@ export async function getNgocResponse(userMessage: string, history: any[] = []) 
 
   if (!apiKey) {
     console.error("LỖI: Không tìm thấy GROQ_API_KEY");
+    // Debugging: return keys of process.env to see what's available
+    const envKeys = Object.keys(process.env || {}).join(", ");
     return { 
-      reply: "Ngọc đang gặp chút vấn đề về kết nối AI. Bạn đợi một lát hoặc nhắn qua Zalo nhé! 🌸", 
+      reply: `Ngọc đang gặp chút vấn đề về kết nối AI. (Debug env keys: ${envKeys})`, 
       products: [] 
     };
   }
+
 
 
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
