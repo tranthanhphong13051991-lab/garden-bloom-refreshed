@@ -1,0 +1,57 @@
+import { jsx, jsxs } from "react/jsx-runtime";
+import { Link } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
+import { S as SiteLayout } from "./SiteLayout-3xrACp3X.js";
+import "react";
+import "zustand";
+import "zustand/middleware";
+import "./router-DQf0jzPI.js";
+import "@tanstack/react-query";
+import "./products-c_hw6lyT.js";
+import "zod";
+import "./createSsrRpc-cz3zUEHg.js";
+import "./server-ma-ijNXL.js";
+import "node:async_hooks";
+import "h3-v2";
+import "@tanstack/router-core";
+import "seroval";
+import "@tanstack/history";
+import "@tanstack/router-core/ssr/client";
+import "@tanstack/router-core/ssr/server";
+import "@tanstack/react-router/ssr/server";
+function ReturnPolicy() {
+  return /* @__PURE__ */ jsx(SiteLayout, { children: /* @__PURE__ */ jsxs("main", { className: "min-h-screen bg-cream pt-24 pb-20", children: [
+    /* @__PURE__ */ jsx("div", { className: "mx-auto max-w-4xl px-4 pt-4 md:px-8", children: /* @__PURE__ */ jsxs(Link, { to: "/", className: "inline-flex items-center gap-2 text-sm text-primary hover:underline", children: [
+      /* @__PURE__ */ jsx(ArrowLeft, { className: "h-4 w-4" }),
+      "Về trang chủ"
+    ] }) }),
+    /* @__PURE__ */ jsx("div", { className: "mx-auto max-w-4xl px-4 md:px-8", children: /* @__PURE__ */ jsxs("div", { className: "rounded-3xl bg-white p-8 shadow-elegant md:p-12 lg:p-16", children: [
+      /* @__PURE__ */ jsxs("div", { className: "text-center", children: [
+        /* @__PURE__ */ jsx("h1", { className: "font-serif text-3xl font-semibold md:text-4xl text-primary", children: "Chính Sách Đổi Trả & Hoàn Tiền" }),
+        /* @__PURE__ */ jsx("div", { className: "mx-auto mt-6 h-px w-16 bg-gold/50" })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "prose prose-stone mt-12 max-w-none text-muted-foreground", children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-primary font-serif", children: "1. Điều kiện đổi trả" }),
+        /* @__PURE__ */ jsx("p", { children: "Hoa Tươi Thanh Ngọc luôn đặt chất lượng lên hàng đầu. Chúng tôi chấp nhận đổi trả hoặc hoàn tiền 100% trong các trường hợp sau:" }),
+        /* @__PURE__ */ jsxs("ul", { children: [
+          /* @__PURE__ */ jsx("li", { children: "Hoa bị dập nát, héo úa, hoặc hư hỏng nghiêm trọng trong quá trình vận chuyển." }),
+          /* @__PURE__ */ jsx("li", { children: "Sản phẩm giao không đúng với mẫu thiết kế (sai loại hoa chủ đạo, sai tông màu) mà không có sự thông báo trước." }),
+          /* @__PURE__ */ jsx("li", { children: "Giao hàng chậm trễ quá thời gian thỏa thuận (mà không có lý do chính đáng và sự đồng ý của khách hàng)." })
+        ] }),
+        /* @__PURE__ */ jsx("h3", { className: "text-primary font-serif", children: "2. Quy định về việc thay thế hoa" }),
+        /* @__PURE__ */ jsx("p", { children: "Do hoa là sản phẩm nông nghiệp và thay đổi theo mùa, theo ngày, một số loại hoa phụ hoặc phụ kiện có thể không có sẵn. Trong trường hợp đó, chúng tôi sẽ thay thế bằng hoa khác có giá trị tương đương và phù hợp với tông màu tổng thể. Chúng tôi cam kết đảm bảo tính thẩm mỹ của sản phẩm. Sự thay đổi nhỏ (dưới 20%) sẽ không được tính là sai mẫu để yêu cầu hoàn tiền." }),
+        /* @__PURE__ */ jsx("h3", { className: "text-primary font-serif", children: "3. Thời gian tiếp nhận khiếu nại" }),
+        /* @__PURE__ */ jsxs("p", { children: [
+          "Do tính chất hoa tươi dễ héo, chúng tôi chỉ giải quyết khiếu nại về chất lượng sản phẩm trong vòng ",
+          /* @__PURE__ */ jsx("strong", { children: "4 - 6 tiếng" }),
+          " kể từ lúc giao hàng thành công. Quý khách vui lòng cung cấp hình ảnh/video rõ nét về tình trạng hoa để chúng tôi có cơ sở xác minh và xử lý nhanh chóng."
+        ] }),
+        /* @__PURE__ */ jsx("h3", { className: "text-primary font-serif", children: "4. Phương thức hoàn tiền" }),
+        /* @__PURE__ */ jsx("p", { children: "Nếu đủ điều kiện hoàn tiền, chúng tôi sẽ tiến hành chuyển khoản lại số tiền (hoặc một phần số tiền tùy mức độ ảnh hưởng) vào tài khoản mà quý khách đã dùng để thanh toán trong vòng 24 - 48 giờ làm việc." })
+      ] })
+    ] }) })
+  ] }) });
+}
+export {
+  ReturnPolicy as component
+};
