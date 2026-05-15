@@ -1,93 +1,137 @@
-# Hướng Dẫn Deploy Lên Cloudflare Workers
+# Hướng Dẫn Deploy Lên Cloudflare Workers & Trỏ DNS từ iNET
 
-## 1. Đăng nhập Cloudflare
+## QUAN TRỌNG: DNS giữ ở iNET – Không chuyển nameserver
 
-Mở Terminal tại thư mục dự án:
+Bạn **KHÔNG cần** chuyển nameserver sang Cloudflare. DNS vẫn quản lý ở **iNET**, chỉ cần thêm bản ghi CNAME trỏ về Cloudflare Workers.
+
+---
+
+## 1. Build dự án (đã chạy xong)
 
 ```bash
-npx wrangler login
+npm install
+npm run build
 ```
 
-Trình duyệt sẽ mở ra → Đăng nhập tài khoản Cloudflare của bạn → **Allow**.
+---
 
-## 2. Deploy Worker lên Cloudflare
+## 2. Đăng nhập Cloudflare & Deploy Worker
+
+Mở Terminal tại thư mục dự án (`d:\garden-bloom-renewed-main`):
 
 ```bash
+# Bước 1: Đăng nhập Cloudflare (sẽ mở trình duyệt)
+npx wrangler login
+# → Trình duyệt mở ra → Đăng nhập tài khoản Cloudflare của bạn → Allow
+
+# Bước 2: Deploy Worker lên Cloudflare
 npx wrangler deploy
 ```
 
-Sau khi chạy xong, bạn sẽ thấy URL dạng:
+Sau khi chạy xong, bạn sẽ thấy kết quả như:
 ```
-https://tanstack-start-ts.<your-account>.workers.dev
+https://tanstack-start-ts.<tên-account>.workers.dev
 ```
 
-> Lưu URL này lại (thay `<your-account>` bằng tên account Cloudflare của bạn)
+> **📝 Ghi lại URL này**, ví dụ: `https://tanstack-start-ts.ten-account.workers.dev`
 
 ---
 
-## 3. Kết nối domain hoatuoithanhngoc.com
+## 3. Trỏ DNS từ iNET về Cloudflare Workers
 
-### Cách 1: Dùng Cloudflare làm DNS (khuyên dùng)
+Vào trang quản lý domain của **iNET** → **DNS / Bản ghi DNS**, thêm các bản ghi sau:
 
-Nếu domain `hoatuoithanhngoc.com` chưa dùng Cloudflare DNS:
+### Bản ghi chính (hoatuoithanhngoc.com)
 
-1. Vào [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Add a Site**
-2. Nhập `hoatuoithanhngoc.com`
-3. Chọn **Free** plan
-4. Cloudflare sẽ cung cấp 2 nameserver (VD: `naveen.ns.cloudflare.com`)
-5. Vào trang quản lý iNET → thay đổi nameserver của domain thành 2 nameserver đó
-6. Đợi 1-24h DNS propagate
+| Loại  | Tên (Host) | Giá trị (Points to)                          |
+|-------|------------|----------------------------------------------|
+| CNAME | @          | `tanstack-start-ts.<tên-account>.workers.dev` |
+| CNAME | www        | `tanstack-start-ts.<tên-account>.workers.dev` |
 
-Sau đó:
+> **Giải thích:**
+> - `@` là chính domain (hoatuoithanhngoc.com)
+> - `www` là www.hoatuoithanhngoc.com
+> - Thay `<tên-account>` bằng account Cloudflare thực tế của bạn
 
-1. Cloudflare Dashboard → **Workers & Pages** → Chọn worker `tanstack-start-ts`
-2. Tab **Triggers** → **Custom Domains** → **Add Custom Domain**
-3. Nhập: `hoatuoithanhngoc.com`
-4. Cloudflare tự động cấp SSL + proxy DNS
+### Hướng dẫn từng bước trên giao diện iNET:
 
-### Cách 2: Trỏ CNAME từ iNET (không dùng Cloudflare DNS)
+1. Đăng nhập [iNET](https://inet.vn)
+2. Vào **Quản lý domain** → Chọn `hoatuoithanhngoc.com`
+3. Chọn **DNS / Bản ghi DNS**
+4. Click **Thêm bản ghi**:
+   - Loại: **CNAME**
+   - Host: để trống hoặc `@`
+   - Giá trị: `tanstack-start-ts.<tên-account>.workers.dev`
+   - TTL: 300 hoặc để mặc định
+   - Lưu
+5. Thêm bản ghi thứ hai:
+   - Loại: **CNAME**
+   - Host: `www`
+   - Giá trị: `tanstack-start-ts.<tên-account>.workers.dev`
+   - Lưu
 
-Vào trang quản lý DNS của **iNET**, thêm các bản ghi:
+### Nếu iNET yêu cầu A record cho domain chính (@)
 
-| Loại  | Tên  | Giá trị                                      |
-|-------|------|----------------------------------------------|
-| CNAME | @    | `tanstack-start-ts.<your-account>.workers.dev` |
-| CNAME | www  | `tanstack-start-ts.<your-account>.workers.dev` |
+Một số nhà cung cấp không cho CNAME ở root (domain chính). Nếu vậy, làm thay thế:
+
+| Loại | Tên | Giá trị |
+|------|-----|---------|
+| A | @ | `192.0.2.1` |
+| CNAME | www | `tanstack-start-ts.<tên-account>.workers.dev` |
+
+Hoặc tốt nhất: liên hệ iNET hỗ trợ CNAME flatten/ANAME cho root domain.
 
 ---
 
-## 4. Auto-deploy từ GitHub (CI/CD)
+## 4. Cấu hình Cloudflare cho phép domain ngoài
 
-Để mỗi lần push code lên GitHub tự động deploy:
+Sau khi deploy worker, vào **Cloudflare Dashboard**:
 
-1. Cloudflare Dashboard → **Workers & Pages** → **Create**
-2. Chọn **Pages** tab → **Connect to Git**
-3. Chọn repository: `garden-bloom-refreshed`
-4. **Build settings:**
-   - Framework preset: `None`
+1. Dashboard → **Workers & Pages**
+2. Click vào worker `tanstack-start-ts`
+3. Tab **Triggers**
+4. Mục **Routes** → **Add Route**
+5. Nhập: `hoatuoithanhngoc.com/*`
+   (Dấu `/*` ở cuối là bắt buộc)
+6. **Add route**
+
+---
+
+## 5. Auto-deploy từ GitHub (CI/CD) – Khuyến nghị
+
+Vào **Cloudflare Dashboard**:
+
+1. **Workers & Pages** → **Create** → **Pages** tab
+2. **Connect to Git** → Chọn `garden-bloom-refreshed`
+3. **Build settings:**
    - Build command: `npm run build`
    - Build output directory: `dist`
-   - Root directory: (để trống)
-5. Deploy branch: `main`
-6. Click **Save and Deploy**
+4. **Save and Deploy**
 
-Sau đó mỗi lần push code lên GitHub, Cloudflare tự động build và deploy.
+Sau đó mỗi lần push code lên GitHub, Cloudflare tự động build và deploy lại.
 
 ---
 
-## 5. Deploy lại thủ công khi có cập nhật
+## 6. Kiểm tra
+
+Sau khi DNS propagate (thường 5-30 phút, có thể lâu hơn):
+
+1. Mở trình duyệt: `https://hoatuoithanhngoc.com`
+2. Mở: `https://www.hoatuoithanhngoc.com`
+3. Nếu chưa thấy → đợi thêm hoặc dùng: https://dnschecker.org
+
+---
+
+## Tóm tắt nhanh
 
 ```bash
-npm run build
-npx wrangler deploy
+cd d:\garden-bloom-renewed-main
+npx wrangler login          # 1. Đăng nhập Cloudflare
+npx wrangler deploy         # 2. Deploy worker → lấy URL
 ```
 
----
+Sau đó:
+- **iNET**: Thêm 2 CNAME record (@ và www) trỏ đến worker URL
+- **Cloudflare Dashboard**: Worker → Triggers → Routes → thêm `hoatuoithanhngoc.com/*`
 
-## Tóm tắt
-
-1. `npx wrangler login` → đăng nhập Cloudflare
-2. `npx wrangler deploy` → deploy Worker
-3. Cloudflare Dashboard → Workers & Pages → Custom Domains → thêm `hoatuoithanhngoc.com`
-4. (Tùy chọn) Nếu dùng Cloudflare DNS: iNET cập nhật nameserver
-5. (Tùy chọn) Connect to Git để auto-deploy
+✅ Xong! Không cần chuyển nameserver.
