@@ -4,9 +4,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Hoa Tươi Thanh Ngọc — Design System
- * Tone chủ đạo: Xanh ngọc đậm (emerald) + Kem ngà
- * Typography: Cormorant Garamond (serif) cho heading, Inter cho body
+/* Hoa Tươi Thanh Ngọc — Boutique Florist Design System
+ * Palette cao cấp:
+ *   Dark Green:   #173F35
+ *   Deep Green:   #0F342C
+ *   Champagne:    #D8B36A
+ *   Ivory:        #F5F1E8
+ *   Warm Beige:   #E9DFD2
+ * Typography: Cormorant Garamond (serif) cho heading, Plus Jakarta Sans cho body
  */
 
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap");
@@ -50,9 +55,9 @@
   --shadow-elegant: 0 20px 60px -20px color-mix(in oklab, var(--primary) 25%, transparent);
   --gradient-hero: linear-gradient(
     135deg,
-    color-mix(in oklab, var(--primary) 92%, black) 0%,
-    var(--primary) 50%,
-    color-mix(in oklab, var(--primary) 80%, black) 100%
+    #0F342C 0%,
+    #173F35 50%,
+    #1A4A3E 100%
   );
   --gradient-cream: linear-gradient(180deg, var(--cream) 0%, var(--background) 100%);
 }
@@ -60,64 +65,65 @@
 :root {
   --radius: 0.75rem;
 
-  /* Cream / kem ngà — nền chủ đạo */
-  --background: oklch(0.985 0.012 80);
-  --foreground: oklch(0.22 0.04 160);
+  /* Ivory ấm — nền chủ đạo */
+  --background: #F5F1E8;
+  --foreground: #1A2E28;
 
-  --cream: oklch(0.965 0.018 80);
-  --cream-deep: oklch(0.92 0.025 80);
+  /* Kem ấm */
+  --cream: #F5F1E8;
+  --cream-deep: #E9DFD2;
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.04 160);
+  --card: #FFFFFF;
+  --card-foreground: #1A2E28;
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.04 160);
+  --popover: #FFFFFF;
+  --popover-foreground: #1A2E28;
 
-  /* Xanh ngọc đậm — màu thương hiệu */
-  --primary: oklch(0.36 0.06 165);
-  --primary-foreground: oklch(0.985 0.012 80);
+  /* Xanh đậm thương hiệu */
+  --primary: #173F35;
+  --primary-foreground: #F5F1E8;
 
-  --secondary: oklch(0.94 0.02 80);
-  --secondary-foreground: oklch(0.36 0.06 165);
+  --secondary: #E9DFD2;
+  --secondary-foreground: #173F35;
 
-  --muted: oklch(0.95 0.012 80);
-  --muted-foreground: oklch(0.45 0.025 160);
+  --muted: #F0EBE0;
+  --muted-foreground: #5A6B64;
 
-  --accent: oklch(0.92 0.04 80);
-  --accent-foreground: oklch(0.36 0.06 165);
+  --accent: #E9DFD2;
+  --accent-foreground: #173F35;
 
-  /* Vàng champagne nhấn */
-  --gold: oklch(0.78 0.11 80);
-  --rose: oklch(0.78 0.09 20);
+  /* Vàng champagne */
+  --gold: #D8B36A;
+  --rose: #C49A8C;
 
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.985 0 0);
+  --destructive: #B23B3B;
+  --destructive-foreground: #F5F1E8;
 
-  --border: oklch(0.88 0.018 80);
-  --input: oklch(0.88 0.018 80);
-  --ring: oklch(0.36 0.06 165);
+  --border: #DCD5C8;
+  --input: #DCD5C8;
+  --ring: #173F35;
 }
 
 .dark {
-  --background: oklch(0.18 0.025 165);
-  --foreground: oklch(0.96 0.012 80);
-  --card: oklch(0.22 0.03 165);
-  --card-foreground: oklch(0.96 0.012 80);
-  --popover: oklch(0.22 0.03 165);
-  --popover-foreground: oklch(0.96 0.012 80);
-  --primary: oklch(0.85 0.05 80);
-  --primary-foreground: oklch(0.22 0.03 165);
-  --secondary: oklch(0.28 0.03 165);
-  --secondary-foreground: oklch(0.96 0.012 80);
-  --muted: oklch(0.28 0.03 165);
-  --muted-foreground: oklch(0.72 0.02 80);
-  --accent: oklch(0.32 0.04 165);
-  --accent-foreground: oklch(0.96 0.012 80);
-  --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.6 0.05 165);
-  --cream: oklch(0.24 0.03 165);
-  --cream-deep: oklch(0.28 0.03 165);
+  --background: #0F342C;
+  --foreground: #F5F1E8;
+  --card: #173F35;
+  --card-foreground: #F5F1E8;
+  --popover: #173F35;
+  --popover-foreground: #F5F1E8;
+  --primary: #D8B36A;
+  --primary-foreground: #0F342C;
+  --secondary: #1A4A3E;
+  --secondary-foreground: #F5F1E8;
+  --muted: #1A4A3E;
+  --muted-foreground: #B0BDB6;
+  --accent: #1A4A3E;
+  --accent-foreground: #F5F1E8;
+  --border: rgba(245, 241, 232, 0.12);
+  --input: rgba(245, 241, 232, 0.14);
+  --ring: #D8B36A;
+  --cream: #1A4A3E;
+  --cream-deep: #0F342C;
 }
 
 @layer base {
@@ -141,6 +147,20 @@
     font-family: var(--font-serif);
     letter-spacing: -0.01em;
   }
+
+  /* Luxury styling cho heading */
+  h1 {
+    font-weight: 600;
+    line-height: 1.05;
+  }
+  h2 {
+    font-weight: 600;
+    line-height: 1.1;
+  }
+  h3 {
+    font-weight: 500;
+    line-height: 1.15;
+  }
 }
 
 @layer utilities {
@@ -162,5 +182,19 @@
     opacity: 0.4;
     vertical-align: middle;
     margin: 0 0.75rem;
+  }
+
+  /* Aspect ratio 4:5 cho ảnh sản phẩm */
+  .aspect-product {
+    aspect-ratio: 4 / 5;
+  }
+
+  /* Scrollbar ẩn */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
   }
 }

@@ -18,15 +18,15 @@ export function Header() {
   const setCartOpen = useCart((s) => s.setOpen);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 w-full border-b border-[#DCD5C8]/60 bg-[#F5F1E8]/85 backdrop-blur-xl">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 md:px-8">
         <Link to="/" className="flex items-center gap-3 group" aria-label={SITE.name}>
-          <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-primary/20 bg-white transition-transform group-hover:scale-105">
-            <img src={SITE.logo} alt="Logo Hoa Tươi Thanh Ngọc" className="h-full w-full object-contain" />
+          <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border-2 border-[#D8B36A]/30 bg-[#F5F1E8] transition-all group-hover:scale-105 group-hover:border-[#D8B36A]/60">
+            <img src={SITE.logo} alt="Logo Hoa Tươi Thanh Ngọc" className="h-full w-full object-contain p-0.5" />
           </div>
           <div className="leading-tight">
-            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Hoa Tươi</div>
-            <div className="font-serif text-xl font-semibold text-primary">Thanh Ngọc</div>
+            <div className="text-[10px] uppercase tracking-[0.25em] text-[#5A6B64]">Boutique Florist</div>
+            <div className="font-serif text-xl font-semibold text-[#173F35]">Thanh Ngọc</div>
           </div>
         </Link>
 
@@ -36,8 +36,8 @@ export function Header() {
               key={n.to}
               to={n.to}
               activeOptions={{ exact: n.to === "/" }}
-              className="px-4 py-2 text-sm font-medium text-foreground/75 transition-colors hover:text-primary"
-              activeProps={{ className: "px-4 py-2 text-sm font-semibold text-primary" }}
+              className="relative px-4 py-2 text-sm font-medium text-[#5A6B64] transition-colors hover:text-[#173F35] after:absolute after:bottom-0 after:left-4 after:right-4 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-[#D8B36A] after:transition-transform after:duration-300 hover:after:scale-x-100"
+              activeProps={{ className: "relative px-4 py-2 text-sm font-semibold text-[#173F35] after:absolute after:bottom-0 after:left-4 after:right-4 after:h-0.5 after:scale-x-100 after:rounded-full after:bg-[#D8B36A]" }}
             >
               {n.label}
             </Link>
@@ -47,18 +47,18 @@ export function Header() {
         <div className="flex items-center gap-2">
           <a
             href={`tel:${SITE.phones[0]}`}
-            className="hidden items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-soft transition-all hover:bg-primary/90 hover:shadow-elegant lg:inline-flex"
+            className="hidden items-center gap-2 rounded-full bg-[#173F35] px-5 py-2.5 text-sm font-medium text-[#F5F1E8] shadow-soft transition-all hover:bg-[#0F342C] hover:shadow-elegant lg:inline-flex"
           >
             <Phone className="h-4 w-4" /> {SITE.phones[0].replace(/(\d{3})(\d{3})(\d{4})/, "$1 $2 $3")}
           </a>
           <button
             onClick={() => setCartOpen(true)}
             aria-label="Giỏ hàng"
-            className="relative flex h-10 w-10 items-center justify-center rounded-full text-foreground/80 transition-colors hover:bg-secondary hover:text-primary"
+            className="relative flex h-10 w-10 items-center justify-center rounded-full text-[#5A6B64] transition-colors hover:bg-[#E9DFD2] hover:text-[#173F35]"
           >
             <ShoppingBag className="h-5 w-5" />
             {count > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-[10px] font-bold text-primary">
+              <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#D8B36A] px-1 text-[10px] font-bold text-[#173F35]">
                 {count}
               </span>
             )}
@@ -66,7 +66,7 @@ export function Header() {
           <button
             onClick={() => setOpen(!open)}
             aria-label="Menu"
-            className="flex h-10 w-10 items-center justify-center rounded-full text-foreground/80 hover:bg-secondary md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-[#5A6B64] hover:bg-[#E9DFD2] md:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -74,20 +74,20 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-background md:hidden">
+        <div className="border-t border-[#DCD5C8] bg-[#F5F1E8] md:hidden">
           <nav className="mx-auto flex max-w-7xl flex-col px-4 py-4" aria-label="Menu di động">
             {nav.map((n) => (
               <Link
                 key={n.to}
                 to={n.to}
                 onClick={() => setOpen(false)}
-                className="border-b border-border/40 py-3 text-base font-medium text-foreground/80"
-                activeProps={{ className: "border-b border-border/40 py-3 text-base font-semibold text-primary" }}
+                className="border-b border-[#DCD5C8]/40 py-3 text-base font-medium text-[#5A6B64]"
+                activeProps={{ className: "border-b border-[#DCD5C8]/40 py-3 text-base font-semibold text-[#173F35]" }}
               >
                 {n.label}
               </Link>
             ))}
-            <a href={`tel:${SITE.phones[0]}`} className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground">
+            <a href={`tel:${SITE.phones[0]}`} className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-[#173F35] px-5 py-3 text-sm font-medium text-[#F5F1E8]">
               <Phone className="h-4 w-4" /> Gọi {SITE.phones[0]}
             </a>
           </nav>

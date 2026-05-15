@@ -51,7 +51,7 @@ export const Route = createRootRoute({
       { name: "keywords", content: "hoa tươi bình thạnh, hoa tươi tphcm, đặt hoa online, hoa khai trương, lan hồ điệp, bó hoa sinh nhật, giỏ hoa, hoa chia buồn, hoa tươi thanh ngọc" },
       { name: "author", content: SITE.brand },
       { name: "robots", content: "index, follow, max-image-preview:large" },
-      { name: "theme-color", content: "#0F4C3A" },
+      { name: "theme-color", content: "#173F35" },
       { property: "og:site_name", content: SITE.name },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "vi_VN" },

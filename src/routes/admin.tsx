@@ -24,9 +24,9 @@ type Category = "bo-hoa" | "gio-hoa" | "khai-truong" | "chia-buon" | "lan-ho-die
 
 const GALLERY_ANGLES = [
   { key: "chinh-dien", label: "Góc chính diện" },
-  { key: "can-canh",   label: "Góc cận cảnh" },
-  { key: "tren-cao",   label: "Góc từ trên cao" },
-  { key: "anh-sang",   label: "Ánh sáng tự nhiên" },
+  { key: "can-canh", label: "Góc cận cảnh" },
+  { key: "tren-cao", label: "Góc từ trên cao" },
+  { key: "anh-sang", label: "Ánh sáng tự nhiên" },
 ] as const;
 
 type GalleryAngleKey = typeof GALLERY_ANGLES[number]["key"];
@@ -304,7 +304,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         // Lưu handle để hiển thị nút "Xác nhận lại quyền truy cập"
         setDirHandle(handle);
       }
-    }).catch(() => {});
+    }).catch(() => { });
   }, []);
 
   const pickDirectory = async () => {
@@ -312,7 +312,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const handle = await (window as any).showDirectoryPicker({ mode: "readwrite" });
       setDirHandle(handle);
-      idbSave(handle).catch(() => {});
+      idbSave(handle).catch(() => { });
     } catch {
       // User cancelled
     }
@@ -376,17 +376,17 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           prev.map((d) =>
             d.id === item.id
               ? {
-                  ...d,
-                  status: "done",
-                  slug,
-                  name: result.name,
-                  category: result.category as Category,
-                  short: result.short,
-                  description: result.description,
-                  keywords: result.keywords,
-                  badge: result.badge,
-                  colorNames: result.colorNames,
-                }
+                ...d,
+                status: "done",
+                slug,
+                name: result.name,
+                category: result.category as Category,
+                short: result.short,
+                description: result.description,
+                keywords: result.keywords,
+                badge: result.badge,
+                colorNames: result.colorNames,
+              }
               : d,
           ),
         );
@@ -549,11 +549,10 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
-          className={`cursor-pointer rounded-xl border-2 border-dashed p-14 text-center transition select-none ${
-            isDragging
+          className={`cursor-pointer rounded-xl border-2 border-dashed p-14 text-center transition select-none ${isDragging
               ? "border-primary bg-primary/5"
               : "border-border bg-background hover:border-primary/50"
-          }`}
+            }`}
         >
           <Upload className="mx-auto mb-3 h-10 w-10 text-muted-foreground" />
           <p className="font-medium text-foreground">Kéo thả ảnh sản phẩm vào đây</p>
@@ -678,7 +677,7 @@ function DraftCard({
           {draft.status === "analyzing" && (
             <div className="flex items-center gap-2 text-sm text-primary">
               <Loader2 className="h-4 w-4 animate-spin" />
-              Đang phân tích ảnh với Claude AI…
+              Đang phân tích ảnh với AI…
             </div>
           )}
 
