@@ -12,8 +12,7 @@ export type BlogPost = {
   content: string;
 };
 
-const CDN = "https://hoatuoithanhngoc.com/image/responsive";
-const cover = (slug: string) => `${CDN}/${slug}-800.webp`;
+const cover = (slug: string) => `/images/blog/${slug}.webp`;
 
 export const POSTS: BlogPost[] = [
   {
@@ -21,7 +20,7 @@ export const POSTS: BlogPost[] = [
     title: "Ý Nghĩa Các Loại Hoa Hồng Theo Màu Sắc",
     excerpt:
       "Hoa hồng đỏ tượng trưng tình yêu nồng cháy, hồng kem cho sự dịu dàng, hồng trắng cho sự thuần khiết — chọn đúng màu sẽ truyền tải đúng thông điệp.",
-    cover: cover("hoa-hong-kem-tinh-te"),
+    cover: cover("hoa-hong-theo-mau-sac"),
     author: "Hoa Tươi Thanh Ngọc",
     publishedAt: "2026-04-10",
     readingMinutes: 5,
@@ -56,7 +55,7 @@ Tặng bạn thân, đồng nghiệp hoặc dùng trong các dịp chúc mừng 
     title: "Cách Chăm Hoa Tươi Tại Nhà Giữ Tươi 7 Ngày",
     excerpt:
       "Bí quyết cắm hoa, thay nước, cắt cành và bảo quản giúp bó hoa tại nhà luôn rạng rỡ suốt cả tuần.",
-    cover: cover("bo-hong-phat-trang-giay-hong"),
+    cover: cover("cham-soc-hoa-tuoi"),
     author: "Hoa Tươi Thanh Ngọc",
     publishedAt: "2026-04-12",
     readingMinutes: 6,
@@ -86,7 +85,7 @@ Quấn giấy báo quanh hoa, nhúng cành vào nước ấm 40°C trong 30 phú
     title: "Cách Chọn Hoa Khai Trương Hợp Phong Thủy 2026",
     excerpt:
       "Màu sắc, loài hoa, vị trí đặt kệ — hướng dẫn đầy đủ giúp ngày khai trương rước lộc, đón may.",
-    cover: cover("ke-hoa-vang-cam-do-2-tang-khai-truong"),
+    cover: cover("hoa-khai-truong-phong-thuy"),
     author: "Hoa Tươi Thanh Ngọc",
     publishedAt: "2026-04-15",
     readingMinutes: 7,
@@ -118,7 +117,7 @@ Nên giao trước 1–2 tiếng so với giờ khai trương để hoa kịp �
     title: "Gợi Ý Hoa Tặng Sinh Nhật Theo Độ Tuổi & Mối Quan Hệ",
     excerpt:
       "Tặng hoa sinh nhật cho mẹ, bạn gái, đồng nghiệp hay sếp — mỗi đối tượng có một lựa chọn phù hợp riêng.",
-    cover: cover("bo-tram-hong-do-sinh-nhat"),
+    cover: cover("hoa-tang-sinh-nhat"),
     author: "Hoa Tươi Thanh Ngọc",
     publishedAt: "2026-04-20",
     readingMinutes: 5,

@@ -42,6 +42,10 @@ export const Route = createFileRoute("/blog/")({
 });
 
 function BlogIndex() {
+  const addFallback = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    (e.target as HTMLImageElement).src = "/images/blog-placeholder.svg";
+  };
+
   return (
     <SiteLayout>
       <section className="bg-cream py-16 md:py-20">
@@ -63,8 +67,8 @@ function BlogIndex() {
               params={{ slug: p.slug }}
               className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-soft transition hover:shadow-elegant"
             >
-              <div className="aspect-[4/3] overflow-hidden bg-cream">
-                <img src={p.cover} alt={p.title} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+              <div className="aspect-[4/3] overflow-hidden rounded-t-2xl bg-cream">
+                <img src={p.cover} alt={p.title} loading="lazy" width={800} height={600} onError={addFallback} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">

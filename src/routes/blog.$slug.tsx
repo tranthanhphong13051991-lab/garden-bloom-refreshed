@@ -91,6 +91,9 @@ function BlogPost() {
   const { post } = Route.useLoaderData() as { post: BlogPost };
   const blocks = parseContent(post.content);
   const related = POSTS.filter((p: BlogPost) => p.slug !== post.slug).slice(0, 3);
+  const addFallback = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    (e.target as HTMLImageElement).src = "/images/blog-placeholder.svg";
+  };
 
   return (
     <SiteLayout>
@@ -109,7 +112,7 @@ function BlogPost() {
         </div>
 
         <div className="mt-8 overflow-hidden rounded-2xl bg-cream shadow-soft">
-          <img src={post.cover} alt={post.title} className="aspect-[16/9] w-full object-cover" />
+          <img src={post.cover} alt={post.title} width={1200} height={675} onError={addFallback} className="aspect-[16/9] w-full object-cover" />
         </div>
 
         <p className="mt-8 text-lg leading-relaxed text-foreground/80">{post.excerpt}</p>
@@ -151,7 +154,7 @@ function BlogPost() {
               {related.map((p: BlogPost) => (
                 <Link key={p.slug} to="/blog/$slug" params={{ slug: p.slug }} className="group overflow-hidden rounded-2xl bg-background shadow-soft transition hover:shadow-elegant">
                   <div className="aspect-[4/3] overflow-hidden">
-                    <img src={p.cover} alt={p.title} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                    <img src={p.cover} alt={p.title} loading="lazy" width={800} height={600} onError={addFallback} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
                   </div>
                   <div className="p-5">
                     <h3 className="font-serif text-lg font-semibold text-foreground group-hover:text-primary">{p.title}</h3>

@@ -97,31 +97,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* BEST SELLER */}
-      <section className="py-16 md:py-28">
-        <div className="mx-auto max-w-7xl px-4 md:px-8">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <div className="mb-3 flex items-center gap-3">
-                <span className="h-px w-8 bg-[#D8B36A]" />
-                <span className="text-xs uppercase tracking-[0.25em] text-[#173F35]">Best Seller</span>
-              </div>
-              <h2 className="font-serif text-4xl font-semibold text-[#1A2E28] md:text-5xl">Sản Phẩm Bán Chạy</h2>
-              <p className="mt-3 max-w-2xl text-[#5A6B64]">
-                Những mẫu hoa được yêu thích nhất, được florist của Thanh Ngọc chọn lọc và thiết kế tinh tế.
-              </p>
-            </div>
-            <Link to="/san-pham" className="inline-flex items-center gap-2 text-sm font-medium text-[#173F35] hover:text-[#D8B36A]">
-              Xem tất cả <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {featured.map((p, i) => <ProductCard key={p.slug} product={p} eager={i < 4} />)}
-          </div>
-        </div>
-      </section>
-
-      {/* CATEGORIES */}
+      {/* CATEGORIES — moved up để làm điều hướng chính */}
       <section className="bg-[#E9DFD2]/50 py-16 md:py-28">
         <div className="mx-auto max-w-7xl px-4 md:px-8">
           <div className="text-center">
@@ -156,6 +132,30 @@ function HomePage() {
                 </Link>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* BEST SELLER */}
+      <section className="py-16 md:py-28">
+        <div className="mx-auto max-w-7xl px-4 md:px-8">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <div className="mb-3 flex items-center gap-3">
+                <span className="h-px w-8 bg-[#D8B36A]" />
+                <span className="text-xs uppercase tracking-[0.25em] text-[#173F35]">Best Seller</span>
+              </div>
+              <h2 className="font-serif text-4xl font-semibold text-[#1A2E28] md:text-5xl">Sản Phẩm Bán Chạy</h2>
+              <p className="mt-3 max-w-2xl text-[#5A6B64]">
+                Những mẫu hoa được yêu thích nhất, được florist của Thanh Ngọc chọn lọc và thiết kế tinh tế.
+              </p>
+            </div>
+            <Link to="/san-pham" className="inline-flex items-center gap-2 text-sm font-medium text-[#173F35] hover:text-[#D8B36A]">
+              Xem tất cả <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {featured.map((p, i) => <ProductCard key={p.slug} product={p} eager={i < 4} />)}
           </div>
         </div>
       </section>

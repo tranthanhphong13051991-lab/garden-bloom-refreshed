@@ -1,0 +1,133 @@
+# 🌸 Hoa Tươi Thanh Ngọc — Product Addition Skill
+
+**Project**: Hoa Tươi Thanh Ngọc (garden-bloom-renewed-main)
+**Stack**: TanStack Start (React 19) + Vite 7 + Tailwind CSS v4 + TypeScript + Cloudflare Workers
+
+---
+
+## 🔍 Trigger Detection
+
+When the user provides a task containing a JSON object matching the `ProductTask` schema (with `id`, `title`, `slug`, `category`, `price`, `keywords`, etc.), **automatically add a new product** following the steps below.
+
+The JSON may look like:
+```json
+{
+  "id": "some-product-slug",
+  "title": "Product Name",
+  "slug": "product-slug",
+  "category": "bo-hoa | gio-hoa | khai-truong | chia-buon | lan-ho-diep",
+  "price": 0,
+  "primaryKeyword": "từ khoá chính",
+  "keywords": ["keyword 1", "keyword 2", ...],
+  "colors": ["color 1", "color 2", ...],
+  "occasions": ["occasion 1", ...],
+  "styles": ["style 1", ...],
+  "flowers": ["flower 1", ...],
+  "metaTitle": "...",
+  "metaDescription": "...",
+  "shortDescription": "...",
+  "description": "...",
+  "imageAlt": { "hero": "...", "lifestyle": "...", "closeup": "...", "angle45": "...", "delivery": "..." }
+}
+```
+
+---
+
+## 📋 Step-by-step Workflow
+
+### Step 1: Read Reference Files
+- Read `SEO_PRODUCT_GUIDE.md` for SEO content rules
+- Read `src/data/products.ts` for existing patterns (especially a similar product with price + galleryImgs)
+- Read an existing product entry with `price` for reference (e.g., `red-velvet-roses-bouquet`)
+
+### Step 2: Map the Category
+The task uses English category names (e.g., `"rose-bouquet"`). Map to the project's `Category` type:
+- `"bo-hoa"` — bouquet/bó hoa (maps from: rose-bouquet, bouquet, flower-bouquet)
+- `"gio-hoa"` — flower basket/giỏ hoa
+- `"khai-truong"` — grand opening
+- `"chia-buon"` — sympathy/funeral
+- `"lan-ho-diep"` — phalaenopsis orchid
+
+### Step 3: Construct the Product Entry
+
+Add to `src/data/products.ts` inside the `raw[]` array (after the last product in the appropriate category section). Format:
+
+```typescript
+{
+  slug: "product-slug",
+  name: "Product Name",           // Viết HOA đầu mỗi từ
+  category: "bo-hoa",             // mapped category
+  badge: "Nổi bật",               // optional: "Nổi bật" | "Bán chạy" | omit
+  _img: "product-slug.png",
+  price: 1250000,                 // VND, optional
+  short:
+    "Bó hoa hồng kem ivory phối lan vũ nữ vàng ấm áp, thanh lịch — sinh nhật, chúc mừng, lời yêu thương. Giao 2 giờ tại TP.HCM.",
+  description:
+    "Product description in Vietnamese, 150–250 words. Structure: (1) intro with tone/style, (2) flowers/materials/wrapping, (3) occasions + 'Giao 2 giờ tại TP.HCM.'",
+  keywords: [
+    "bó hoa hồng kem",            // primaryKeyword first
+    "ivory rose bouquet",
+    "hoa hồng vàng kem",
+    "hoa lan vũ nữ vàng",
+    "garden rose bouquet",
+    "luxury flower bouquet tphcm",
+    "hoa sinh nhật đẹp",
+    "bó hoa tone vàng kem",
+  ],
+  galleryImgs: [
+    "product-slug.png",                        // main image
+    "product-slug-lifestyle.jpg",
+    "product-slug-closeup.jpg",
+    "product-slug-angle45.jpg",
+    "product-slug-delivery.jpg",
+  ],
+},
+```
+
+### Step 4: SEO Content Rules (from SEO_PRODUCT_GUIDE.md)
+
+| Field | Rule |
+|-------|------|
+| **name** | 30–60 ký tự, viết HOA đầu mỗi từ, KHÔNG thêm tên shop |
+| **short** | 120–155 ký tự, chứa từ khoá chính, kết thúc bằng "Giao 2 giờ tại TP.HCM." |
+| **description** | 150–250 từ, 3 phần: giới thiệu → chất liệu/hoa → dịp tặng + cam kết giao 2h. KHÔNG chứa giá, link, thông tin shop |
+| **keywords** | 5–10 từ, mỗi từ 2–5 từ, viết thường có dấu, primaryKeyword đầu tiên |
+| **colors** | Auto-inferred from text by `PRODUCTS.map()` — OK to omit |
+| **occasions** | Auto-assigned from `OCCASIONS_BY_CATEGORY` — OK to omit |
+| **sizes** | Auto-assigned from `SIZES_BY_CATEGORY` — OK to omit |
+| **faqs** | Auto-assigned from `FAQ_BY_CATEGORY` — OK to omit |
+| **careTips** | Auto-assigned from `CARE_BY_CATEGORY` — OK to omit |
+| **materials** | Auto-assigned from `MATERIALS_BY_CATEGORY` — OK to omit |
+| **rating** | Auto-generated from `ratingFor()` — OK to omit |
+
+### Step 5: Create Placeholder Images
+
+Create minimal PNG images in `public/images/` for all 5 gallery images:
+```typescript
+const files = [
+  { name: "product-slug.png", w: 400, h: 500, r: 245, g: 225, b: 200 },
+  { name: "product-slug-lifestyle.jpg", w: 400, h: 500, r: 240, g: 220, b: 195 },
+  { name: "product-slug-closeup.jpg", w: 400, h: 500, r: 250, g: 230, b: 205 },
+  { name: "product-slug-angle45.jpg", w: 400, h: 500, r: 238, g: 218, b: 193 },
+  { name: "product-slug-delivery.jpg", w: 400, h: 500, r: 242, g: 222, b: 197 },
+];
+```
+
+Use Node.js `zlib` to generate valid PNGs programmatically (project has `"type": "module"`, so use `.cjs` extension for scripts).
+
+### Step 6: Verification Checklist
+- [ ] Ảnh `_img` và tất cả ảnh trong `galleryImgs` tồn tại trong `public/images/`
+- [ ] `short` ≤ 155 ký tự
+- [ ] `keywords` ≥ 5 từ khoá
+- [ ] `description` contains "Giao 2 giờ tại TP.HCM."
+- [ ] Slug đúng format (không dấu, gạch ngang, lowercase)
+- [ ] File ảnh KHÔNG double extension
+- [ ] File ảnh chỉ dùng chữ thường, không space
+
+---
+
+## 📁 File Locations
+- **Product data**: `src/data/products.ts` — add entry to `raw[]` array
+- **Images**: `public/images/` — store all product images here
+- **SEO Guide**: `SEO_PRODUCT_GUIDE.md` — full SEO content rules
+- **Project tasks**: `TASKS.md` — project task tracker

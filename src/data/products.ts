@@ -225,6 +225,35 @@ const raw: RawProduct[] = [
       "red-velvet-roses-bouquet-delivery.jpg",
     ],
   },
+  {
+    slug: "golden-ivory-rose-bouquet",
+    name: "Golden Ivory Rose Bouquet",
+    category: "bo-hoa",
+    badge: "Nổi bật",
+    _img: "golden-ivory-rose-bouquet.png",
+    price: 1250000,
+    short:
+      "Bó hoa hồng kem ivory phối lan vũ nữ vàng ấm áp, thanh lịch — sinh nhật, chúc mừng, lời yêu thương. Giao 2 giờ tại TP.HCM.",
+    description:
+      "Golden Ivory Rose Bouquet là thiết kế mang vẻ đẹp nhẹ nhàng với những đóa hồng ivory form garden rose nở lớn phối cùng lan vũ nữ vàng rực rỡ. Tone màu kem vàng ấm áp kết hợp giấy gói burgundy sang trọng tạo nên tổng thể thanh lịch, nữ tính và đầy cuốn hút. Những bông hồng ivory tượng trưng cho sự thuần khiết và tinh tế, trong khi lan vũ nữ vàng mang đến niềm vui và năng lượng tích cực. Các loài hoa được phối hợp hài hòa, tạo điểm nhấn thanh nhã cho người nhận. Phù hợp cho sinh nhật, lời chúc dịu dàng, kỷ niệm, cảm ơn và những dịp đặc biệt cần sự tinh tế, sang trọng. Mỗi bó hoa đều được chọn lọc kỹ lưỡng từ những vườn hoa tươi nhập khẩu và Đà Lạt, đảm bảo chất lượng tốt nhất khi đến tay khách hàng. Giao 2 giờ tại TP.HCM.",
+    keywords: [
+      "bó hoa hồng kem",
+      "ivory rose bouquet",
+      "hoa hồng vàng kem",
+      "hoa lan vũ nữ vàng",
+      "garden rose bouquet",
+      "luxury flower bouquet tphcm",
+      "hoa sinh nhật đẹp",
+      "bó hoa tone vàng kem",
+    ],
+    galleryImgs: [
+      "golden-ivory-rose-bouquet.png",
+      "golden-ivory-rose-bouquet-lifestyle.jpg",
+      "golden-ivory-rose-bouquet-closeup.jpg",
+      "golden-ivory-rose-bouquet-angle45.jpg",
+      "golden-ivory-rose-bouquet-delivery.jpg",
+    ],
+  },
 
   // ----- GIỎ HOA -----
   {
