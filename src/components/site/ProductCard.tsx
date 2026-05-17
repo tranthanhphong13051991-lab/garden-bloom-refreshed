@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/store/cart";
 import type { Product } from "@/data/products";
-import { formatPrice } from "@/data/products";
 
 export function ProductCard({ product, eager = false }: { product: Product; eager?: boolean }) {
   const add = useCart((s) => s.add);
@@ -28,7 +27,7 @@ export function ProductCard({ product, eager = false }: { product: Product; eage
         {/* Badge overlay */}
         {product.badge && (
           <span className="absolute left-3 top-3 rounded-full bg-gold/90 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-primary backdrop-blur-sm shadow-sm">
-            {product.badge === "Bán chạy" ? "★ Bán chạy" : "◆ Florist choice"}
+            {product.badge === "Bán chạy" ? "★ Bán chạy" : "◆ Shop Chọn Mẫu"}
           </span>
         )}
 
@@ -57,7 +56,12 @@ export function ProductCard({ product, eager = false }: { product: Product; eage
         <p className="mt-1.5 line-clamp-2 flex-1 text-sm leading-relaxed text-muted-foreground md:mt-2">{product.short}</p>
 
         <div className="mt-3 flex items-center justify-between gap-3 border-t border-border/40 pt-3 md:mt-4 md:pt-4">
-          <div className="font-serif text-xl font-semibold text-primary">{formatPrice(product.price)}</div>
+          <a
+            href="tel:0934926092"
+            className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-soft transition-all duration-300 hover:bg-gold hover:text-primary hover:scale-[1.02] active:scale-95"
+          >
+            Liên hệ
+          </a>
           <button
             onClick={(e) => {
               e.preventDefault();

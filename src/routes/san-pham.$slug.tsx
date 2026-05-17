@@ -170,11 +170,8 @@ function ProductDetail() {
     `Xin chào Hoa Tươi Thanh Ngọc, tôi muốn đặt sản phẩm: ${product.name}. Xin tư vấn và báo giá giúp tôi.`,
   );
 
-  // Lightbox cho gallery
-  const galleryShots = [
-    { src: product.image, alt: product.name, variant: "Studio", note: "Ảnh studio — bố cục và tone màu chuẩn." },
-    ...product.gallery,
-  ];
+  // Gallery chỉ gồm 4 ảnh thực tế (không bao gồm ảnh studio chính)
+  const galleryShots = product.gallery;
   const [lightbox, setLightbox] = useState<number | null>(null);
   const closeLightbox = () => setLightbox(null);
   const prev = () => setLightbox((i) => (i === null ? null : (i - 1 + galleryShots.length) % galleryShots.length));
@@ -231,7 +228,7 @@ function ProductDetail() {
               {cat && <span className="rounded-full bg-[#173F35]/10 px-3.5 py-1 text-xs font-medium uppercase tracking-wider text-[#173F35]">{cat.label}</span>}
               {product.badge && (
                 <span className="rounded-full bg-[#D8B36A]/20 px-3.5 py-1 text-xs font-medium text-[#173F35]">
-                  {product.badge === "Bán chạy" ? "★ Bán chạy" : "◆ Florist choice"}
+                  {product.badge === "Bán chạy" ? "★ Bán chạy" : "◆ Shop Chọn Mẫu"}
                 </span>
               )}
               <span className="flex items-center gap-1 text-xs text-[#5A6B64]">
@@ -240,11 +237,6 @@ function ProductDetail() {
             </div>
 
             <h1 className="mt-4 font-serif text-4xl font-semibold leading-tight text-[#1A2E28] md:text-5xl">{product.name}</h1>
-
-            <div className="mt-4 flex items-baseline gap-3">
-              <div className="font-serif text-2xl font-semibold text-[#173F35]">Liên hệ báo giá</div>
-              <span className="text-xs text-[#5A6B64]">Tư vấn miễn phí — kèm thiệp & gói quà</span>
-            </div>
 
             <p className="mt-5 text-base leading-relaxed text-[#5A6B64]">{product.description}</p>
 
@@ -314,11 +306,11 @@ function ProductDetail() {
               </div>
               <h2 className="mt-2 font-serif text-3xl font-semibold text-[#1A2E28] md:text-4xl">Sản Phẩm Qua Nhiều Góc Nhìn</h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#5A6B64]">
-                Hình ảnh thực tế từ studio và các lô khác nhau — giúp bạn hình dung rõ nhất về sản phẩm trước khi đặt.
+                Hình ảnh thực tế của sản phẩm qua nhiều góc nhìn — giúp bạn hình dung rõ nhất về sản phẩm trước khi đặt.
               </p>
             </div>
             <span className="rounded-full bg-[#E9DFD2] px-3 py-1 text-xs font-medium text-[#5A6B64]">
-              {galleryShots.length} ảnh
+              4 ảnh
             </span>
           </header>
 
@@ -344,7 +336,7 @@ function ProductDetail() {
                 </div>
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-3 text-left">
                   <div className="text-[11px] font-medium uppercase tracking-wider text-white/80">
-                    {i === 0 ? "Studio" : "Thực tế"}
+                    THỰC TẾ
                   </div>
                   <div className="text-sm font-semibold text-white">{shot.variant}</div>
                 </div>

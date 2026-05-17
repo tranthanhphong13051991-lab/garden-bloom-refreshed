@@ -125,80 +125,16 @@ export type NewProduct = {
 // ============================================================
 // SẢN PHẨM CHÍNH THỨC — CHỈ DÙNG ẢNH CÓ THẬT
 // ============================================================
+// Quy chuẩn ảnh:
+//   image / _img: ảnh studio chính (đại diện, thumbnail, hero)
+//   galleryImgs: [ góc nghiêng, close-up, ánh sáng tự nhiên, giao hàng ]
+//   KHÔNG đưa ảnh studio vào galleryImgs
+
 const raw: RawProduct[] = [
   // ----- BÓ HOA -----
   {
-    slug: "bo-hoa-tuoi-dep-sang",
-    name: "Bó Hoa Tươi Đẹp Sang",
-    category: "bo-hoa",
-    badge: "Nổi bật",
-    _img: "bo-hoa-tuoi-dep-sang.png",
-    short: "Bó hoa tươi tone hồng trắng thanh lịch, gói giấy sang trọng — sinh nhật, kỷ niệm, cảm ơn. Giao 2 giờ tại TP.HCM.",
-    description:
-      "Bó Hoa Tươi Đẹp Sang được thiết kế tinh tế với hoa hồng hồng phấn, hoa cẩm chướng trắng, baby trắng và lá xanh tươi, gói giấy cao cấp tông hồng kem nhẹ nhàng. Phù hợp tặng sinh nhật, kỷ niệm, cảm ơn hoặc gửi lời yêu thương đến người thân, bạn bè, đồng nghiệp. Giao 2 giờ tại TP.HCM.",
-    keywords: [
-      "bó hoa tươi đẹp",
-      "bó hoa hồng phấn",
-      "bó hoa sinh nhật",
-      "hoa tươi sang trọng",
-      "hoa tặng người yêu",
-      "hoa tươi TP.HCM",
-      "giao hoa nhanh",
-    ],
-    galleryImgs: [
-      "bo-hoa-tuoi-dep-sang.png",
-      "bo-hoa-tuoi-dep-sang-chinh-dien.jpg",
-      "bo-hoa-tuoi-dep-sang-can-canh.jpg",
-      "bo-hoa-tuoi-dep-sang-tren-cao.jpg",
-      "bo-hoa-tuoi-dep-sang-anh-sang.jpg",
-    ],
-  },
-  {
-    slug: "bo-hoa-hong-pastel-ngot-ngao",
-    name: "Bó Hoa Hồng Pastel Ngọt Ngào",
-    category: "bo-hoa",
-    badge: "Bán chạy",
-    _img: "bo-hoa-hong-pastel-ngot-ngao.png",
-    short: "Bó hoa hồng pastel phối hồng kem nhẹ nhàng, sang trọng — sinh nhật, kỷ niệm, tỏ tình. Giao 2 giờ tại TP.HCM.",
-    description:
-      "Bó Hoa Hồng Pastel Ngọt Ngào được thiết kế từ hoa hồng hồng phấn, hồng kem và các nụ hoa điểm xuyết, gói giấy pastel mềm mại. Phù hợp tặng sinh nhật, kỷ niệm, chúc mừng hoặc gửi lời yêu thương. Giao 2 giờ tại TP.HCM.",
-    keywords: [
-      "bó hoa hồng pastel",
-      "bó hoa hồng hồng phấn",
-      "hoa hồng kem",
-      "hoa tặng sinh nhật",
-      "hoa tặng người yêu",
-      "hoa đẹp TP.HCM",
-    ],
-    galleryImgs: [
-      "bo-hoa-hong-pastel-ngot-ngao.png",
-    ],
-  },
-  {
-    slug: "bo-hoa-hong-kem-tinh-te",
-    name: "Bó Hoa Hồng Kem Tinh Tế",
-    category: "bo-hoa",
-    badge: "Nổi bật",
-    _img: "bo-hoa-tuoi-dep-sang.png",
-    short: "Bó hoa hồng kem tinh tế, nhẹ nhàng và sang trọng — tặng sinh nhật, kỷ niệm, chúc mừng. Giao 2 giờ tại TP.HCM.",
-    description:
-      "Bó Hoa Hồng Kem Tinh Tế kết hợp hoa hồng kem, hồng phấn và hoa baby trắng, gói giấy pastel mềm mại, tạo vẻ đẹp thanh lịch, ngọt ngào. Lựa chọn hoàn hảo để tặng người thân, bạn bè trong những dịp đặc biệt. Giao 2 giờ tại TP.HCM.",
-    keywords: [
-      "bó hoa hồng kem",
-      "bó hoa hồng tinh tế",
-      "hoa tặng sinh nhật",
-      "hoa tặng bạn bè",
-      "bó hoa đẹp",
-      "hoa tươi TP.HCM",
-    ],
-    galleryImgs: [
-      "bo-hoa-tuoi-dep-sang.png",
-      "bo-hoa-hong-kem-tinh-te-can-canh.jpg",
-    ],
-  },
-  {
     slug: "red-velvet-roses-bouquet",
-    name: "Red Velvet Roses Bouquet",
+    name: "Bó Hoa Hồng Đỏ Nhung",
     category: "bo-hoa",
     badge: "Nổi bật",
     _img: "red-velvet-roses-bouquet.png",
@@ -206,7 +142,7 @@ const raw: RawProduct[] = [
     short:
       "Bó hoa hồng đỏ nổi bật với baby trắng và eucalyptus xanh bạc, mang cảm giác lãng mạn và thanh lịch cho những dịp đặc biệt.",
     description:
-      "Red Velvet Roses Bouquet là thiết kế hoa mang vẻ đẹp cổ điển với những đóa hồng đỏ nhung phối baby trắng và eucalyptus xanh bạc. Tone gói trắng kem giúp tổng thể nhẹ nhàng nhưng vẫn nổi bật, phù hợp cho sinh nhật, kỷ niệm và những dịp cần gửi gắm cảm xúc chân thành.",
+      "Bó Hoa Hồng Đỏ Nhung là thiết kế hoa mang vẻ đẹp cổ điển với những đóa hồng đỏ nhung phối baby trắng và eucalyptus xanh bạc. Tone gói trắng kem giúp tổng thể nhẹ nhàng nhưng vẫn nổi bật, phù hợp cho sinh nhật, kỷ niệm và những dịp cần gửi gắm cảm xúc chân thành.",
     keywords: [
       "bó hoa hồng đỏ",
       "red rose bouquet",
@@ -218,16 +154,15 @@ const raw: RawProduct[] = [
       "hoa chúc mừng sinh nhật tphcm",
     ],
     galleryImgs: [
-      "red-velvet-roses-bouquet.png",
-      "red-velvet-roses-bouquet-lifestyle.jpg",
-      "red-velvet-roses-bouquet-closeup.jpg",
       "red-velvet-roses-bouquet-angle45.jpg",
+      "red-velvet-roses-bouquet-closeup.jpg",
+      "red-velvet-roses-bouquet-lifestyle.jpg",
       "red-velvet-roses-bouquet-delivery.jpg",
     ],
   },
   {
     slug: "golden-ivory-rose-bouquet",
-    name: "Golden Ivory Rose Bouquet",
+    name: "Bó Hoa Hồng Kem Vàng",
     category: "bo-hoa",
     badge: "Nổi bật",
     _img: "golden-ivory-rose-bouquet.png",
@@ -235,7 +170,7 @@ const raw: RawProduct[] = [
     short:
       "Bó hoa hồng kem ivory phối lan vũ nữ vàng ấm áp, thanh lịch — sinh nhật, chúc mừng, lời yêu thương. Giao 2 giờ tại TP.HCM.",
     description:
-      "Golden Ivory Rose Bouquet là thiết kế mang vẻ đẹp nhẹ nhàng với những đóa hồng ivory form garden rose nở lớn phối cùng lan vũ nữ vàng rực rỡ. Tone màu kem vàng ấm áp kết hợp giấy gói burgundy sang trọng tạo nên tổng thể thanh lịch, nữ tính và đầy cuốn hút. Những bông hồng ivory tượng trưng cho sự thuần khiết và tinh tế, trong khi lan vũ nữ vàng mang đến niềm vui và năng lượng tích cực. Các loài hoa được phối hợp hài hòa, tạo điểm nhấn thanh nhã cho người nhận. Phù hợp cho sinh nhật, lời chúc dịu dàng, kỷ niệm, cảm ơn và những dịp đặc biệt cần sự tinh tế, sang trọng. Mỗi bó hoa đều được chọn lọc kỹ lưỡng từ những vườn hoa tươi nhập khẩu và Đà Lạt, đảm bảo chất lượng tốt nhất khi đến tay khách hàng. Giao 2 giờ tại TP.HCM.",
+      "Bó Hoa Hồng Kem Vàng là thiết kế mang vẻ đẹp nhẹ nhàng với những đóa hồng ivory form garden rose nở lớn phối cùng lan vũ nữ vàng rực rỡ. Tone màu kem vàng ấm áp kết hợp giấy gói burgundy sang trọng tạo nên tổng thể thanh lịch, nữ tính và đầy cuốn hút. Những bông hồng ivory tượng trưng cho sự thuần khiết và tinh tế, trong khi lan vũ nữ vàng mang đến niềm vui và năng lượng tích cực. Các loài hoa được phối hợp hài hòa, tạo điểm nhấn thanh nhã cho người nhận. Phù hợp cho sinh nhật, lời chúc dịu dàng, kỷ niệm, cảm ơn và những dịp đặc biệt cần sự tinh tế, sang trọng. Mỗi bó hoa đều được chọn lọc kỹ lưỡng từ những vườn hoa tươi nhập khẩu và Đà Lạt, đảm bảo chất lượng tốt nhất khi đến tay khách hàng. Giao 2 giờ tại TP.HCM.",
     keywords: [
       "bó hoa hồng kem",
       "ivory rose bouquet",
@@ -247,128 +182,192 @@ const raw: RawProduct[] = [
       "bó hoa tone vàng kem",
     ],
     galleryImgs: [
-      "golden-ivory-rose-bouquet.png",
-      "golden-ivory-rose-bouquet-lifestyle.jpg",
-      "golden-ivory-rose-bouquet-closeup.jpg",
       "golden-ivory-rose-bouquet-angle45.jpg",
+      "golden-ivory-rose-bouquet-closeup.jpg",
+      "golden-ivory-rose-bouquet-lifestyle.jpg",
       "golden-ivory-rose-bouquet-delivery.jpg",
+    ],
+  },
+  {
+    slug: "hong-phan-diu-em",
+    name: "Bó Hoa Hồng Phấn Dịu Êm",
+    category: "bo-hoa",
+    badge: "Nổi bật",
+    _img: "hong-phan-diu-em.png",
+    short:
+      "Bó hồng pastel phối foliage tím sang trọng, dịu dàng và lãng mạn — sinh nhật, kỷ niệm, tỏ tình. Giao 2 giờ tại TP.HCM.",
+    description:
+      "“Hồng Phấn Dịu Êm” là thiết kế bó hoa mang tinh thần nữ tính hiện đại với sắc hồng pastel nhẹ nhàng kết hợp cùng foliage tím nổi bật. Những bông hồng được tuyển chọn kỹ lưỡng, bung nở mềm mại trên nền giấy gói tông hồng đồng điệu tạo nên tổng thể thanh lịch và sang trọng. Sản phẩm phù hợp cho những dịp cần sự tinh tế như sinh nhật, kỷ niệm yêu nhau, chúc mừng hay gửi lời yêu thương chân thành. Từng chi tiết được phối theo phong cách florist boutique, giữ cảm giác tự nhiên nhưng vẫn nổi bật và cuốn hút. Đây là lựa chọn lý tưởng dành cho người yêu vẻ đẹp ngọt ngào, hiện đại và đầy cảm xúc. Giao 2 giờ tại TP.HCM.",
+    keywords: [
+      "bó hoa hồng pastel",
+      "bó hoa hồng hồng phấn",
+      "hoa sinh nhật sang trọng",
+      "bó hoa nữ tính",
+      "hoa tặng người yêu",
+      "bó hoa boutique",
+      "hoa tone hồng pastel",
+      "bó hoa romantic",
+      "hoa chúc mừng đẹp",
+      "florist luxury",
+    ],
+    galleryImgs: [
+      "hong-phan-diu-em-angle45.jpg",
+      "hong-phan-diu-em-closeup.jpg",
+      "hong-phan-diu-em-lifestyle.jpg",
+      "hong-phan-diu-em-delivery.jpg",
+    ],
+  },
+  {
+    slug: "nang-ruc-ro",
+    name: "Bó Hoa Hướng Dương Nắng Rực Rỡ",
+    category: "bo-hoa",
+    badge: "Bán chạy",
+    _img: "nang-ruc-ro.png",
+    short:
+      "Bó hướng dương phối cúc tana mang sắc vàng rạng rỡ, tượng trưng cho niềm vui — khai trương, tốt nghiệp, sinh nhật. Giao 2 giờ tại TP.HCM.",
+    description:
+      "“Nắng Rực Rỡ” là bó hoa mang tinh thần tươi sáng và đầy cảm hứng với những đóa hướng dương vàng nổi bật được phối cùng cúc tana trắng nhỏ xinh. Thiết kế sử dụng tone giấy gói beige hiện đại giúp tổng thể trở nên hài hòa, tự nhiên nhưng vẫn sang trọng theo phong cách florist boutique. Sắc vàng của hướng dương tượng trưng cho hy vọng, thành công và sự lạc quan, rất phù hợp để gửi lời chúc mừng trong các dịp khai trương, tốt nghiệp, sinh nhật hoặc những cột mốc đặc biệt. Điểm nhấn nơ đỏ tạo cảm giác nổi bật và mang lại nguồn năng lượng tích cực cho người nhận. Đây là lựa chọn hoàn hảo dành cho những ai yêu vẻ đẹp tươi mới, ấm áp và tràn đầy sức sống. Giao 2 giờ tại TP.HCM.",
+    keywords: [
+      "bó hoa hướng dương",
+      "hoa hướng dương đẹp",
+      "bó hoa khai trương",
+      "hoa chúc mừng",
+      "bó hoa tốt nghiệp",
+      "hướng dương boutique",
+      "bó hoa tone vàng",
+      "hoa sinh nhật tươi sáng",
+      "bó hoa năng lượng tích cực",
+      "florist luxury",
+    ],
+    galleryImgs: [
+      "nang-ruc-ro-angle45.jpg",
+      "nang-ruc-ro-closeup.jpg",
+      "nang-ruc-ro-lifestyle.jpg",
+      "nang-ruc-ro-delivery.jpg",
+    ],
+  },
+  {
+    slug: "may-hong-diu-dang",
+    name: "Bó Hoa Mây Hồng Dịu Dàng",
+    category: "bo-hoa",
+    badge: "Florist choice",
+    _img: "may-hong-diu-dang.png",
+    short:
+      "Bó hoa pastel hồng baby phối cát tường và scabiosa trắng nhẹ nhàng, nữ tính — sinh nhật, kỷ niệm, tỏ tình. Giao 2 giờ tại TP.HCM.",
+    description:
+      "“Mây Hồng Dịu Dàng” là thiết kế bó hoa mang tinh thần feminine luxury với sự kết hợp hài hòa giữa hồng pastel nhẹ nhàng và cát tường mềm mại. Những bông hoa được phối theo bố cục tự nhiên, điểm thêm scabiosa trắng cùng foliage xanh non tạo cảm giác thanh thoát và tinh khôi. Tone giấy gói hồng baby đồng điệu giúp tổng thể trở nên dịu mắt, hiện đại nhưng vẫn giữ được nét sang trọng đặc trưng của florist boutique. Sản phẩm phù hợp cho các dịp sinh nhật, kỷ niệm, tỏ tình hoặc gửi lời yêu thương chân thành đến người đặc biệt. Thiết kế mang lại cảm giác nhẹ nhàng và đầy cảm xúc, thích hợp dành cho những ai yêu vẻ đẹp nữ tính và tinh tế. Giao 2 giờ tại TP.HCM.",
+    keywords: [
+      "bó hoa pastel hồng",
+      "bó hoa cát tường",
+      "bó hoa sinh nhật đẹp",
+      "hoa hồng pastel cao cấp",
+      "bó hoa nữ tính",
+      "hoa tặng người yêu",
+      "bó hoa boutique luxury",
+      "bó hoa tone hồng",
+      "hoa romantic pastel",
+      "florist sang trọng",
+    ],
+    galleryImgs: [
+      "may-hong-diu-dang-angle45.jpg",
+      "may-hong-diu-dang-closeup.jpg",
+      "may-hong-diu-dang-lifestyle.jpg",
+      "may-hong-diu-dang-delivery.jpg",
+    ],
+  },
+  {
+    slug: "do-nhung-say-dam",
+    name: "Bó Hoa Đỏ Nhung Say Đắm",
+    category: "bo-hoa",
+    badge: "Nổi bật",
+    _img: "do-nhung-say-dam.png",
+    short:
+      "Bó hồng đỏ sang trọng phối giấy gói đen huyền bí, biểu tượng của tình yêu mãnh liệt và đầy cuốn hút. Giao 2 giờ tại TP.HCM.",
+    description:
+      "“Đỏ Nhung Say Đắm” là thiết kế bó hoa mang tinh thần luxury romantic với những đóa hồng đỏ nhung được tuyển chọn kỹ lưỡng và sắp xếp theo bố cục tròn đầy tinh tế. Sắc đỏ nổi bật kết hợp cùng lớp giấy gói đen sang trọng tạo nên vẻ đẹp quyến rũ, hiện đại và đầy chiều sâu cảm xúc. Điểm xuyết foliage xanh nhẹ giúp tổng thể trở nên hài hòa và mềm mại hơn mà vẫn giữ được nét nổi bật đặc trưng. Thiết kế phù hợp cho những dịp đặc biệt như Valentine, cầu hôn, kỷ niệm yêu nhau hoặc gửi gắm lời yêu chân thành đến người thương. Đây là bó hoa dành cho những khoảnh khắc cần sự tinh tế, lãng mạn và cảm xúc mạnh mẽ khó quên. Giao 2 giờ tại TP.HCM.",
+    keywords: [
+      "bó hoa hồng đỏ",
+      "bó hoa tình yêu",
+      "hoa Valentine cao cấp",
+      "bó hoa romantic luxury",
+      "bó hồng đỏ sang trọng",
+      "hoa cầu hôn",
+      "bó hoa kỷ niệm",
+      "bó hoa tone đỏ đen",
+      "hoa tặng người yêu",
+      "florist luxury",
+    ],
+    galleryImgs: [
+      "do-nhung-say-dam-angle45.jpg",
+      "do-nhung-say-dam-closeup.jpg",
+      "do-nhung-say-dam-lifestyle.jpg",
+      "do-nhung-say-dam-delivery.jpg",
+    ],
+  },
+  {
+    slug: "khuc-ca-hong-phan",
+    name: "Khúc Ca Hồng Phấn",
+    category: "bo-hoa",
+    badge: "Florist choice",
+    _img: "khuc-ca-hong-phan.png",
+    short:
+      "Bó hoa pastel phối hồng phấn và cát tường phong cách boutique — sinh nhật, kỷ niệm, gửi người thương. Giao 2 giờ tại TP.HCM.",
+    description:
+      "“Khúc Ca Hồng Phấn” là thiết kế bó hoa mang phong cách premium feminine với sự kết hợp tinh tế giữa hồng pastel, cát tường mềm mại và các chi tiết hoa điểm nhẹ đầy nghệ thuật. Tông màu hồng phấn chủ đạo hòa quyện cùng sắc kem champagne và foliage tím tạo nên tổng thể nhẹ nhàng nhưng vẫn nổi bật sang trọng. Thiết kế được sắp xếp theo bố cục tự nhiên với lớp giấy gói hồng hiện đại, mang lại cảm giác mềm mại và thanh thoát đúng tinh thần florist boutique. Những đóa hoa nở rộ đan xen tạo chiều sâu thị giác tinh tế, phù hợp cho các dịp sinh nhật, kỷ niệm hay gửi tặng người thương. Đây là bó hoa dành cho những khoảnh khắc cần sự dịu dàng, nữ tính và cảm xúc chân thành. Giao 2 giờ tại TP.HCM.",
+    keywords: [
+      "bó hoa pastel cao cấp",
+      "bó hoa hồng phấn",
+      "bó hoa cát tường",
+      "hoa sinh nhật sang trọng",
+      "bó hoa nữ tính",
+      "bó hoa boutique luxury",
+      "hoa tone hồng pastel",
+      "bó hoa romantic",
+      "hoa tặng người yêu",
+      "florist cao cấp",
+    ],
+    galleryImgs: [
+      "khuc-ca-hong-phan-angle45.jpg",
+      "khuc-ca-hong-phan-closeup.jpg",
+      "khuc-ca-hong-phan-lifestyle.jpg",
+      "khuc-ca-hong-phan-delivery.jpg",
     ],
   },
 
   // ----- GIỎ HOA -----
   {
-    slug: "gio-hoa-dep-sang-tao",
-    name: "Giỏ Hoa Đẹp Sáng Tạo",
+    slug: "vuon-hoa-mong-mo",
+    name: "Vườn Hoa Mộng Mơ",
     category: "gio-hoa",
-    badge: "Bán chạy",
-    _img: "gio-hoa-dep-sang-tao.png",
-    short: "Giỏ hoa tươi sáng tạo với hoa hồng, hoa baby, màu sắc hài hoà — sinh nhật, kỷ niệm, biếu tặng. Giao 2 giờ tại TP.HCM.",
+    badge: "Nổi bật",
+    _img: "vuon-hoa-mong-mo.png",
+    short:
+      "Giỏ hoa nghệ thuật phối hồng sọc, lan trắng và green trick, vẻ đẹp độc đáo đầy sức sống — khai trương, tân gia, chúc mừng. Giao 2 giờ tại TP.HCM.",
     description:
-      "Giỏ Hoa Đẹp Sáng Tạo là sự kết hợp tinh tế giữa hoa hồng các màu, hoa baby trắng và lá xanh mướt, được sắp xếp trong giỏ mây vintage sang trọng. Phù hợp tặng sinh nhật, kỷ niệm, cảm ơn đối tác hoặc thăm bệnh. Giao 2 giờ tại TP.HCM.",
+      "“Vườn Hoa Mộng Mơ” là thiết kế giỏ hoa mang phong cách garden luxury với sự kết hợp hài hòa giữa hồng sọc đỏ trắng nổi bật, lan hồ điệp trắng thanh lịch cùng green trick xanh độc đáo. Tổng thể được điểm xuyết bởi eucalyptus và baby trắng tạo cảm giác mềm mại, tự nhiên nhưng vẫn đầy chiều sâu nghệ thuật. Thiết kế sử dụng giỏ gỗ rustic kết hợp nơ xanh pastel giúp sản phẩm vừa hiện đại vừa mang nét gần gũi tinh tế. Đây là lựa chọn phù hợp cho các dịp khai trương, tân gia, chúc mừng hoặc làm quà tặng cao cấp dành cho đối tác và người thân yêu. Sự phối hợp màu sắc hài hòa cùng bố cục bay tự nhiên giúp giỏ hoa trở nên cuốn hút ở mọi không gian trưng bày. Giao 2 giờ tại TP.HCM.",
     keywords: [
-      "giỏ hoa đẹp",
-      "giỏ hoa sáng tạo",
-      "giỏ hoa tươi",
-      "hoa sinh nhật",
-      "giỏ hoa biếu tặng",
-      "hoa tươi TP.HCM",
+      "giỏ hoa cao cấp",
+      "giỏ hoa nghệ thuật",
+      "hoa hồng sọc đỏ trắng",
+      "giỏ hoa khai trương",
+      "giỏ hoa chúc mừng",
+      "lan hồ điệp trắng",
+      "green trick bouquet",
+      "giỏ hoa boutique",
+      "hoa tặng đối tác",
+      "florist luxury",
     ],
     galleryImgs: [
-      "gio-hoa-dep-sang-tao.png",
-      "gio-hoa-dep-sang-tao-chinh-dien.jpg",
-      "gio-hoa-dep-sang-tao-can-canh.jpg",
-      "gio-hoa-dep-sang-tao-anh-sang.jpg",
-    ],
-  },
-  {
-    slug: "gio-hoa-tinh-yeu-hong",
-    name: "Giỏ Hoa Tình Yêu Hồng",
-    category: "gio-hoa",
-    badge: "Bán chạy",
-    _img: "gio-hoa-tinh-yeu-hong.png",
-    short: "Giỏ hoa tông hồng ngọt ngào, sang trọng — tặng người yêu, sinh nhật, kỷ niệm. Giao 2 giờ tại TP.HCM.",
-    description:
-      "Giỏ Hoa Tình Yêu Hồng được thiết kế với hoa hồng hồng, hoa cẩm chướng hồng và baby trắng, điểm xuyết lá xanh tươi, giỏ mây đan thanh lịch. Món quà hoàn hảo để gửi gắm yêu thương đến người ấy trong ngày sinh nhật, kỷ niệm hoặc Valentine. Giao 2 giờ tại TP.HCM.",
-    keywords: [
-      "giỏ hoa tình yêu",
-      "giỏ hoa hồng",
-      "hoa tặng người yêu",
-      "hoa sinh nhật",
-      "hoa valentine",
-      "giỏ hoa đẹp",
-    ],
-    galleryImgs: [
-      "gio-hoa-tinh-yeu-hong.png",
-      "gio-hoa-tinh-yeu-hong-chinh-dien.jpg",
-      "gio-hoa-tinh-yeu-hong-can-canh.jpg",
-      "gio-hoa-tinh-yeu-hong-anh-sang.jpg",
+      "vuon-hoa-mong-mo-angle45.jpg",
+      "vuon-hoa-mong-mo-closeup.jpg",
+      "vuon-hoa-mong-mo-lifestyle.jpg",
+      "vuon-hoa-mong-mo-delivery.jpg",
     ],
   },
 
   // ----- KHAI TRƯƠNG -----
-  {
-    slug: "ke-hoa-khai-truong-thanh-cong",
-    name: "Kệ Hoa Khai Trương Thành Công",
-    category: "khai-truong",
-    badge: "Nổi bật",
-    _img: "ke-hoa-khai-truong-thanh-cong.png",
-    short: "Kệ hoa khai trương sang trọng, tone hồng cam may mắn — chúc mừng khai trương, khánh thành. Giao 2 giờ tại TP.HCM.",
-    description:
-      "Kệ Hoa Khai Trương Thành Công thiết kế ấn tượng với hoa hồng các màu, hoa baby trắng, cúc và lá xanh, tông màu hồng cam chủ đạo mang ý nghĩa may mắn, phát tài. Phù hợp chúc mừng khai trương, khánh thành, sự kiện doanh nghiệp. Giao và dựng kệ miễn phí trong nội thành TP.HCM.",
-    keywords: [
-      "kệ hoa khai trương",
-      "hoa khai trương sang trọng",
-      "kệ hoa chúc mừng",
-      "hoa hồng cam",
-      "hoa khai trương TP.HCM",
-    ],
-    galleryImgs: [
-      "ke-hoa-khai-truong-thanh-cong.png",
-      "ke-hoa-khai-truong-thanh-cong-chinh-dien.png",
-      "ke-hoa-khai-truong-thanh-cong-can-canh.png",
-    ],
-  },
-  {
-    slug: "ke-hoa-khai-truong-sang-trong-trang",
-    name: "Kệ Hoa Khai Trương Sang Trọng Trắng",
-    category: "khai-truong",
-    _img: "ke-hoa-khai-truong-sang-trong-trang.png",
-    short: "Kệ hoa khai trương tông trắng vàng tinh tế, sang trọng — chúc mừng khai trương, khánh thành. Giao 2 giờ tại TP.HCM.",
-    description:
-      "Kệ Hoa Khai Trương Sang Trọng Trắng được thiết kế với hoa hồng trắng, hoa cúc trắng, baby trắng kết hợp với lá xanh và điểm nhấn vàng nhẹ, tạo vẻ đẹp trang nhã, đẳng cấp. Phù hợp chúc mừng khai trương, khánh thành, sự kiện doanh nghiệp hoặc biếu tặng đối tác. Giao và dựng kệ miễn phí trong nội thành TP.HCM.",
-    keywords: [
-      "kệ hoa khai trương trắng",
-      "hoa khai trương sang trọng",
-      "kệ hoa trắng tinh tế",
-      "hoa chúc mừng",
-      "hoa khai trương TP.HCM",
-    ],
-    galleryImgs: [
-      "ke-hoa-khai-truong-sang-trong-trang.png",
-    ],
-  },
 
   // ----- CHIA BUỒN -----
-  {
-    slug: "lang-hoa-chia-buon-thanh-lich",
-    name: "Lẵng Hoa Chia Buồn Thanh Lịch",
-    category: "chia-buon",
-    _img: "lang-hoa-chia-buon-thanh-lich.png",
-    short: "Lẵng hoa chia buồn tông trắng xanh trang nghiêm, thành kính — tang lễ, lễ viếng. Giao 2 giờ tại TP.HCM.",
-    description:
-      "Lẵng Hoa Chia Buồn Thanh Lịch kết hợp hoa hồng trắng, hoa cúc trắng, lan trắng và lá xanh trang trọng, thể hiện sự thành kính và lòng tiếc thương sâu sắc. Phù hợp gửi đến tang lễ, nhà tang lễ hoặc gia quyến để bày tỏ sự chia buồn và phân ưu. Giao 2 giờ tại TP.HCM.",
-    keywords: [
-      "hoa chia buồn",
-      "lẵng hoa tang lễ",
-      "hoa viếng tang",
-      "hoa chia buồn trắng",
-      "hoa phân ưu",
-      "hoa tang TP.HCM",
-    ],
-    galleryImgs: [
-      "lang-hoa-chia-buon-thanh-lich.png",
-    ],
-  },
 ];
 
 // ----- Defaults theo category -----
@@ -494,22 +493,22 @@ const imgPoolByCat: Record<Category, string[]> = raw.reduce((acc, p) => {
 }, {} as Record<Category, string[]>);
 
 const VARIANT_LABELS = [
-  { variant: "Góc chính diện", note: "Nhìn thẳng vào sản phẩm — bố cục tổng thể rõ nhất" },
-  { variant: "Góc cận cảnh", note: "Chi tiết hoa, màu sắc và chất liệu" },
-  { variant: "Góc từ trên cao", note: "Nhìn toàn bộ từ trên xuống — bố cục và tỉ lệ" },
-  { variant: "Ánh sáng tự nhiên", note: "Chụp ngoài trời — màu sắc thực nhất" },
+  { variant: "Góc nghiêng", note: "Ảnh góc nghiêng 45 độ — hình dung tổng thể sản phẩm từ góc nhìn thực tế" },
+  { variant: "Cận chất liệu hoa", note: "Chi tiết hoa, cánh hoa, màu sắc và chất liệu thực tế" },
+  { variant: "Ánh sáng tự nhiên", note: "Sản phẩm dưới ánh sáng ban ngày — màu sắc thực tế nhất" },
+  { variant: "Giao hoa tận nơi", note: "Ảnh thực tế khi giao hàng — kiểm tra sản phẩm trước khi bàn giao" },
 ];
 
 const buildDefaultGallery = (slug: string, cat: Category, mainImg: string): GalleryShot[] => {
   const pool = (imgPoolByCat[cat] || []).filter((s) => s !== mainImg);
   const h = hash(slug);
   const picked: string[] = [];
-  for (let i = 0; i < Math.min(3, pool.length); i++) {
+  for (let i = 0; i < Math.min(4, pool.length); i++) {
     picked.push(pool[(h + i * 7) % pool.length]);
   }
   return picked.map((s, i) => ({
     src: img(s, 800),
-    alt: `${VARIANT_LABELS[i].variant} — minh họa khác biệt thực tế`,
+    alt: `THỰC TẾ — ${VARIANT_LABELS[i].variant}`,
     variant: VARIANT_LABELS[i].variant,
     note: VARIANT_LABELS[i].note,
   }));
@@ -518,15 +517,20 @@ const buildDefaultGallery = (slug: string, cat: Category, mainImg: string): Gall
 export const PRODUCTS: Product[] = raw.map((p) => {
   const colors = p.colors ?? inferColors(`${p.name} ${p.short}`);
   let gallery: GalleryShot[];
-  if (p.gallery) gallery = p.gallery;
-  else if (p.galleryImgs)
+  if (p.gallery) {
+    // Legacy inline gallery — use as-is
+    gallery = p.gallery;
+  } else if (p.galleryImgs) {
+    // galleryImgs should have EXACTLY 4 images: angle45, closeup, lifestyle, delivery
     gallery = p.galleryImgs.map((s, i) => ({
       src: img(s, 800),
-      alt: `${p.name} — ${VARIANT_LABELS[i % VARIANT_LABELS.length].variant}`,
+      alt: `THỰC TẾ — ${VARIANT_LABELS[i % VARIANT_LABELS.length].variant}`,
       variant: VARIANT_LABELS[i % VARIANT_LABELS.length].variant,
       note: VARIANT_LABELS[i % VARIANT_LABELS.length].note,
     }));
-  else gallery = buildDefaultGallery(p.slug, p.category, p._img);
+  } else {
+    gallery = buildDefaultGallery(p.slug, p.category, p._img);
+  }
 
   return {
     slug: p.slug,
