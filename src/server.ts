@@ -66,6 +66,7 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   return brandedErrorResponse();
 }
 
+// Export mặc định — dùng cho Cloudflare Workers & Vercel serverless function
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
